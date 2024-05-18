@@ -1,6 +1,6 @@
 import {View, Text, Image , TouchableOpacity} from 'react-native';
 import React from 'react';
-import styles from '../styles/RegisterStyles';
+import styles from '../styles/MainStyles';
 import {useNavigation,ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 //Components
@@ -15,7 +15,7 @@ const Main = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const navigateToRegister = () =>{
-    navigation.navigate("Register")
+    navigation.navigate("Register",{screen:"RegisterFirstTab"})
   }
 
   const navigateToRLogin = () =>{

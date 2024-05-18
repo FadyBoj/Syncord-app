@@ -4,24 +4,39 @@ import {
   Pressable,
   StyleSheet,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import Animated, {
   useSharedValue,
   withSpring,
   withTiming,
   Easing,
-  ReduceMotion
+  ReduceMotion,
 } from 'react-native-reanimated';
 import React, {FC} from 'react';
 
 interface Props {
   label: string;
   action: () => void;
-  bgColor:string
+  bgColor: string;
+  disabled?: boolean;
+  disabledBg?: string;
+  width?: number;
+  isLoading?: boolean;
 }
 
-const Index: FC<Props> = ({label,action,bgColor}) => {
+const screenWidth = Dimensions.get('window').width;
+
+const Index: FC<Props> = ({
+  label,
+  action,
+  bgColor,
+  disabled = false,
+  disabledBg,
+  width = 0.88 * screenWidth,
+  isLoading = false,
+}) => {
   const scaleValue = useSharedValue(1);
   const animatedOpacity = useSharedValue(1);
 
@@ -30,32 +45,43 @@ const Index: FC<Props> = ({label,action,bgColor}) => {
     animatedOpacity.value = withTiming(0.8, {
       duration: 200,
       easing: Easing.inOut(Easing.back(0.8)),
-      reduceMotion: ReduceMotion.System
+      reduceMotion: ReduceMotion.System,
     });
   };
 
   const handlePressOut = () => {
     scaleValue.value = withSpring(1);
     animatedOpacity.value = withTiming(1, {
-        duration: 200,
-        easing: Easing.inOut(Easing.back(0.8)),
-        reduceMotion: ReduceMotion.System
-      });
+      duration: 200,
+      easing: Easing.inOut(Easing.back(0.8)),
+      reduceMotion: ReduceMotion.System,
+    });
   };
 
-  const screenWidth = Dimensions.get('window').width;
-
   return (
-    <Pressable onPress={action} onPressIn={handlePress} onPressOut={handlePressOut}>
+    <Pressable
+      onPress={disabled || isLoading ? () => {} : action}
+      onPressIn={disabled || isLoading ? () => {} : handlePress}
+      onPressOut={handlePressOut}>
       <Animated.View
         style={{
           transform: [{scale: scaleValue}],
           opacity: animatedOpacity,
-          backgroundColor:bgColor,
-          width:0.88 * screenWidth,
+          backgroundColor: disabled || isLoading ? disabledBg : bgColor,
+          width: width,
           ...styles.container,
         }}>
-        <Text style={styles.registerText}>{label}</Text>
+        {isLoading ? (
+          <ActivityIndicator size={30} />
+        ) : (
+          <Text
+            style={{
+              color: disabled || isLoading ? '#b0b4d0' : 'white',
+              ...styles.registerText,
+            }}>
+            {label}
+          </Text>
+        )}
       </Animated.View>
     </Pressable>
   );
@@ -70,9 +96,7 @@ const styles = StyleSheet.create({
   },
   registerText: {
     fontSize: 14,
-    color: 'white',
-    fontFamily:'Roboto'
-
+    fontFamily: 'Roboto',
   },
 });
 

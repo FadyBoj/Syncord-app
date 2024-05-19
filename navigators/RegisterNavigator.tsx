@@ -6,6 +6,7 @@ const Tab = createMaterialTopTabNavigator();
 //pages
 import RegisterFirstTab from '../screens/AuthScreens/Register/RegisterFirstTab';
 import RegisterSecondTab from '../screens/AuthScreens/Register/RegisterSecondTab';
+import RegisgerThirdTab from '../screens/AuthScreens/Register/RegisgerThirdTab';
 
 //Components
 import Modal from '../components/Modal/Modal';
@@ -38,6 +39,7 @@ const RegisterNavigator = ({navigation}: {navigation: any}) => {
           tabBarScrollEnabled: false,
           swipeEnabled: false,
         }}
+        backBehavior='history'
         tabBar={() => null}>
         <Tab.Screen
           name="RegisterFirstTab"
@@ -45,6 +47,7 @@ const RegisterNavigator = ({navigation}: {navigation: any}) => {
           initialParams={{openModal: openModal, closeModal: closeModal}}
         />
         <Tab.Screen name="RegisterSecondTab" component={RegisterSecondTab} />
+        <Tab.Screen name="RegisterThirdTab" component={RegisgerThirdTab} />
       </Tab.Navigator>
       {/* Global modal */}
       {modalVisible && (

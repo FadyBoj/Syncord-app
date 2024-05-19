@@ -4,11 +4,20 @@ import React, {FC} from 'react';
 interface Props {
   label: string;
   value: string;
-  changeFunction: React.Dispatch<React.SetStateAction<string>>;
+  changeFunction: (text: string, name: string) => void;
   showLabel?: boolean;
+  name: string;
+  helper?: string | null;
 }
 
-const Index: FC<Props> = ({label, value, changeFunction, showLabel = true}) => {
+const Index: FC<Props> = ({
+  label,
+  value,
+  changeFunction,
+  showLabel = true,
+  name,
+  helper = null,
+}) => {
   const screenWidth = Dimensions.get('window').width;
 
   return (
@@ -18,8 +27,12 @@ const Index: FC<Props> = ({label, value, changeFunction, showLabel = true}) => {
         placeholder={label}
         style={{width: 0.9 * screenWidth, ...styles.input}}
         value={value}
-        onChangeText={changeFunction}
+        onChangeText={text => changeFunction(text, name)}
       />
+      {
+        helper &&
+        <Text style={styles.helperText}>{helper}</Text>
+      }
     </View>
   );
 };
@@ -38,6 +51,11 @@ const styles = StyleSheet.create({
   label: {
     color: '#787b86',
   },
+  helperText:{
+    fontFamily:'Roboto',
+    fontSize:12,
+    transform:'translateX(5px)'
+  }
 });
 
 export default Index;

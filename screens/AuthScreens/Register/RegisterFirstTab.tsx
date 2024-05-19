@@ -14,10 +14,12 @@ interface Props {
 }
 
 const RegisterFirstTab: FC<Props> = ({navigation, route}) => {
-  const [email, setEmail] = useState('');
   const [validForm, setValidForm] = useState(false);
-  const {openModal, closeModal} = route.params;
   const [isLoading, setIsLoading] = useState(false);
+  const {openModal, closeModal} = route.params;
+  const [formData,setFormData] = useState({
+    email:''
+  })
 
   const handleSubmit = async () => {
     try {
@@ -25,7 +27,7 @@ const RegisterFirstTab: FC<Props> = ({navigation, route}) => {
       const {data} = await axios.post(
         'http://syncord.somee.com/user/check-user-exist',
         {
-          email: email,
+          email: formData.email,
         },
       );
       if (data === true) {
@@ -34,19 +36,26 @@ const RegisterFirstTab: FC<Props> = ({navigation, route}) => {
         return;
 
       }
-       navigation.jumpTo("RegisterSecondTab")
+       navigation.jumpTo("RegisterSecondTab",{email:formData.email})
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       console.log(error);
     }
   };
+  
+  const handleChnage = (value:string,name:string) => {
+    setFormData((prevData) =>{
+      return {...prevData,[name]:value}
+    })
+  }
 
   useEffect(() => {
-    if (validator.isEmail(email)) return setValidForm(true);
+    if (validator.isEmail(formData.email)) return setValidForm(true);
 
     setValidForm(false);
-  }, [email]);
+  }, [formData.email]);
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -56,9 +65,10 @@ const RegisterFirstTab: FC<Props> = ({navigation, route}) => {
       <View style={styles.inputContainer}>
         <CustomTextInput
           label="Email"
-          value={email}
-          changeFunction={setEmail}
+          value={formData.email}
+          changeFunction={handleChnage}
           showLabel={false}
+          name='email'
         />
         <Text style={styles.confirmEmailText}>
           You'll need to confirm this email later

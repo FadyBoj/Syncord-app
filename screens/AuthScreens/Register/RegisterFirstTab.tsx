@@ -1,22 +1,21 @@
 import {View, Text, ScrollView, ActivityIndicator} from 'react-native';
-import React, {useState, useEffect, FC, Suspense} from 'react';
+import React, {useState, useEffect, FC, useContext} from 'react';
 import styles from '../../../styles/RegisterFirstTabStyles';
 import validator from 'validator';
 import axios from 'axios';
-
+import { AuthContext } from '../../../context/AuthContext';
 //Components
 import CustomTextInput from '../../../components/Inputs/CustomTextInput/Index';
 import ShrinkButton from '../../../components/Buttons/ShrinkButton';
 
 interface Props {
   navigation: any;
-  route: any;
+  openModal: () => void
 }
 
-const RegisterFirstTab: FC<Props> = ({navigation, route}) => {
+const RegisterFirstTab: FC<Props> = ({navigation,openModal}) => {
   const [validForm, setValidForm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const {openModal, closeModal} = route.params;
   const [formData,setFormData] = useState({
     email:''
   })
@@ -56,7 +55,9 @@ const RegisterFirstTab: FC<Props> = ({navigation, route}) => {
     setValidForm(false);
   }, [formData.email]);
 
-
+  const token = useContext(AuthContext);
+  console.log(token);
+ 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View>

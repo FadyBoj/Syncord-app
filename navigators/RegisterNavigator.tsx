@@ -2,7 +2,6 @@ import {View, Text, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 const Tab = createMaterialTopTabNavigator();
-
 //pages
 import RegisterFirstTab from '../screens/AuthScreens/Register/RegisterFirstTab';
 import RegisterSecondTab from '../screens/AuthScreens/Register/RegisterSecondTab';
@@ -39,13 +38,13 @@ const RegisterNavigator = ({navigation}: {navigation: any}) => {
           tabBarScrollEnabled: false,
           swipeEnabled: false,
         }}
-        backBehavior='history'
+        backBehavior="history"
         tabBar={() => null}>
         <Tab.Screen
           name="RegisterFirstTab"
-          component={RegisterFirstTab}
-          initialParams={{openModal: openModal, closeModal: closeModal}}
-        />
+        >
+          {(props) => <RegisterFirstTab {...props} openModal={openModal} />}
+          </Tab.Screen>
         <Tab.Screen name="RegisterSecondTab" component={RegisterSecondTab} />
         <Tab.Screen name="RegisterThirdTab" component={RegisgerThirdTab} />
       </Tab.Navigator>
@@ -60,9 +59,18 @@ const RegisterNavigator = ({navigation}: {navigation: any}) => {
               <Text style={styles.secText}>Do you wanna login instead ? </Text>
             </View>
             <View style={styles.sec2}>
-              <ShrinkButton action={() =>{}} label='Login' bgColor='#5865f2' width={100} />
-              <ShrinkButton action={closeModal} label='Close' bgColor='#373a43' width={100} />
-
+              <ShrinkButton
+                action={() => {}}
+                label="Login"
+                bgColor="#5865f2"
+                width={100}
+              />
+              <ShrinkButton
+                action={closeModal}
+                label="Close"
+                bgColor="#373a43"
+                width={100}
+              />
             </View>
           </View>
         </Modal>
@@ -75,7 +83,7 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 30,
     paddingRight: 30,
-    gap:40
+    gap: 40,
   },
   mainText: {
     color: 'white',
@@ -87,7 +95,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 18,
   },
-  sec2:{
+  sec2: {
     alignItems: 'center',
     gap: 18,
   },

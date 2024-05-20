@@ -1,16 +1,29 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import AppNavigationContainer from './navigators/AppNavigationContainer';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import AuthProvider from './context/AuthContext';
+
 import AuthStack from './navigators/AuthStack';
+import AppStack from './navigators/AppNavigator';
+import {View} from 'react-native';
 
 const Stack = createNativeStackNavigator();
-
 
 export default function App() {
   return (
     <NavigationContainer>
-        <AuthStack/>
+        <AuthProvider>
+      <Stack.Navigator>
+          <>
+            <Stack.Screen
+              name="AuthStack"
+              component={AuthStack}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen name="AppStack" component={AppStack} />
+          </>
+      </Stack.Navigator>
+        </AuthProvider>
     </NavigationContainer>
   );
 }

@@ -2,6 +2,8 @@ import {View, Text, ScrollView} from 'react-native';
 import React, {useState, FC, useEffect} from 'react';
 import styles from '../../../styles/RegisterThirdTabStyles ';
 import validator from 'validator';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Components
 import CustomTextInput from '../../../components/Inputs/CustomTextInput/Index';
@@ -12,7 +14,13 @@ interface Props {
   route: any;
 }
 
+interface IregisterRequest {
+  msg: string;
+  token: string;
+}
+
 const RegisgerThirdTab: FC<Props> = ({navigation, route}) => {
+  const previousData = route?.params;
   const [formData, setFormData] = useState({
     password: '',
     passwordConfirmation: '',
@@ -33,7 +41,6 @@ const RegisgerThirdTab: FC<Props> = ({navigation, route}) => {
   //Validate form
 
   useEffect(() => {
-
     if (
       !validator.isStrongPassword(formData.password, {
         minLength: 8,
@@ -58,10 +65,21 @@ const RegisgerThirdTab: FC<Props> = ({navigation, route}) => {
     setIsFormValid(true);
   }, [formData]);
 
-  const handleSubmit = () => {
-    //Submit logic
+  const handleSubmit = async () => {
+    try {
+      setIsLoading(true);
+      const userData = {...previousData, ...formData};
+      const {msg, token}: IregisterRequest = (
+        await axios.post('http://syncord.somee.com/user/register', userData)
+      ).data;
+      await AsyncStorage.setItem('token', token);
+      navigation.navigate('AppStack', {screen: 'Home'});
+    } catch (error) {
+      setIsLoading(false)
+      console.log("F")
+      console.log(error);
+    }
   };
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.labelInputContainer}>

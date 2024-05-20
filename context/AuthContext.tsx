@@ -1,12 +1,6 @@
 import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createContext, FC, useState, useEffect} from 'react';
-import {
-  useNavigation,
-  ParamListBase,
-  createNavigationContainerRef,
-} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 interface Props {
   children: JSX.Element;
@@ -19,7 +13,6 @@ export const AuthContext = createContext<contextType>(null);
 const AuthProvider: FC<Props> = ({children}) => {
   const [token, setToken] = useState<string | null>('token v');
   const [isLoading, setIsLoading] = useState(true);
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   useEffect(() => {
     const getData = async () => {

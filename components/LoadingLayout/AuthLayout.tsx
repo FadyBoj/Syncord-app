@@ -15,16 +15,15 @@ const AuthLayout: FC<Props> = ({onFailNav, children, screen = null}) => {
 
   const token = useContext(AuthContext);
 
- useEffect(() =>{
-  if (token !== null) {
-    if (!screen) {
-      navigation.navigate(onFailNav);
+  useEffect(() => {
+    if (token !== null) {
+      if (!screen) {
+        navigation.navigate(onFailNav);
+      } else {
+        navigation.navigate(onFailNav, {screen: screen});
+      }
     }
-    else{
-      navigation.navigate(onFailNav,{screen:screen});
-    }
-  }
- },[0])
+  }, [0]);
 
   return token ? (
     <View style={styles.constainer}>

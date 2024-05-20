@@ -1,6 +1,7 @@
 import {Text, View} from 'react-native';
 import React, {Component} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import AuthProvider from '../context/AuthContext';
 
 //Screens
 import Main from '../screens/Main';
@@ -11,6 +12,7 @@ const Stack = createNativeStackNavigator();
 
 const AuthStack = () => {
   return (
+    <AuthProvider>
       <Stack.Navigator 
       >
       <Stack.Screen
@@ -42,6 +44,7 @@ const AuthStack = () => {
         }}
       />
     </Stack.Navigator>
+    </AuthProvider>
   );
 };
 

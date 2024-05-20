@@ -12,18 +12,18 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-        <AuthProvider>
       <Stack.Navigator>
-          <>
-            <Stack.Screen
-              name="AuthStack"
-              component={AuthStack}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen name="AppStack" component={AppStack} />
-          </>
+        <Stack.Screen
+          name="AuthStack"
+          component={AuthStack}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AppStack"
+          component={AppStack}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
-        </AuthProvider>
     </NavigationContainer>
   );
 }

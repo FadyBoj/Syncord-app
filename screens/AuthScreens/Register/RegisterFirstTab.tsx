@@ -3,22 +3,22 @@ import React, {useState, useEffect, FC, useContext} from 'react';
 import styles from '../../../styles/RegisterFirstTabStyles';
 import validator from 'validator';
 import axios from 'axios';
-import { AuthContext } from '../../../context/AuthContext';
+import {AuthContext} from '../../../context/AuthContext';
 //Components
 import CustomTextInput from '../../../components/Inputs/CustomTextInput/Index';
 import ShrinkButton from '../../../components/Buttons/ShrinkButton';
 
 interface Props {
   navigation: any;
-  openModal: () => void
+  openModal: () => void;
 }
 
-const RegisterFirstTab: FC<Props> = ({navigation,openModal}) => {
+const RegisterFirstTab: FC<Props> = ({navigation, openModal}) => {
   const [validForm, setValidForm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [formData,setFormData] = useState({
-    email:''
-  })
+  const [formData, setFormData] = useState({
+    email: '',
+  });
 
   const handleSubmit = async () => {
     try {
@@ -33,21 +33,20 @@ const RegisterFirstTab: FC<Props> = ({navigation,openModal}) => {
         openModal();
         setIsLoading(false);
         return;
-
       }
-       navigation.jumpTo("RegisterSecondTab",{email:formData.email})
+      navigation.jumpTo('RegisterSecondTab', {email: formData.email});
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       console.log(error);
     }
   };
-  
-  const handleChnage = (value:string,name:string) => {
-    setFormData((prevData) =>{
-      return {...prevData,[name]:value}
-    })
-  }
+
+  const handleChnage = (value: string, name: string) => {
+    setFormData(prevData => {
+      return {...prevData, [name]: value};
+    });
+  };
 
   useEffect(() => {
     if (validator.isEmail(formData.email)) return setValidForm(true);
@@ -57,35 +56,35 @@ const RegisterFirstTab: FC<Props> = ({navigation,openModal}) => {
 
   const token = useContext(AuthContext);
   console.log(token);
- 
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View>
-        <Text style={styles.mainText}>Enter you email address</Text>
-      </View>
-      <View style={styles.inputContainer}>
-        <CustomTextInput
-          label="Email"
-          value={formData.email}
-          changeFunction={handleChnage}
-          showLabel={false}
-          name='email'
-        />
-        <Text style={styles.confirmEmailText}>
-          You'll need to confirm this email later
-        </Text>
-      </View>
-      <View>
-        <ShrinkButton
-          label="Next"
-          action={handleSubmit}
-          bgColor="#5865f2"
-          disabledBg="#3a408a"
-          disabled={!validForm}
-          isLoading={isLoading}
-        />
-      </View>
-    </ScrollView>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View>
+          <Text style={styles.mainText}>Enter you email address</Text>
+        </View>
+        <View style={styles.inputContainer}>
+          <CustomTextInput
+            label="Email"
+            value={formData.email}
+            changeFunction={handleChnage}
+            showLabel={false}
+            name="email"
+          />
+          <Text style={styles.confirmEmailText}>
+            You'll need to confirm this email later
+          </Text>
+        </View>
+        <View>
+          <ShrinkButton
+            label="Next"
+            action={handleSubmit}
+            bgColor="#5865f2"
+            disabledBg="#3a408a"
+            disabled={!validForm}
+            isLoading={isLoading}
+          />
+        </View>
+      </ScrollView>
   );
 };
 

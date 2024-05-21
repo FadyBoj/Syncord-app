@@ -10,7 +10,21 @@ import Home from '../screens/Home';
 const AppStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Friends"
+        component={Home}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Chats"
+        component={Home}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };

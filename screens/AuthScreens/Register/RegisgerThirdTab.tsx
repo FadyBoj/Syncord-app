@@ -75,7 +75,7 @@ const RegisgerThirdTab: FC<Props> = ({navigation, route}) => {
       await AsyncStorage.setItem('token', token);
       navigation.navigate('AppStack', {screen: 'Home'});
     } catch (error) {
-      setIsLoading(false)
+      setIsLoading(false  )
       console.log("F")
       console.log(error);
     }

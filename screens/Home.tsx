@@ -1,11 +1,15 @@
 import {View, Text, TouchableOpacity} from 'react-native';
-import {useState} from 'react';
+import {useState,FC} from 'react';
 import styles from '../styles/HomeStyles';
-
+import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 //Components
 import MainLayout from '../components/MainLayout';
 
-const Home = () => {
+interface Porps{
+  gestureStyles :object
+}
+
+const Home:FC<Porps> = ({gestureStyles}) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const closeDrawer = () => {
@@ -14,10 +18,12 @@ const Home = () => {
 
   const openDrawer = () => {
     setIsDrawerOpen(true);
-    setTimeout(() => {
-      setIsDrawerOpen(false);
-    }, 3000);
+    // setTimeout(() => {
+    //   setIsDrawerOpen(false);
+    // }, 3000);
   };
+
+ console.log(gestureStyles)
 
   return (
     <MainLayout closeDrawer={closeDrawer} isDrawerOpen={isDrawerOpen}>

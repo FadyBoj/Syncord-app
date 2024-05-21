@@ -6,19 +6,20 @@ import Animated, {
   SlideOutLeft,
   useAnimatedStyle,
 } from 'react-native-reanimated';
+import { FC } from 'react';
 
-const Drawer = () => {
-  const screenWidth = Dimensions.get('window').width;
+interface Props{
+gestureStyles : object
+}
 
-  const drawerAnimatedStyles = useAnimatedStyle(() => {
-    return {};
-  });
+const Drawer:FC<Props> = ({gestureStyles}) => {
+ 
 
   return (
     <Animated.View
-      entering={SlideInLeft.duration(500)}
-      exiting={SlideOutLeft.duration(500)}
-      style={[styles.container]}>
+      entering={SlideInLeft.duration(300)}
+      exiting={SlideOutLeft.duration(300)}
+      style={[styles.container,gestureStyles]}>
       <Text>This is a Drawer</Text>
     </Animated.View>
   );

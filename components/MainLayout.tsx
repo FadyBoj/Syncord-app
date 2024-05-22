@@ -4,42 +4,32 @@ import {
   Dimensions,
   FlatList,
   ViewToken,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
+
 } from 'react-native';
 import React, {FC, useEffect, useRef, useState, memo} from 'react';
 import styles from '../styles/MainLayoutStyles';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-import {
-  GestureHandlerRootView,
-  Gesture,
-  GestureDetector,
-} from 'react-native-gesture-handler';
+;
 //Components
 import Drawer from './Drawer/Drawer';
 
 interface Props {
   children: JSX.Element;
-  closeDrawer: () => void;
   isDrawerOpen: boolean;
+  activeScreen:string
 }
 
-const MainLayout: FC<Props> = ({children, closeDrawer, isDrawerOpen}) => {
+const MainLayout: FC<Props> = ({children, isDrawerOpen,activeScreen}) => {
   const screenWidth = Dimensions.get('window').width;
   const [isSwipeEnabled, setIsSwipeEnabled] = useState(false);
   const [listIndex, setListIndex] = useState<number | null>(1);
   const [isScrolling,setIsScrolling] = useState(false);
   const flatListRef = useRef<FlatList | null>(null);
 
-  useEffect(() => {
-    flatListRef.current?.scrollToIndex({
-      index: 0,
-    });
-  }, [0]);
+  // useEffect(() => {
+  //   flatListRef.current?.scrollToIndex({
+  //     index: 0,
+  //   });
+  // }, [0]);
 
   useEffect(() => {
     flatListRef.current?.scrollToIndex({
@@ -61,6 +51,13 @@ const MainLayout: FC<Props> = ({children, closeDrawer, isDrawerOpen}) => {
       setIsSwipeEnabled(false)
   }, [listIndex,isScrolling]);
 
+  const closeDrawer = () =>{
+    flatListRef.current?.scrollToIndex({
+      index:1
+    })
+    setIsSwipeEnabled(false)
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -70,7 +67,7 @@ const MainLayout: FC<Props> = ({children, closeDrawer, isDrawerOpen}) => {
           item == 2 ? (
             <View style={styles.container}>{children}</View>
           ) : (
-            <Drawer />
+            <Drawer closeDrawer={closeDrawer} activeScreen={activeScreen} />
           )
         }
         horizontal

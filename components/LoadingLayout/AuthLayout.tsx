@@ -13,7 +13,7 @@ interface Props {
 const AuthLayout: FC<Props> = ({onFailNav, children, screen = null}) => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const token = useContext(AuthContext);
+  const token = useContext(AuthContext)?.token || null;
 
   useEffect(() => {
     if (token !== null) {

@@ -6,20 +6,33 @@ interface Props {
   children: JSX.Element;
 }
 
-type contextType = string | null;
+interface IContext {
+  token: string | null;
+  setIsLoading: React.Dispatch<
+    React.SetStateAction<{
+      value: boolean;
+      fromNav: boolean;
+    }>
+  >;
+}
 
-export const AuthContext = createContext<contextType>(null);
+export const AuthContext = createContext<IContext | null>(null);
 
 const AuthProvider: FC<Props> = ({children}) => {
   const [token, setToken] = useState<string | null>('token v');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState({
+    value: true,
+    fromNav: false,
+  });
 
   useEffect(() => {
     const getData = async () => {
       try {
         const tokenValue = await AsyncStorage.getItem('token');
         setToken(tokenValue);
-        setIsLoading(false);
+        setTimeout(() => {
+          setIsLoading({value: false, fromNav: false});
+        }, 1000);
       } catch (error) {
         console.log(error);
       }
@@ -27,21 +40,44 @@ const AuthProvider: FC<Props> = ({children}) => {
     getData();
   }, [0]);
 
-  return !isLoading ? (
-    <AuthContext.Provider value={token}>{children}</AuthContext.Provider>
-  ) : (
-    <View style={styles.constainer}>
-      <ActivityIndicator size={40} />
+  useEffect(() => {
+    if (isLoading.fromNav) {
+      setTimeout(() => {
+        setIsLoading({value: false, fromNav: false});
+      }, 200);
+    }
+  }, [isLoading]);
+
+  return (
+    <View style={styles.appContainer}>
+      <AuthContext.Provider value={{token, setIsLoading}}>
+        {children}
+      </AuthContext.Provider>
+      {isLoading.value && (
+        <View style={styles.container}>
+          <ActivityIndicator size={40} />
+        </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  constainer: {
+  container: {
     flex: 1,
+    width: '100%',
+    height: '100%',
     backgroundColor: '#1c1d22',
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'absolute',
+  },
+  appContainer: {
+    flex: 1,
+    position: 'relative',
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'cyan',
   },
 });
 

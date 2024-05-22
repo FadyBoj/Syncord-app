@@ -7,7 +7,7 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from 'react-native';
-import React, {FC, useEffect, useRef, useState,memo} from 'react';
+import React, {FC, useEffect, useRef, useState, memo} from 'react';
 import styles from '../styles/MainLayoutStyles';
 import Animated, {
   useAnimatedStyle,
@@ -31,6 +31,8 @@ interface Props {
 const MainLayout: FC<Props> = ({children, closeDrawer, isDrawerOpen}) => {
   const screenWidth = Dimensions.get('window').width;
   const [isSwipeEnabled, setIsSwipeEnabled] = useState(false);
+  const [listIndex, setListIndex] = useState<number | null>(1);
+  const [isScrolling,setIsScrolling] = useState(false);
   const flatListRef = useRef<FlatList | null>(null);
 
   useEffect(() => {
@@ -41,9 +43,9 @@ const MainLayout: FC<Props> = ({children, closeDrawer, isDrawerOpen}) => {
 
   useEffect(() => {
     flatListRef.current?.scrollToIndex({
-      index:0
-    })
-    setIsSwipeEnabled(true)
+      index: 0,
+    });
+    setIsSwipeEnabled(true);
   }, [isDrawerOpen]);
 
   const handleScroll = (info: {
@@ -51,11 +53,13 @@ const MainLayout: FC<Props> = ({children, closeDrawer, isDrawerOpen}) => {
     changed: ViewToken<any>[];
   }) => {
     const currentItem = info.viewableItems[0];
-    console.log(currentItem)
-    if ( currentItem.index === 1) {
-      setIsSwipeEnabled(false);
-    }
+     setListIndex(currentItem.index);
   };
+
+  useEffect(() => {
+    if(!isScrolling && listIndex === 1)
+      setIsSwipeEnabled(false)
+  }, [listIndex,isScrolling]);
 
   return (
     <View style={styles.container}>
@@ -79,8 +83,10 @@ const MainLayout: FC<Props> = ({children, closeDrawer, isDrawerOpen}) => {
           index,
         })}
         scrollEnabled={isSwipeEnabled}
-        viewabilityConfig={{itemVisiblePercentThreshold:50}}
+        viewabilityConfig={{itemVisiblePercentThreshold: 50}}
         onViewableItemsChanged={handleScroll}
+        onScrollBeginDrag={() => setIsScrolling(true)}
+        onScrollEndDrag={() => setIsScrolling(false)}
       />
     </View>
   );

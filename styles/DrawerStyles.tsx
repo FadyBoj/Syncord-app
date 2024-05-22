@@ -9,7 +9,9 @@ const styles = StyleSheet.create({
        alignItems:'center',
        width:screenWidth * 0.9,
        height:screenHeight,
-       backgroundColor:'cyan',
+       backgroundColor:'#1c1d22',
+       borderRightWidth:3,
+
        borderRadius:8,
        flex:1
     }

@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         backgroundColor:'#1c1d22',
-        borderLeftWidth:1,
         borderRadius:8,
         gap:80
     },

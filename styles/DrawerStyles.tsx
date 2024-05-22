@@ -1,16 +1,17 @@
 import { StyleSheet } from "react-native";
+import { Dimensions } from "react-native";
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     container:{
        justifyContent:'center',
        alignItems:'center',
-       width:'90%',
-       height:'100%',
-       position:'absolute',
-       left:0,
-       backgroundColor:'#1c1d22',
-       borderRightWidth:1,
-       borderRadius:8
+       width:screenWidth * 0.9,
+       height:screenHeight,
+       backgroundColor:'cyan',
+       borderRadius:8,
+       flex:1
     }
 });
 

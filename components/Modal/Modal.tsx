@@ -8,7 +8,7 @@ import {
   Pressable,
 } from 'react-native';
 import React, {FC} from 'react';
-import Animated, {FadeInUp, FadeOutDown} from 'react-native-reanimated';
+import Animated, {FadeInUp, FadeOutDown, ZoomIn} from 'react-native-reanimated';
 
 //Components
 import Backdrop from '../Backdrop/Backdrop';
@@ -30,10 +30,10 @@ const Modal: FC<Props> = ({closeModal, children, height = 300, width}) => {
     <Backdrop closeModal={closeModal}>
       <Pressable onPress={e => e.stopPropagation()}>
         <Animated.View
-          entering={FadeInUp.duration(300)}
+          entering={FadeInUp.springify().stiffness(200).damping(18)}
           exiting={FadeOutDown.duration(300)}
           style={{
-            width: width ? width : 0.9 * screenWidth,
+            width: width ? width : 0.8 * screenWidth,
             height: height,
             ...styles.container,
           }}>

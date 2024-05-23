@@ -30,6 +30,7 @@ interface Props {
   isLoading?: boolean;
   borderColor?: string;
   borderWidth?: number;
+  color?:string
   radius: number;
   icon?:ImageSourcePropType
 }
@@ -48,6 +49,7 @@ const Index: FC<Props> = ({
   borderColor = '',
   borderWidth = 0,
   radius = 4,
+  color='white',
   icon
 }) => {
   const scaleValue = useSharedValue(1);
@@ -109,7 +111,7 @@ const Index: FC<Props> = ({
         ) : (
           <Text
             style={{
-              color: disabled || isLoading ? '#b0b4d0' : 'white',
+              color: disabled || isLoading ? '#b0b4d0' : color,
               ...styles.registerText,
             }}>
             {label}

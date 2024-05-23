@@ -66,6 +66,10 @@ const MainLayout: FC<Props> = ({children, isDrawerOpen, activeScreen}) => {
       else navigation.goBack();
 
       return true;
+      if (activeScreen === 'Chats') BackHandler.exitApp();
+      else navigation.goBack();
+
+      return true;
     };
 
     const backHandler = BackHandler.addEventListener(

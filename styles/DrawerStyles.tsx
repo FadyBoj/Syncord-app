@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     flex: 1,
     gap: 40,
+    position:'relative'
   },
   logoContainer: {
     width: '100%',

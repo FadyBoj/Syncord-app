@@ -1,5 +1,5 @@
 import {Text, View} from 'react-native';
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AuthProvider from '../context/AuthContext';
 const Stack = createNativeStackNavigator();
@@ -12,35 +12,38 @@ import Notifications from '../screens/Notifications';
 import Settings from '../screens/Settings';
 
 const AppStack = () => {
+
   return (
     <AuthProvider>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{headerShown: false, animation: 'none'}}
-        />
-        <Stack.Screen
-          name="Friends"
-          component={Friends}
-          options={{headerShown: false, animation: 'none'}}
-        />
-        <Stack.Screen
-          name="Chats"
-          component={Chats}
-          options={{headerShown: false, animation: 'none'}}
-        />
-        <Stack.Screen
-          name="Notifications"
-          component={Notifications}
-          options={{headerShown: false, animation: 'none'}}
-        />
-        <Stack.Screen
-          name="Settings"
-          component={Settings}
-          options={{headerShown: false, animation: 'none'}}
-        />
-      </Stack.Navigator>
+      <>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{headerShown: false, animation: 'none'}}
+          />
+          <Stack.Screen
+            name="Friends"
+            component={Friends}
+            options={{headerShown: false, animation: 'none'}}
+          />
+          <Stack.Screen
+            name="Chats"
+            component={Chats}
+            options={{headerShown: false, animation: 'none'}}
+          />
+          <Stack.Screen
+            name="Notifications"
+            component={Notifications}
+            options={{headerShown: false, animation: 'none'}}
+          />
+          <Stack.Screen
+            name="Settings"
+            component={Settings}
+            options={{headerShown: false, animation: 'none'}}
+          />
+        </Stack.Navigator>
+      </>
     </AuthProvider>
   );
 };

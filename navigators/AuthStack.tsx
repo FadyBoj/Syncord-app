@@ -25,7 +25,7 @@ const AuthStack = () => {
         name="Register"
         component={RegisterNavigator}
         options={{
-          animation: 'slide_from_right',
+          animation: 'ios',
           headerTitleAlign: 'center',
           headerStyle: {backgroundColor: '#1c1d22'},
           headerShadowVisible: false,
@@ -40,7 +40,8 @@ const AuthStack = () => {
         name="Login"
         component={Login}
         options={{
-          animation: 'slide_from_right',
+          animation: 'ios',
+          headerShown:false
         }}
       />
     </Stack.Navigator>

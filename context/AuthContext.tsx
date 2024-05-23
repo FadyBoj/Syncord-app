@@ -20,7 +20,7 @@ interface IContext {
 export const AuthContext = createContext<IContext | null>(null);
 
 const AuthProvider: FC<Props> = ({children}) => {
-  const [token, setToken] = useState<string | null>('token v');
+  const [token, setToken] = useState<string | null>('');
   const [isLoading, setIsLoading] = useState({
     value: true,
     fromNav: false,
@@ -30,22 +30,20 @@ const AuthProvider: FC<Props> = ({children}) => {
     const getData = async () => {
       try {
         const tokenValue = await AsyncStorage.getItem('token');
-
+        // await AsyncStorage.clear()
         //Validating token
-        await axios.get('http://syncord.somee.com/user/requests',{
-          headers:{
-            Authorization:`Bearer ${tokenValue}`
-          }
-        })
-
-        setToken(tokenValue)
-
+        await axios.get('http://syncord.somee.com/user/requests', {
+          headers: {
+            Authorization: `Bearer ${tokenValue}`,
+          },
+        });
+        setToken(tokenValue);
         setTimeout(() => {
           setIsLoading({value: false, fromNav: false});
         }, 1000);
       } catch (error) {
         console.log(error);
-        setToken(null)
+        setToken(null);
         setTimeout(() => {
           setIsLoading({value: false, fromNav: false});
         }, 1000);

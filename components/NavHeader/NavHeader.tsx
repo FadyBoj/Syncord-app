@@ -7,10 +7,10 @@ import arrow from '../../assets/arrow.png';
 interface Props {
   bgColor?: string;
   backAction: () => void;
-  title: string;
+  title?: string;
 }
 
-const NavHeader: FC<Props> = ({bgColor = '#1c1d22', backAction, title}) => {
+const NavHeader: FC<Props> = ({bgColor = '#1c1d22', backAction, title=null}) => {
   return (
     <View style={{backgroundColor: bgColor, ...styles.container}}>
       <TouchableOpacity onPress={backAction} style={styles.arrowContainer}>
@@ -18,7 +18,7 @@ const NavHeader: FC<Props> = ({bgColor = '#1c1d22', backAction, title}) => {
       </TouchableOpacity>
 
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{title}</Text>
+        {title && <Text style={styles.title}>{title}</Text>}
       </View>
     </View>
   );
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingTop: 25,
     paddingBottom: 25,
+    minHeight:70
   },
   arrow: {
     width: 30,

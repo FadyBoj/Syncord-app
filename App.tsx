@@ -21,7 +21,7 @@ export default function App() {
         <Stack.Screen
           name="AppStack"
           component={AppStack}
-          options={{headerShown: false}}
+          options={{headerShown: false,animation:'default'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -13,6 +13,7 @@ import Animated, {
   withTiming,
   Easing,
   ReduceMotion,
+  useAnimatedStyle,
 } from 'react-native-reanimated';
 import React, {FC} from 'react';
 
@@ -24,6 +25,7 @@ interface Props {
   disabledBg?: string;
   width?: number;
   isLoading?: boolean;
+
 }
 
 const screenWidth = Dimensions.get('window').width;
@@ -41,22 +43,37 @@ const Index: FC<Props> = ({
   const animatedOpacity = useSharedValue(1);
 
   const handlePress = () => {
-    scaleValue.value = withSpring(0.98);
+    scaleValue.value = withTiming(0.97, {
+      duration: 100,
+      easing: Easing.inOut(Easing.back(0.8)),
+      reduceMotion: ReduceMotion.System,
+    });
     animatedOpacity.value = withTiming(0.8, {
-      duration: 200,
+      duration: 0.1,
       easing: Easing.inOut(Easing.back(0.8)),
       reduceMotion: ReduceMotion.System,
     });
   };
 
   const handlePressOut = () => {
-    scaleValue.value = withSpring(1);
+    scaleValue.value = withTiming(1, {
+      duration: 100,
+      easing: Easing.inOut(Easing.back(0.8)),
+      reduceMotion: ReduceMotion.System,
+    });
     animatedOpacity.value = withTiming(1, {
-      duration: 200,
+      duration: 0.1,
       easing: Easing.inOut(Easing.back(0.8)),
       reduceMotion: ReduceMotion.System,
     });
   };
+
+  const btnAnimatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [{scale: scaleValue.value}],
+      opacity:animatedOpacity.value
+    };
+  });
 
   return (
     <Pressable
@@ -64,13 +81,14 @@ const Index: FC<Props> = ({
       onPressIn={disabled || isLoading ? () => {} : handlePress}
       onPressOut={handlePressOut}>
       <Animated.View
-        style={{
-          transform: [{scale: scaleValue}],
-          opacity: animatedOpacity,
-          backgroundColor: disabled || isLoading ? disabledBg : bgColor,
-          width: width,
-          ...styles.container,
-        }}>
+        style={[
+          {
+            backgroundColor: disabled || isLoading ? disabledBg : bgColor,
+            width: width,
+          },
+          styles.container,
+          btnAnimatedStyles,
+        ]}>
         {isLoading ? (
           <ActivityIndicator size={30} />
         ) : (

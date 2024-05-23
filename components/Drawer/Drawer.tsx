@@ -4,15 +4,19 @@ import {FC, useId} from 'react';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import navigationData from './navigationData';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 //Components
 import NavItem from './NavItem';
 import StatusBadge from '../StatusBadge/StatusBadge';
+import ShrinkButton from '../Buttons/ShrinkButton';
 
 //Assets
 import Logo from '../../assets/Logo2.png';
 import sidebarIcon from '../../assets/sidebar.png';
 import profileIcon from '../../assets/profile.jpg';
+import logoutIcon from '../../assets/logout.png';
 
 interface Props {
   closeDrawer: () => void;
@@ -21,6 +25,12 @@ interface Props {
 
 const Drawer: FC<Props> = ({closeDrawer, activeScreen}) => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
+  const testAction = () => {};
+
+  // const handleLogout = async() =>{
+  //   await AsyncStorage.removeItem()
+  // }
 
   return (
     <View style={[styles.container]}>
@@ -64,8 +74,30 @@ const Drawer: FC<Props> = ({closeDrawer, activeScreen}) => {
             </View>
           </View>
         </View>
-        <View></View>
+        <View style={styles.logEditContainer}>
+          <ShrinkButton
+            label="Edit profile"
+            action={testAction}
+            bgColor="#2d2d35"
+            width={120}
+            height={50}
+            radius={8}
+            borderColor="gray"
+            borderWidth={1}
+          />
+          <ShrinkButton
+            label="Log out"
+            action={testAction}
+            bgColor="#2d2d35"
+            width={120}
+            height={50}
+            borderWidth={1}
+            radius={8}
+            icon={logoutIcon}
+          />
+        </View>
       </View>
+
     </View>
   );
 };

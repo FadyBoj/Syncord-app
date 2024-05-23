@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
+  ImageSourcePropType,
+  Image
 } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -25,7 +27,14 @@ interface Props {
   disabledBg?: string;
   width?: number;
   isLoading?: boolean;
-
+  fit?: boolean;
+  height?: number;
+  padding?: number;
+  radius?: number;
+  color?: string;
+  borderColor?: string;
+  borderWidth?: number;
+  icon?:ImageSourcePropType
 }
 
 const screenWidth = Dimensions.get('window').width;
@@ -37,7 +46,15 @@ const Index: FC<Props> = ({
   disabled = false,
   disabledBg,
   width = 0.88 * screenWidth,
+  height = 45,
   isLoading = false,
+  fit = false,
+  padding = 0,
+  radius = 4,
+  color = 'white',
+  borderColor = '',
+  borderWidth = 0,
+  icon
 }) => {
   const scaleValue = useSharedValue(1);
   const animatedOpacity = useSharedValue(1);
@@ -71,7 +88,7 @@ const Index: FC<Props> = ({
   const btnAnimatedStyles = useAnimatedStyle(() => {
     return {
       transform: [{scale: scaleValue.value}],
-      opacity:animatedOpacity.value
+      opacity: animatedOpacity.value,
     };
   });
 
@@ -84,7 +101,12 @@ const Index: FC<Props> = ({
         style={[
           {
             backgroundColor: disabled || isLoading ? disabledBg : bgColor,
-            width: width,
+            width: fit ? 'auto' : width,
+            height: height,
+            padding: padding,
+            borderRadius: radius,
+            borderColor: borderColor,
+            borderWidth: borderWidth,
           },
           styles.container,
           btnAnimatedStyles,
@@ -94,12 +116,19 @@ const Index: FC<Props> = ({
         ) : (
           <Text
             style={{
-              color: disabled || isLoading ? '#b0b4d0' : 'white',
+              color: disabled || isLoading ? '#b0b4d0' : color,
               ...styles.registerText,
             }}>
             {label}
           </Text>
         )}
+        {
+          icon && 
+          <Image
+          source={icon}
+          style={styles.icon}
+        />
+        }
       </Animated.View>
     </Pressable>
   );
@@ -107,15 +136,21 @@ const Index: FC<Props> = ({
 
 const styles = StyleSheet.create({
   container: {
-    height: 45,
-    borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection:'row',
+    gap:10
   },
   registerText: {
     fontSize: 14,
     fontFamily: 'Roboto',
   },
+  icon:{
+    width:17,
+    height:17,
+    objectFit:'contain',
+    transform:[{translateY:2}]
+  }
 });
 
 export default Index;

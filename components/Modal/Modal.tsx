@@ -19,18 +19,24 @@ import closeIcon from '../../assets/close.png';
 interface Props {
   closeModal: () => void;
   children: JSX.Element;
+  height?: number;
+  width?: number;
 }
 
-const Modal: FC<Props> = ({closeModal, children}) => {
+const Modal: FC<Props> = ({closeModal, children, height = 300, width}) => {
   const screenWidth = Dimensions.get('window').width;
 
   return (
     <Backdrop closeModal={closeModal}>
-      <Pressable onPress={(e) => e.stopPropagation()}>
+      <Pressable onPress={e => e.stopPropagation()}>
         <Animated.View
           entering={FadeInUp.duration(300)}
           exiting={FadeOutDown.duration(300)}
-          style={{width: 0.9 * screenWidth, ...styles.container}}>
+          style={{
+            width: width ? width : 0.9 * screenWidth,
+            height: height,
+            ...styles.container,
+          }}>
           <>
             {/* Close button */}
             {/* <TouchableOpacity
@@ -49,7 +55,6 @@ const Modal: FC<Props> = ({closeModal, children}) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 300,
     borderRadius: 8,
     backgroundColor: '#2c2e36',
     paddingTop: 35,

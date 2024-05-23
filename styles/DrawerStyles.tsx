@@ -6,7 +6,7 @@ const screenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   container: {
     paddingTop: 60,
-    paddingBottom:60,
+    paddingBottom: 60,
     alignItems: 'center',
     justifyContent: 'space-between',
     width: screenWidth * 0.9,
@@ -53,42 +53,46 @@ const styles = StyleSheet.create({
     backgroundColor: '#2d2d35',
     width: '90%',
     minHeight: 200,
-    borderRadius:12,
-    borderColor:'#35353d',
-    borderWidth:1,
-    padding:20
+    borderRadius: 12,
+    borderColor: '#35353d',
+    borderWidth: 1,
+    padding: 20,
+    justifyContent: 'space-between',
   },
-  profilePicContainer:{
-    position:"relative",
-    width:60
+  profilePicContainer: {
+    position: 'relative',
+    width: 60,
   },
-  profilePic:{
-    width:60,
-    height:60,
-    objectFit:'cover',
-    borderRadius:100
+  profilePic: {
+    width: 60,
+    height: 60,
+    objectFit: 'cover',
+    borderRadius: 100,
   },
-  previewInfo:{
-    flexDirection:'row',
-    width:'100%',
-    alignItems:'center',
-    gap:13
+  previewInfo: {
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+    gap: 13,
   },
-  nameId:{
-    flexDirection:'column',
-    gap:3
-
+  nameId: {
+    flexDirection: 'column',
+    gap: 3,
   },
-  nameText:{
-    fontFamily:'Roboto',
-    color:'white',
-    fontSize:16
+  nameText: {
+    fontFamily: 'Roboto',
+    color: 'white',
+    fontSize: 16,
   },
-  idText:{
-    fontFamily:'Roboto',
-    color:'gray',
-    fontSize:12
-  }
+  idText: {
+    fontFamily: 'Roboto',
+    color: 'gray',
+    fontSize: 12,
+  },
+  logEditContainer: {
+    flexDirection: 'row',
+    gap:20
+  },
 });
 
 export default styles;

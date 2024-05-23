@@ -8,6 +8,8 @@ const Stack = createNativeStackNavigator();
 import Home from '../screens/Home';
 import Chats from '../screens/Chats';
 import Friends from '../screens/Friends';
+import Notifications from '../screens/Notifications';
+import Settings from '../screens/Settings';
 
 const AppStack = () => {
   return (
@@ -26,6 +28,16 @@ const AppStack = () => {
         <Stack.Screen
           name="Chats"
           component={Chats}
+          options={{headerShown: false, animation: 'none'}}
+        />
+        <Stack.Screen
+          name="Notifications"
+          component={Notifications}
+          options={{headerShown: false, animation: 'none'}}
+        />
+        <Stack.Screen
+          name="Settings"
+          component={Settings}
           options={{headerShown: false, animation: 'none'}}
         />
       </Stack.Navigator>

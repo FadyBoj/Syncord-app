@@ -12,9 +12,12 @@ interface Props {
 const LoadingLayout: FC<Props> = ({onFailNav, children}) => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [isLoading, setIsLoading] = useState(true);
-  const token = useContext(AuthContext);
+  const token = useContext(AuthContext)?.token;
 
-  if (token === null) navigation.navigate(onFailNav);
+  useEffect(() =>{
+    if (token === null) navigation.navigate('AuthStack',{screen:'Main'});
+
+  },[token])
 
   useEffect(() => {
     setIsLoading(false);

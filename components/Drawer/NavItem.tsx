@@ -42,10 +42,7 @@ const NavItem: FC<Props> = ({
 
   return (
     <TouchableHighlight
-      style={[
-        styles.container,
-        {backgroundColor: isActive ? '#323337' : '#1c1d22'},
-      ]}
+      style={[styles.container, isActive ? styles.active : styles.notActive]}
       underlayColor={'#323337'}
       activeOpacity={0.9}
       onPress={handleNavigation}>
@@ -66,6 +63,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     gap: 20,
     paddingLeft: 10,
+  },
+  active: {
+    borderColor: '#35353d',
+    borderWidth: 2,
+    backgroundColor: '#323337',
+  },
+  notActive: {
+    backgroundColor: '#1c1d22',
   },
   navTitle: {
     fontFamily: 'Roboto',

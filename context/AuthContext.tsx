@@ -1,6 +1,7 @@
 import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createContext, FC, useState, useEffect} from 'react';
+import axios from 'axios';
 
 interface Props {
   children: JSX.Element;
@@ -29,12 +30,25 @@ const AuthProvider: FC<Props> = ({children}) => {
     const getData = async () => {
       try {
         const tokenValue = await AsyncStorage.getItem('token');
-        setToken(tokenValue);
+
+        //Validating token
+        await axios.get('http://syncord.somee.com/user/requests',{
+          headers:{
+            Authorization:`Bearer ${tokenValue}`
+          }
+        })
+
+        setToken(tokenValue)
+
         setTimeout(() => {
           setIsLoading({value: false, fromNav: false});
         }, 1000);
       } catch (error) {
         console.log(error);
+        setToken(null)
+        setTimeout(() => {
+          setIsLoading({value: false, fromNav: false});
+        }, 1000);
       }
     };
     getData();

@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity, ViewComponent} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {useState, FC, useRef, useEffect} from 'react';
 import styles from '../styles/HomeStyles';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
@@ -18,8 +18,9 @@ const Home: FC = () => {
     });
   };
 
+
   return (
-    <LoadingLayout onFailNav='AuthStack'>
+    <LoadingLayout onFailNav="AuthStack">
       <MainLayout isDrawerOpen={isDrawerOpen} activeScreen="Home">
         <View style={styles.container}>
           <TouchableOpacity style={styles.btn} onPress={openDrawer}>

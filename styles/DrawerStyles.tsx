@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     flex: 1,
     gap: 40,
+    position:'relative'
   },
   logoContainer: {
     width: '100%',
@@ -56,7 +57,8 @@ const styles = StyleSheet.create({
     borderRadius:12,
     borderColor:'#35353d',
     borderWidth:1,
-    padding:20
+    padding:20,
+    justifyContent:'space-between'
   },
   profilePicContainer:{
     position:"relative",
@@ -88,7 +90,12 @@ const styles = StyleSheet.create({
     fontFamily:'Roboto',
     color:'gray',
     fontSize:12
-  }
+  },
+  logEditContainer:{
+    flexDirection:'row',
+    width:'100%',
+    gap:20
+  },
 });
 
 export default styles;

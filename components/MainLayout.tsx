@@ -13,6 +13,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 //Components
 import Drawer from './Drawer/Drawer';
+import LogoutModal from './CustomModals/LogoutModal';
 
 interface Props {
   children: JSX.Element;
@@ -26,6 +27,9 @@ const MainLayout: FC<Props> = ({children, isDrawerOpen, activeScreen}) => {
   const [listIndex, setListIndex] = useState<number | null>(1);
   const [isScrolling, setIsScrolling] = useState(false);
   const flatListRef = useRef<FlatList | null>(null);
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+  const openLogoutModal = () => setLogoutModalVisible(true);
+  const closeLogoutModal = () => setLogoutModalVisible(false);
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
@@ -58,12 +62,10 @@ const MainLayout: FC<Props> = ({children, isDrawerOpen, activeScreen}) => {
   //configure back behavior
   useEffect(() => {
     const backAction = () => {
-      if (activeScreen === 'Chats') 
-        BackHandler.exitApp();
-      else 
-      navigation.goBack()
-      
-        return true;
+      if (activeScreen === 'Chats') BackHandler.exitApp();
+      else navigation.goBack();
+
+      return true;
     };
 
     const backHandler = BackHandler.addEventListener(
@@ -83,7 +85,11 @@ const MainLayout: FC<Props> = ({children, isDrawerOpen, activeScreen}) => {
           item == 2 ? (
             <View style={styles.container}>{children}</View>
           ) : (
-            <Drawer closeDrawer={closeDrawer} activeScreen={activeScreen} />
+            <Drawer
+              openModal={openLogoutModal}
+              closeDrawer={closeDrawer}
+              activeScreen={activeScreen}
+            />
           )
         }
         horizontal
@@ -101,6 +107,7 @@ const MainLayout: FC<Props> = ({children, isDrawerOpen, activeScreen}) => {
         onScrollBeginDrag={() => setIsScrolling(true)}
         onScrollEndDrag={() => setIsScrolling(false)}
       />
+      {logoutModalVisible && <LogoutModal closeModal={closeLogoutModal} />}
     </View>
   );
 };

@@ -8,48 +8,27 @@ interface Props {
 }
 
 interface IContext {
-  token: string | null;
   setIsLoading: React.Dispatch<
     React.SetStateAction<{
       value: boolean;
       fromNav: boolean;
     }>
   >;
+  getToken: () => Promise<string | null>;
 }
 
 export const AuthContext = createContext<IContext | null>(null);
 
 const AuthProvider: FC<Props> = ({children}) => {
-  const [token, setToken] = useState<string | null>('');
   const [isLoading, setIsLoading] = useState({
     value: true,
     fromNav: false,
   });
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const tokenValue = await AsyncStorage.getItem('token');
-        // await AsyncStorage.clear()
-        //Validating token
-        await axios.get('http://syncord.somee.com/user/requests', {
-          headers: {
-            Authorization: `Bearer ${tokenValue}`,
-          },
-        });
-        setToken(tokenValue);
-        setTimeout(() => {
-          setIsLoading({value: false, fromNav: false});
-        }, 1000);
-      } catch (error) {
-        console.log(error);
-        setToken(null);
-        setTimeout(() => {
-          setIsLoading({value: false, fromNav: false});
-        }, 1000);
-      }
-    };
-    getData();
+    setTimeout(() => {
+      setIsLoading({value: false, fromNav: false});
+    }, 200);
   }, [0]);
 
   useEffect(() => {
@@ -60,9 +39,24 @@ const AuthProvider: FC<Props> = ({children}) => {
     }
   }, [isLoading]);
 
+  const getToken = async () => {
+    const tokenValue = await AsyncStorage.getItem('token');
+    if (tokenValue === null) return tokenValue;
+    //Validating token
+    try {
+      await axios.get('http://syncord.somee.com/user/requests', {
+        headers: {
+          Authorization: `Bearer ${tokenValue}`,
+        },
+      });
+      return tokenValue;
+    } catch (error) {}
+    return null;
+  };
+
   return (
     <View style={styles.appContainer}>
-      <AuthContext.Provider value={{token, setIsLoading}}>
+      <AuthContext.Provider value={{setIsLoading, getToken}}>
         {children}
       </AuthContext.Provider>
       {isLoading.value && (

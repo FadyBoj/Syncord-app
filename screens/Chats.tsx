@@ -19,7 +19,6 @@ const Chats: FC = props => {
   };
 
   return (
-    <LoadingLayout onFailNav='AuthStack'>
       <MainLayout isDrawerOpen={isDrawerOpen} activeScreen="Chats">
         <View style={styles.container}>
           <TouchableOpacity style={styles.btn} onPress={openDrawer}>
@@ -27,7 +26,6 @@ const Chats: FC = props => {
           </TouchableOpacity>
         </View>
       </MainLayout>
-    </LoadingLayout>
   );
 };
 

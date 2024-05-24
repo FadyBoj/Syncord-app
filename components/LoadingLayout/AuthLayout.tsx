@@ -1,5 +1,5 @@
 import {View, Text, ActivityIndicator, StyleSheet} from 'react-native';
-import {useContext, FC, useEffect} from 'react';
+import {useContext, FC, useEffect, useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {AuthContext} from '../../context/AuthContext';
@@ -13,19 +13,24 @@ interface Props {
 const AuthLayout: FC<Props> = ({onFailNav, children, screen = null}) => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const token = useContext(AuthContext)?.token 
+  const [isLoading,setIsLoading] = useState(true);
+  const getToken = useContext(AuthContext)?.getToken
 
   useEffect(() => {
-    if (token != null) {
-      if (!screen) {
-        navigation.navigate(onFailNav);
-      } else {
-        navigation.navigate(onFailNav, {screen: screen});
-      }
-    }
-  }, [token]);
+    const handleGetToken = async() =>{
+      let token = null
+      if(getToken)
+        token = await getToken();
 
-  return token !== null ? (
+      if(token === null)
+        setIsLoading(false)
+      else 
+      navigation.navigate(onFailNav,{screen:screen})
+    }
+    handleGetToken()
+  }, [0]);
+
+  return isLoading ? (
     <View style={styles.constainer}>
       <ActivityIndicator size={40} />
     </View>

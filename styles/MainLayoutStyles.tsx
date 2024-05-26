@@ -9,6 +9,15 @@ const styles = StyleSheet.create({
         width:'100%',
         height:'100%',
         position:'absolute'
+    },
+    loadingContainer:{
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#1c1d22',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
     }
 });
 

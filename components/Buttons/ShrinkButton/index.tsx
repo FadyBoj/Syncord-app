@@ -31,7 +31,7 @@ interface Props {
   borderColor?: string;
   borderWidth?: number;
   color?:string
-  radius: number;
+  radius?: number;
   icon?:ImageSourcePropType
 }
 

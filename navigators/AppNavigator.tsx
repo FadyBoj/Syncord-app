@@ -14,7 +14,6 @@ import Settings from '../screens/Settings';
 const AppStack = () => {
 
   return (
-    <AuthProvider>
       <>
         <Stack.Navigator>
           <Stack.Screen
@@ -44,7 +43,6 @@ const AppStack = () => {
           />
         </Stack.Navigator>
       </>
-    </AuthProvider>
   );
 };
 

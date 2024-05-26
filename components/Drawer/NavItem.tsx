@@ -28,15 +28,10 @@ const NavItem: FC<Props> = ({
 }) => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const setIsLoading = useContext(AuthContext)?.setIsLoading;
-
   const handleNavigation = () => {
     closeDrawer();
     setTimeout(() => {
-      if (setIsLoading) {
-        setIsLoading({value: true, fromNav: true});
-        navigation.navigate(navDestination);
-      }
+        navigation.push(navDestination);
     }, 200);
   };
 

@@ -15,7 +15,7 @@ const Main = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const navigateToRegister = () => {
-    navigation.navigate('Register', {screen: 'RegisterFirstTab'});
+    navigation.push('Register', {screen: 'RegisterFirstTab'});
   };
 
   const navigateToRLogin = () => {

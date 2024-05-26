@@ -50,12 +50,12 @@ const Login: FC<Props> = ({navigation}) => {
     try {
       setIsLoading(true)
       const response = await axios.post('http://syncord.somee.com/user/login',{
-      email:formData.email,
+      email:formData.email.toLocaleLowerCase(),
       password:formData.password
       })
       const token = response.data.token;
       await AsyncStorage.setItem('token',token);
-      navigation.navigate('AppStack',{screen:'Chats'}); 
+      navigation.replace('AppStack',{screen:'Chats'}); 
       setIsLoading(false)
     } catch (error) {
       setEmailError("Email and password are mismatched")

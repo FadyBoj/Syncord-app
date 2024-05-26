@@ -5,6 +5,7 @@ import {
   FlatList,
   ViewToken,
   BackHandler,
+  ActivityIndicator,
 } from 'react-native';
 import React, {FC, useEffect, useRef, useState, memo} from 'react';
 import styles from '../styles/MainLayoutStyles';
@@ -26,8 +27,10 @@ const MainLayout: FC<Props> = ({children, isDrawerOpen, activeScreen}) => {
   const [isSwipeEnabled, setIsSwipeEnabled] = useState(false);
   const [listIndex, setListIndex] = useState<number | null>(1);
   const [isScrolling, setIsScrolling] = useState(false);
-  const flatListRef = useRef<FlatList | null>(null);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const flatListRef = useRef<FlatList | null>(null);
+  const [firstRender, setFirstRender] = useState(true);
   const openLogoutModal = () => setLogoutModalVisible(true);
   const closeLogoutModal = () => setLogoutModalVisible(false);
 
@@ -63,12 +66,9 @@ const MainLayout: FC<Props> = ({children, isDrawerOpen, activeScreen}) => {
   useEffect(() => {
     const backAction = () => {
       if (activeScreen === 'Chats') BackHandler.exitApp();
-      else navigation.goBack();
-
-      return true;
-      if (activeScreen === 'Chats') BackHandler.exitApp();
-      else navigation.goBack();
-
+      else {
+        navigation.goBack();
+      }
       return true;
     };
 
@@ -80,6 +80,15 @@ const MainLayout: FC<Props> = ({children, isDrawerOpen, activeScreen}) => {
     return () => backHandler.remove();
   }, [0]);
 
+  const handleFirstRender = () => {
+    if (firstRender) {
+      setFirstRender(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 100);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -89,7 +98,11 @@ const MainLayout: FC<Props> = ({children, isDrawerOpen, activeScreen}) => {
           item == 2 ? (
             <View style={styles.container}>{children}</View>
           ) : (
-            <Drawer openModal={openLogoutModal} closeDrawer={closeDrawer} activeScreen={activeScreen} />
+            <Drawer
+              openModal={openLogoutModal}
+              closeDrawer={closeDrawer}
+              activeScreen={activeScreen}
+            />
           )
         }
         horizontal
@@ -106,8 +119,14 @@ const MainLayout: FC<Props> = ({children, isDrawerOpen, activeScreen}) => {
         onViewableItemsChanged={handleScroll}
         onScrollBeginDrag={() => setIsScrolling(true)}
         onScrollEndDrag={() => setIsScrolling(false)}
+        onScroll={handleFirstRender}
       />
       {logoutModalVisible && <LogoutModal closeModal={closeLogoutModal} />}
+      {isLoading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size={40} />
+        </View>
+      )}
     </View>
   );
 };

@@ -44,27 +44,34 @@ const Index: FC<Props> = ({
   return (
     <View style={styles.container}>
       {showLabel && <Text style={styles.label}>{label}</Text>}
-      <TextInput
-        placeholder={label}
-        style={[
-          {width: 0.9 * screenWidth, borderColor: isError ? '#ff3333' : '',borderWidth:isError ? 1 : 0},
-          styles.input,
-        ]}
-        value={value}
-        onChangeText={text => changeFunction(text, name)}
-        secureTextEntry={isPassword && !isPasswordVisible}
-      />
-      {isPassword && (
-        <TouchableOpacity
-          style={styles.eyeContainer}
-          onPress={togglePasswordVisibility}>
-          {!isPasswordVisible ? (
-            <Image source={eyeIcon} style={styles.eye} />
-          ) : (
-            <Image source={closedEyeIcon} style={styles.eye} />
-          )}
-        </TouchableOpacity>
-      )}
+      <View style={styles.inputEyeContainer}>
+        <TextInput
+          placeholder={label}
+          placeholderTextColor={'gray'}
+          style={[
+            {
+              width: 0.9 * screenWidth,
+              borderColor: isError ? '#ff3333' : '',
+              borderWidth: isError ? 1 : 0,
+            },
+            styles.input,
+          ]}
+          value={value}
+          onChangeText={text => changeFunction(text, name)}
+          secureTextEntry={isPassword && !isPasswordVisible}
+        />
+        {isPassword && (
+          <TouchableOpacity
+            style={styles.eyeContainer}
+            onPress={togglePasswordVisibility}>
+            {!isPasswordVisible ? (
+              <Image source={eyeIcon} style={styles.eye} />
+            ) : (
+              <Image source={closedEyeIcon} style={styles.eye} />
+            )}
+          </TouchableOpacity>
+        )}
+      </View>
       {helper && <Text style={styles.helperText}>{helper}</Text>}
       {isError && <Text style={styles.errorText}>{errorMsg}</Text>}
     </View>
@@ -76,13 +83,14 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 10,
     position: 'relative',
-    justifyContent: 'center',
+
   },
   input: {
     backgroundColor: '#32323c',
     borderRadius: 4,
     height: 50,
     paddingLeft: 15,
+    color: 'white',
   },
   label: {
     color: '#787b86',
@@ -91,11 +99,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 12,
     transform: 'translateX(5px)',
+    color: 'white',
+  },
+  inputEyeContainer: {
+    justifyContent:'center'
   },
   eyeContainer: {
     position: 'absolute',
     right: 0,
-    padding: 20,
+    padding:13
   },
   eye: {
     width: 23,

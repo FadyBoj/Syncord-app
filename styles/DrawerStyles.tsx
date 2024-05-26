@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 30,
     paddingRight: 30,
+
   },
   logo: {
     width: 150,
@@ -92,7 +93,8 @@ const styles = StyleSheet.create({
   },
   logEditContainer: {
     flexDirection: 'row',
-    gap:20
+    gap:20,
+    justifyContent:'space-between'
   },
 });
 

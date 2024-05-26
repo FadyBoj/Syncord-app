@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   navTitle: {
     fontFamily: 'Roboto',
     fontSize: 17,
+    color:'white'
   },
   icon: {
     width: 20,

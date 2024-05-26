@@ -28,13 +28,13 @@ const Main = () => {
         <View style={styles.sec1}>
           <Image style={styles.logo} source={logo} />
           <Image style={styles.hero} source={hero} />
-        </View>
         <View style={styles.sec2}>
           <Text style={styles.mainText}>Welcome to Syncord</Text>
           <Text style={styles.secText}>
             Join our community for smooth and engaging real-time communication.
             Let's get chatting!
           </Text>
+        </View>
         </View>
         <View style={styles.authBtnsContainer}>
           <ShrinkButton

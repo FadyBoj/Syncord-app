@@ -28,7 +28,7 @@ const AuthProvider: FC<Props> = ({children}) => {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading({value: false, fromNav: false});
-    }, 200);
+    }, 2000);
   }, [0]);
 
   useEffect(() => {

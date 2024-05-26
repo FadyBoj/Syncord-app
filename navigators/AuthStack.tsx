@@ -12,7 +12,6 @@ const Stack = createNativeStackNavigator();
 
 const AuthStack = () => {
   return (
-    <AuthProvider>
       <Stack.Navigator 
       >
       <Stack.Screen
@@ -45,7 +44,6 @@ const AuthStack = () => {
         }}
       />
     </Stack.Navigator>
-    </AuthProvider>
   );
 };
 

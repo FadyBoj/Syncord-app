@@ -91,6 +91,7 @@ const RegisgerThirdTab: FC<Props> = ({navigation, route}) => {
           name="password"
           showLabel={false}
           helper={'Your password needs to be at least 8 characters long'}
+          isPassword
         />
       </View>
       <View style={styles.labelInputContainer}>
@@ -101,6 +102,7 @@ const RegisgerThirdTab: FC<Props> = ({navigation, route}) => {
           changeFunction={handleChnage}
           name="passwordConfirmation"
           showLabel={false}
+          isPassword
         />
       </View>
       <View style={styles.btnsContainer}>

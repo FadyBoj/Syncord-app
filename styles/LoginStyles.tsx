@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     fontSize:12
   },
   inptsContainer:{
-    gap:10
+    gap:20
   },
   forgetText:{
     color:'#1b98d4',

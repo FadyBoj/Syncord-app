@@ -35,6 +35,7 @@ interface Props {
 interface IContext {
   getToken: () => Promise<string | null>;
   user: IUser | null;
+  setUser:React.Dispatch<React.SetStateAction<null>>
 }
 
 export const AuthContext = createContext<IContext | null>(null);
@@ -97,15 +98,15 @@ const AuthProvider: FC<Props> = ({children}) => {
         setUser(response.data)
       } catch (error) {
         console.log(error)
+        setIsLoading({value:false})
       }
     };
     getDashboard()
   }, [0]);
 
-
   return (
     <View style={styles.appContainer}>
-      <AuthContext.Provider value={{getToken, user}}>
+      <AuthContext.Provider value={{getToken, user,setUser}}>
         {children}
       </AuthContext.Provider>
       {isLoading.value &&  (

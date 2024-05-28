@@ -6,7 +6,7 @@ import {
   ImageSourcePropType,
 } from 'react-native';
 import styles from '../../styles/DrawerStyles';
-import {FC, useId} from 'react';
+import {FC, useId,useContext} from 'react';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import navigationData from './navigationData';
@@ -22,6 +22,7 @@ import Logo from '../../assets/Logo2.png';
 import sidebarIcon from '../../assets/sidebar.png';
 import profileIcon from '../../assets/profile.jpg';
 import logoutIcon from '../../assets/logout.png';
+import { AuthContext } from '../../context/AuthContext';
 
 interface Props {
   closeDrawer: () => void;
@@ -37,6 +38,8 @@ const Drawer: FC<Props> = ({closeDrawer, activeScreen, openModal}) => {
   // const handleLogout = async() =>{
   //   await AsyncStorage.removeItem()
   // }
+
+  const user = useContext(AuthContext)?.user;
 
   return (
     <View style={[styles.container]}>
@@ -68,15 +71,15 @@ const Drawer: FC<Props> = ({closeDrawer, activeScreen, openModal}) => {
       <View style={styles.sec2}>
         <View style={styles.previewInfo}>
           <View style={styles.profilePicContainer}>
-            <Image source={profileIcon} style={styles.profilePic} />
+            <Image source={{uri:user?.image}} style={styles.profilePic} />
             <StatusBadge status="online" />
           </View>
           <View style={styles.nameId}>
             <View>
-              <Text style={styles.nameText}>Tony Soprano</Text>
+              <Text style={styles.nameText}>{`${user?.firstname} ${user?.lastname}`}</Text>
             </View>
             <View>
-              <Text style={styles.idText}>13-324aDSDW-23443</Text>
+              <Text numberOfLines={1} style={styles.idText}>{user?.id}</Text>
             </View>
           </View>
         </View>

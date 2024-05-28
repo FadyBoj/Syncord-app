@@ -3,41 +3,48 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createContext, FC, useState, useEffect} from 'react';
 import axios from 'axios';
 
+interface IRequest {
+  id: number;
+  userId: string;
+  email: string;
+  outGoing: boolean;
+}
+
+interface IFriend {
+  id: string;
+  userId: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+}
+
+interface IUser {
+  id: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  image: string;
+  requests: IRequest[];
+  friends: IFriend[];
+}
+
 interface Props {
   children: JSX.Element;
 }
 
 interface IContext {
-  setIsLoading: React.Dispatch<
-    React.SetStateAction<{
-      value: boolean;
-      fromNav: boolean;
-    }>
-  >;
   getToken: () => Promise<string | null>;
+  user: IUser | null;
 }
 
 export const AuthContext = createContext<IContext | null>(null);
 
 const AuthProvider: FC<Props> = ({children}) => {
+  const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState({
     value: true,
-    fromNav: false,
   });
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading({value: false, fromNav: false});
-    }, 2000);
-  }, [0]);
-
-  useEffect(() => {
-    if (isLoading.fromNav) {
-      setTimeout(() => {
-        setIsLoading({value: false, fromNav: false});
-      }, 200);
-    }
-  }, [isLoading]);
+  const [timeThreshold,setTimeThreshold] = useState(false);
 
   const getToken = async () => {
     const tokenValue = await AsyncStorage.getItem('token');
@@ -54,12 +61,54 @@ const AuthProvider: FC<Props> = ({children}) => {
     return null;
   };
 
+  //Time threshold
+  useEffect(() =>{
+    setTimeout(() =>{
+      setTimeThreshold(true);
+    },2000)
+  },[0])
+
+  useEffect(() =>{
+    if(timeThreshold && user !== null)
+      setIsLoading({value:false})
+  },[user,timeThreshold])
+
+ 
+  //Getting user dashboard
+  useEffect(() => {
+    const getDashboard = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if(!token)
+          {
+            setTimeThreshold(true)
+            setTimeout(() =>{
+              setIsLoading({value:false})
+
+            },2000)
+            return
+          }
+
+        const response  = await axios.get('http://syncord.somee.com/user/dashboard',{
+          headers:{
+            Authorization:`Bearer ${token}`
+          }
+        }) 
+        setUser(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    };
+    getDashboard()
+  }, [0]);
+
+
   return (
     <View style={styles.appContainer}>
-      <AuthContext.Provider value={{setIsLoading, getToken}}>
+      <AuthContext.Provider value={{getToken, user}}>
         {children}
       </AuthContext.Provider>
-      {isLoading.value && (
+      {isLoading.value &&  (
         <View style={styles.container}>
           <ActivityIndicator size={40} />
         </View>

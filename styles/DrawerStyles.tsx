@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     color: 'gray',
     fontSize: 12,
+    width:'80%'
   },
   logEditContainer: {
     flexDirection: 'row',

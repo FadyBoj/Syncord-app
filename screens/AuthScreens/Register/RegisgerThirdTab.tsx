@@ -1,5 +1,5 @@
 import {View, Text, ScrollView} from 'react-native';
-import React, {useState, FC, useEffect} from 'react';
+import React, {useState, FC, useEffect,useContext} from 'react';
 import styles from '../../../styles/RegisterThirdTabStyles ';
 import validator from 'validator';
 import axios from 'axios';
@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //Components
 import CustomTextInput from '../../../components/Inputs/CustomTextInput/Index';
 import ShrinkButton from '../../../components/Buttons/ShrinkButton';
+import { AuthContext } from '../../../context/AuthContext';
 
 interface Props {
   navigation: any;
@@ -65,15 +66,26 @@ const RegisgerThirdTab: FC<Props> = ({navigation, route}) => {
     setIsFormValid(true);
   }, [formData]);
 
+  const setUser = useContext(AuthContext)?.setUser;
+
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
       const userData = {...previousData, ...formData};
       const {msg, token}: IregisterRequest = (
-        await axios.post('http://syncord.somee.com/user/register', userData)
+        await axios.post('https://syncord.runasp.net/user/register', userData)
       ).data;
       await AsyncStorage.setItem('token', token);
-      navigation.navigate('AppStack', {screen: 'Home'});
+      const userResponse = await axios.get(
+        'https://syncord.runasp.net/user/dashboard',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (setUser) setUser(userResponse.data);
+      navigation.replace('AppStack', {screen: 'Chats'});
     } catch (error) {
       setIsLoading(false  )
       console.log("F")

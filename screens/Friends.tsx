@@ -1,13 +1,11 @@
 import {View, Text, TouchableOpacity, ViewComponent} from 'react-native';
-import {useState  ,FC, useRef, useEffect} from 'react';
-import styles from '../styles/HomeStyles';
+import {useState, FC, useRef, useEffect} from 'react';
+import styles from '../styles/FriendsStyles';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 //Components
 import MainLayout from '../components/MainLayout';
 
-
-
-const Friends:FC = (props) => {
+const Friends: FC = props => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const closeDrawer = () => {
@@ -15,18 +13,15 @@ const Friends:FC = (props) => {
   };
 
   const openDrawer = () => {
-    setIsDrawerOpen((prev) =>{
-      return !prev
-    })
+    setIsDrawerOpen(prev => {
+      return !prev;
+    });
   };
 
-  
   return (
-    <MainLayout  isDrawerOpen={isDrawerOpen} activeScreen='Friends'>
-      <View  style={styles.container}>
-        <TouchableOpacity style={styles.btn} onPress={openDrawer}>
-          <Text>open Drawe Friendsr</Text>
-        </TouchableOpacity>
+    <MainLayout isDrawerOpen={isDrawerOpen} activeScreen="Friends">
+      <View style={styles.container}>
+        {/* Title */}
       </View>
     </MainLayout>
   );

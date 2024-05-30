@@ -50,14 +50,14 @@ const Login: FC<Props> = ({navigation}) => {
   const handleLogin = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post('http://syncord.somee.com/user/login', {
+      const response = await axios.post('https://syncord.runasp.net/user/login', {
         email: formData.email.toLocaleLowerCase(),
         password: formData.password,
       });
       const token = response.data.token;
       await AsyncStorage.setItem('token', token);
       const userResponse = await axios.get(
-        'http://syncord.somee.com/user/dashboard',
+        'https://syncord.runasp.net/user/dashboard',
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -6,7 +6,7 @@ import {
   ImageSourcePropType,
 } from 'react-native';
 import styles from '../../styles/DrawerStyles';
-import {FC, useId,useContext} from 'react';
+import {FC, useId, useContext} from 'react';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import navigationData from './navigationData';
@@ -22,7 +22,7 @@ import Logo from '../../assets/Logo2.png';
 import sidebarIcon from '../../assets/sidebar.png';
 import profileIcon from '../../assets/profile.jpg';
 import logoutIcon from '../../assets/logout.png';
-import { AuthContext } from '../../context/AuthContext';
+import {AuthContext} from '../../context/AuthContext';
 
 interface Props {
   closeDrawer: () => void;
@@ -71,15 +71,32 @@ const Drawer: FC<Props> = ({closeDrawer, activeScreen, openModal}) => {
       <View style={styles.sec2}>
         <View style={styles.previewInfo}>
           <View style={styles.profilePicContainer}>
-            <Image source={{uri:user?.image}} style={styles.profilePic} />
+            {user && user.image  ? (
+              <Image source={{uri: user?.image}} style={styles.profilePic} />
+            ) : (
+              <View style={styles.imagePlaceHolder}>
+                <Text style={styles.pfpText}>
+                  {user?.firstname[0].toLocaleUpperCase()}
+                </Text>
+                <Text style={styles.pfpText}>
+                  {user?.lastname[0].toLocaleUpperCase()}
+                </Text>
+              </View>
+            )}
+
             <StatusBadge status="online" />
           </View>
           <View style={styles.nameId}>
             <View>
-              <Text style={styles.nameText}>{`${user?.firstname} ${user?.lastname}`}</Text>
+              <Text
+                style={
+                  styles.nameText
+                }>{`${user?.firstname} ${user?.lastname}`}</Text>
             </View>
             <View>
-              <Text numberOfLines={1} style={styles.idText}>{user?.id}</Text>
+              <Text numberOfLines={1} style={styles.idText}>
+                {user?.id}
+              </Text>
             </View>
           </View>
         </View>

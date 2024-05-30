@@ -15,6 +15,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 //Components
 import Drawer from './Drawer/Drawer';
 import LogoutModal from './CustomModals/LogoutModal';
+import Header from './Header/Header';
 
 interface Props {
   children: JSX.Element;
@@ -33,6 +34,12 @@ const MainLayout: FC<Props> = ({children, isDrawerOpen, activeScreen}) => {
   const [firstRender, setFirstRender] = useState(true);
   const openLogoutModal = () => setLogoutModalVisible(true);
   const closeLogoutModal = () => setLogoutModalVisible(false);
+  const openDrawer = () => {
+    flatListRef.current?.scrollToIndex({
+      index: 0,
+    });
+    setIsSwipeEnabled(true);
+  };
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
@@ -96,7 +103,10 @@ const MainLayout: FC<Props> = ({children, isDrawerOpen, activeScreen}) => {
         data={[1, 2]}
         renderItem={({item}) =>
           item == 2 ? (
-            <View style={styles.container}>{children}</View>
+            <View style={styles.container}>
+              <Header openDrawer={openDrawer} title={activeScreen} />
+              {children}
+            </View>
           ) : (
             <Drawer
               openModal={openLogoutModal}

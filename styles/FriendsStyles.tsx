@@ -7,22 +7,21 @@ const styles = StyleSheet.create({
     container:{
         width:screenWidth,
         height:'100%',
-        justifyContent:'center',
+        justifyContent:'flex-start',
         alignItems:'center',
         backgroundColor:'#111216',
-        gap:80
+        paddingTop:20
     },
-    btn:{
-        padding:15,
-        backgroundColor:'cyan',
-        borderRadius:8
+    titleContainer:{
+        justifyContent:'center',
+        alignItems:'center'
     },
-    ball:{
-        backgroundColor:'cyan',
-        width:100,
-        height:100,
-        borderRadius:100
+    titleText:{
+        fontFamily:'Roboto',
+        fontSize:18,
+        color:'white'
     }
+
 });
 
 export default styles;

@@ -29,6 +29,7 @@ interface IFriend {
   firstname: string;
   lastname: string;
   isOnline: boolean;
+  image:string
 }
 
 interface IUser {
@@ -174,9 +175,9 @@ const Friends: FC = props => {
             })}
           </View>
           <View style={styles.friendsListContainer}>
-            {filteredFriends && statusFilter === 'Online' &&
+            {filteredFriends && statusFilter === 'online' &&
               filteredFriends?.filter(f => f.isOnline).length > 0 && (
-                <FriendsList />
+                <FriendsList status='Online' friends={filteredFriends}/>
               )}
           </View>
         </View>
@@ -185,4 +186,4 @@ const Friends: FC = props => {
   );
 };
 
-export default memo(Friends);
+export default Friends;

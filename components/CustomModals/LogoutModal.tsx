@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet} from 'react-native';
-import {FC, useState} from 'react';
+import {FC, useState,useContext} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Components
@@ -7,6 +7,7 @@ import Modal from '../Modal/Modal';
 import ShrinkButton from '../Buttons/ShrinkButton';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import { DashboardContext } from '../../context/DashboardContext';
 
 interface Props {
   closeModal: () => void;
@@ -16,12 +17,16 @@ const LogoutModal: FC<Props> = ({closeModal}) => {
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [isLoading,setIsLoading] = useState(false)
+  const connection = useContext(DashboardContext)?.connection;
 
   const handleLogout = async() =>{
     setIsLoading(true)
     await AsyncStorage.removeItem('token');
+    connection?.stop()
     navigation.replace('AuthStack')
   }
+
+
   return (
     <Modal closeModal={closeModal} height={170} width={280}>
       <View style={styles.container}>

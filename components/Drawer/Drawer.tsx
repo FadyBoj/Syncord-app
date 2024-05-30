@@ -21,7 +21,7 @@ import ShrinkButton from '../Buttons/ShrinkButton';
 import Logo from '../../assets/Logo2.png';
 import sidebarIcon from '../../assets/sidebar.png';
 import logoutIcon from '../../assets/logout.png';
-import { DashboardContext } from '../../context/DashboardContext';
+import {DashboardContext} from '../../context/DashboardContext';
 
 interface Props {
   closeDrawer: () => void;
@@ -70,7 +70,7 @@ const Drawer: FC<Props> = ({closeDrawer, activeScreen, openModal}) => {
       <View style={styles.sec2}>
         <View style={styles.previewInfo}>
           <View style={styles.profilePicContainer}>
-            {user && user.image  ? (
+            {user && user.image ? (
               <Image source={{uri: user?.image}} style={styles.profilePic} />
             ) : (
               <View style={styles.imagePlaceHolder}>

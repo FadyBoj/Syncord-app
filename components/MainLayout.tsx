@@ -93,7 +93,7 @@ const MainLayout: FC<Props> = ({children, isDrawerOpen, activeScreen}) => {
       setFirstRender(false);
       setTimeout(() => {
         setIsLoading(false);
-      }, 100);
+      }, 300);
     }
   };
 

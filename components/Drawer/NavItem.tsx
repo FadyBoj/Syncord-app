@@ -32,7 +32,7 @@ const NavItem: FC<Props> = ({
     closeDrawer();
     setTimeout(() => {
         navigation.navigate(navDestination);
-    }, 100);
+    },150);
   };
 
   return (

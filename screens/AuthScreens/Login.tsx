@@ -45,8 +45,6 @@ const Login: FC<Props> = ({navigation}) => {
     setIsFormValid(true);
   }, [formData]);
 
-  const setUser = useContext(AuthContext)?.setUser;
-  const startConnection = useContext(AuthContext)?.startConnection;
 
   const handleLogin = async () => {
     try {
@@ -65,7 +63,6 @@ const Login: FC<Props> = ({navigation}) => {
           },
         },
       );
-      if (setUser) setUser(userResponse.data);
       navigation.replace('AppStack', {screen: 'Chats'});
       setIsLoading(false);
     } catch (error) {

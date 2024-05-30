@@ -59,7 +59,8 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-start',
   },
-  friendsListContainer: {},
+  friendsListContainer: {
+  },
 });
 
 export default styles;

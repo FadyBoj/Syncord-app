@@ -45,7 +45,7 @@ const FilterBtn: FC<Props> = ({name, isActive, handleFilterChange}) => {
       <Pressable
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-        onPress={() => handleFilterChange(name)}
+        onPress={() => handleFilterChange(name.toLocaleLowerCase())}
         style={styles.content}>
         <Text style={styles.text}>{name}</Text>
       </Pressable>

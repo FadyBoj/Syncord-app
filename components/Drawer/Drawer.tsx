@@ -20,9 +20,8 @@ import ShrinkButton from '../Buttons/ShrinkButton';
 //Assets
 import Logo from '../../assets/Logo2.png';
 import sidebarIcon from '../../assets/sidebar.png';
-import profileIcon from '../../assets/profile.jpg';
 import logoutIcon from '../../assets/logout.png';
-import {AuthContext} from '../../context/AuthContext';
+import { DashboardContext } from '../../context/DashboardContext';
 
 interface Props {
   closeDrawer: () => void;
@@ -39,7 +38,7 @@ const Drawer: FC<Props> = ({closeDrawer, activeScreen, openModal}) => {
   //   await AsyncStorage.removeItem()
   // }
 
-  const user = useContext(AuthContext)?.user;
+  const user = useContext(DashboardContext)?.user;
 
   return (
     <View style={[styles.container]}>

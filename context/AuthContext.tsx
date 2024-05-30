@@ -17,6 +17,7 @@ interface IFriend {
   email: string;
   firstname: string;
   lastname: string;
+  isOnline: boolean;
 }
 
 interface IUser {
@@ -35,19 +36,16 @@ interface Props {
 
 interface IContext {
   getToken: () => Promise<string | null>;
-  user: IUser | null;
-  setUser: React.Dispatch<React.SetStateAction<null>>;
 }
 
 export const AuthContext = createContext<IContext | null>(null);
 
 const AuthProvider: FC<Props> = ({children}) => {
   //Configure real time connection
-  const [connection, setConnection] = useState<signalR.HubConnection | null>(
-    null,
-  );
-
-  const [user, setUser] = useState(null);
+  
+  const [user, setUser] = useState<IUser | null>(null);
+  const [validToken, setValidToken] = useState(false);
+  const [reConnect, setReconnext] = useState(false);
   const [isLoading, setIsLoading] = useState({
     value: true,
   });
@@ -56,9 +54,8 @@ const AuthProvider: FC<Props> = ({children}) => {
   const getToken = async () => {
     const tokenValue = await AsyncStorage.getItem('token');
     if (tokenValue === null) return tokenValue;
-    //Validating token
     try {
-      await axios.get('https://www.syncord.somee.com/user/requests', {
+      await axios.get('https://syncord.runasp.net/user/requests', {
         headers: {
           Authorization: `Bearer ${tokenValue}`,
         },
@@ -73,11 +70,7 @@ const AuthProvider: FC<Props> = ({children}) => {
     setTimeout(() => {
       setTimeThreshold(true);
     }, 2000);
-  }, [0]);
-
-  useEffect(() => {
-    if (timeThreshold && user !== null) setIsLoading({value: false});
-  }, [user, timeThreshold]);
+  }, []);
 
   //Getting user dashboard
   useEffect(() => {
@@ -91,6 +84,7 @@ const AuthProvider: FC<Props> = ({children}) => {
           }, 2000);
           return;
         }
+        setValidToken(true);
 
         const response = await axios.get(
           'https://syncord.runasp.net/user/dashboard',
@@ -101,31 +95,25 @@ const AuthProvider: FC<Props> = ({children}) => {
           },
         );
         setUser(response.data);
-        setConnection(
-          new signalR.HubConnectionBuilder()
-            .withUrl('https://syncord.runasp.net/chat', {
-              skipNegotiation: true,
-              transport: signalR.HttpTransportType.WebSockets,
-            })
-            .build(),
-        );
       } catch (error) {
         console.log(error);
         setIsLoading({value: false});
       }
     };
     getDashboard();
-  }, [0]);
+  }, []);
 
-  connection?.start()
-  .then(() =>{
-    console.log("Connected")
-  })
+  useEffect(() => {
+    if (timeThreshold && user !== null) setIsLoading({value: false});
+  }, [validToken, timeThreshold]);  
 
  
+
+
   return (
     <View style={styles.appContainer}>
-      <AuthContext.Provider value={{getToken, user, setUser}}>
+      <AuthContext.Provider
+        value={{getToken}}>
         {children}
       </AuthContext.Provider>
       {isLoading.value && (

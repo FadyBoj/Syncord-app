@@ -11,6 +11,7 @@ import React, {FC, useEffect, useRef, useState, memo} from 'react';
 import styles from '../styles/MainLayoutStyles';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import DashboardContextProvider from '../context/DashboardContext';
 
 //Components
 import Drawer from './Drawer/Drawer';
@@ -97,47 +98,47 @@ const MainLayout: FC<Props> = ({children, isDrawerOpen, activeScreen}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        ref={flatListRef}
-        data={[1, 2]}
-        renderItem={({item}) =>
-          item == 2 ? (
-            <View style={styles.container}>
-              <Header openDrawer={openDrawer} title={activeScreen} />
-              {children}
-            </View>
-          ) : (
-            <Drawer
-              openModal={openLogoutModal}
-              closeDrawer={closeDrawer}
-              activeScreen={activeScreen}
-            />
-          )
-        }
-        horizontal
-        pagingEnabled
-        initialNumToRender={1}
-        initialScrollIndex={1}
-        getItemLayout={(data, index) => ({
-          length: screenWidth,
-          offset: screenWidth * 0.9 * index,
-          index,
-        })}
-        scrollEnabled={isSwipeEnabled}
-        viewabilityConfig={{itemVisiblePercentThreshold: 50}}
-        onViewableItemsChanged={handleScroll}
-        onScrollBeginDrag={() => setIsScrolling(true)}
-        onScrollEndDrag={() => setIsScrolling(false)}
-        onScroll={handleFirstRender}
-      />
-      {logoutModalVisible && <LogoutModal closeModal={closeLogoutModal} />}
-      {isLoading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size={40} />
-        </View>
-      )}
-    </View>
+      <View style={styles.container}>
+        <FlatList
+          ref={flatListRef}
+          data={[1, 2]}
+          renderItem={({item}) =>
+            item == 2 ? (
+              <View style={styles.container}>
+                <Header openDrawer={openDrawer} title={activeScreen} />
+                {children}
+              </View>
+            ) : (
+              <Drawer
+                openModal={openLogoutModal}
+                closeDrawer={closeDrawer}
+                activeScreen={activeScreen}
+              />
+            )
+          }
+          horizontal
+          pagingEnabled
+          initialNumToRender={1}
+          initialScrollIndex={1}
+          getItemLayout={(data, index) => ({
+            length: screenWidth,
+            offset: screenWidth * 0.9 * index,
+            index,
+          })}
+          scrollEnabled={isSwipeEnabled}
+          viewabilityConfig={{itemVisiblePercentThreshold: 50}}
+          onViewableItemsChanged={handleScroll}
+          onScrollBeginDrag={() => setIsScrolling(true)}
+          onScrollEndDrag={() => setIsScrolling(false)}
+          onScroll={handleFirstRender}
+        />
+        {logoutModalVisible && <LogoutModal closeModal={closeLogoutModal} />}
+        {isLoading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size={40} />
+          </View>
+        )}
+      </View>
   );
 };
 

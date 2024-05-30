@@ -31,8 +31,8 @@ const NavItem: FC<Props> = ({
   const handleNavigation = () => {
     closeDrawer();
     setTimeout(() => {
-        navigation.push(navDestination);
-    }, 200);
+        navigation.navigate(navDestination);
+    }, 100);
   };
 
   return (

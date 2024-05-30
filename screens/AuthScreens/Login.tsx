@@ -46,6 +46,7 @@ const Login: FC<Props> = ({navigation}) => {
   }, [formData]);
 
   const setUser = useContext(AuthContext)?.setUser;
+  const startConnection = useContext(AuthContext)?.startConnection;
 
   const handleLogin = async () => {
     try {

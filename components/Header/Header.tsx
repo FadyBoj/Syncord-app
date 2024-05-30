@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {useContext, FC} from 'react';
-import {AuthContext} from '../../context/AuthContext';
+import { DashboardContext } from '../../context/DashboardContext';
 
 interface Props {
   openDrawer: () => void;
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const Header: FC<Props> = ({openDrawer, title = false}) => {
-  const user = useContext(AuthContext)?.user;
+  const user = useContext(DashboardContext)?.user;
 
   return (
     <View style={styles.container}>

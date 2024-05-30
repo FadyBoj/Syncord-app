@@ -31,8 +31,8 @@ const NavItem: FC<Props> = ({
   const handleNavigation = () => {
     closeDrawer();
     setTimeout(() => {
-        navigation.push(navDestination);
-    }, 200);
+        navigation.navigate(navDestination);
+    }, 100);
   };
 
   return (
@@ -62,10 +62,9 @@ const styles = StyleSheet.create({
   active: {
     borderColor: '#35353d',
     borderWidth: 2,
-    backgroundColor: '#323337',
+    backgroundColor: '#1c1d22',
   },
   notActive: {
-    backgroundColor: '#1c1d22',
   },
   navTitle: {
     fontFamily: 'Roboto',

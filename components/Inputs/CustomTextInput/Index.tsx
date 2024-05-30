@@ -6,6 +6,7 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  ImageSourcePropType,
 } from 'react-native';
 import React, {FC, useState} from 'react';
 
@@ -23,6 +24,9 @@ interface Props {
   isPassword?: boolean;
   isError?: boolean;
   errorMsg?: string;
+  radius?: number;
+  bgColor?:string
+  icon?:ImageSourcePropType
 }
 
 const Index: FC<Props> = ({
@@ -35,6 +39,9 @@ const Index: FC<Props> = ({
   isPassword = false,
   isError = false,
   errorMsg = false,
+  radius = 4,
+  bgColor='#32323c',
+  icon=null
 }) => {
   const screenWidth = Dimensions.get('window').width;
 
@@ -53,6 +60,9 @@ const Index: FC<Props> = ({
               width: 0.9 * screenWidth,
               borderColor: isError ? '#ff3333' : '',
               borderWidth: isError ? 1 : 0,
+              borderRadius:radius,
+              backgroundColor:bgColor,
+              paddingLeft: icon ? 50 : 15
             },
             styles.input,
           ]}
@@ -74,6 +84,15 @@ const Index: FC<Props> = ({
       </View>
       {helper && <Text style={styles.helperText}>{helper}</Text>}
       {isError && <Text style={styles.errorText}>{errorMsg}</Text>}
+        {
+          icon &&
+          <View style={styles.iconContainer}>
+            <Image 
+            source={icon}
+            style={styles.icon}
+            />
+          </View>
+        }
     </View>
   );
 };
@@ -83,13 +102,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 10,
     position: 'relative',
-
+    justifyContent:'center',
   },
   input: {
-    backgroundColor: '#32323c',
-    borderRadius: 4,
     height: 50,
-    paddingLeft: 15,
     color: 'white',
   },
   label: {
@@ -102,12 +118,12 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   inputEyeContainer: {
-    justifyContent:'center'
+    justifyContent: 'center',
   },
   eyeContainer: {
     position: 'absolute',
     right: 0,
-    padding:13
+    padding: 13,
   },
   eye: {
     width: 23,
@@ -118,6 +134,15 @@ const styles = StyleSheet.create({
     color: '#ff3333',
     fontSize: 12,
   },
+  iconContainer:{
+    position:'absolute',
+    left:15,
+    pointerEvents:'none'
+  },
+  icon:{
+    width:17,
+    height:17
+  }
 });
 
 export default Index;

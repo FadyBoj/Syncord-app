@@ -2,6 +2,7 @@ import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createContext, FC, useState, useEffect} from 'react';
 import axios from 'axios';
+import * as signalR from '@microsoft/signalr';
 
 interface IRequest {
   id: number;
@@ -16,6 +17,7 @@ interface IFriend {
   email: string;
   firstname: string;
   lastname: string;
+  isOnline: boolean;
 }
 
 interface IUser {
@@ -34,24 +36,26 @@ interface Props {
 
 interface IContext {
   getToken: () => Promise<string | null>;
-  user: IUser | null;
 }
 
 export const AuthContext = createContext<IContext | null>(null);
 
 const AuthProvider: FC<Props> = ({children}) => {
-  const [user, setUser] = useState(null);
+  //Configure real time connection
+  
+  const [user, setUser] = useState<IUser | null>(null);
+  const [validToken, setValidToken] = useState(false);
+  const [reConnect, setReconnext] = useState(false);
   const [isLoading, setIsLoading] = useState({
     value: true,
   });
-  const [timeThreshold,setTimeThreshold] = useState(false);
+  const [timeThreshold, setTimeThreshold] = useState(false);
 
   const getToken = async () => {
     const tokenValue = await AsyncStorage.getItem('token');
     if (tokenValue === null) return tokenValue;
-    //Validating token
     try {
-      await axios.get('http://syncord.somee.com/user/requests', {
+      await axios.get('https://syncord.runasp.net/user/requests', {
         headers: {
           Authorization: `Bearer ${tokenValue}`,
         },
@@ -62,53 +66,57 @@ const AuthProvider: FC<Props> = ({children}) => {
   };
 
   //Time threshold
-  useEffect(() =>{
-    setTimeout(() =>{
+  useEffect(() => {
+    setTimeout(() => {
       setTimeThreshold(true);
-    },2000)
-  },[0])
+    }, 2000);
+  }, []);
 
-  useEffect(() =>{
-    if(timeThreshold && user !== null)
-      setIsLoading({value:false})
-  },[user,timeThreshold])
-
- 
   //Getting user dashboard
   useEffect(() => {
     const getDashboard = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        if(!token)
+        if (!token) {
+          setTimeThreshold(true);
+          setTimeout(() => {
+            setIsLoading({value: false});
+          }, 2000);
+          return;
+        }
+        setValidToken(true);
+
+        const response = await axios.get(
+          'https://syncord.runasp.net/user/dashboard',
           {
-            setTimeThreshold(true)
-            setTimeout(() =>{
-              setIsLoading({value:false})
-
-            },2000)
-            return
-          }
-
-        const response  = await axios.get('http://syncord.somee.com/user/dashboard',{
-          headers:{
-            Authorization:`Bearer ${token}`
-          }
-        }) 
-        setUser(response.data)
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        setUser(response.data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
+        setIsLoading({value: false});
       }
     };
-    getDashboard()
-  }, [0]);
+    getDashboard();
+  }, []);
+
+  useEffect(() => {
+    if (timeThreshold && user !== null) setIsLoading({value: false});
+  }, [validToken, timeThreshold]);  
+
+ 
 
 
   return (
     <View style={styles.appContainer}>
-      <AuthContext.Provider value={{getToken, user}}>
+      <AuthContext.Provider
+        value={{getToken}}>
         {children}
       </AuthContext.Provider>
-      {isLoading.value &&  (
+      {isLoading.value && (
         <View style={styles.container}>
           <ActivityIndicator size={40} />
         </View>
@@ -122,7 +130,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: '#1c1d22',
+    backgroundColor: '#111216',
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',

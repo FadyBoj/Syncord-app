@@ -11,11 +11,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: screenWidth * 0.9,
     height: screenHeight,
-    backgroundColor: '#1c1d22',
+    backgroundColor: '#111216',
     borderRightWidth: 3,
     borderRadius: 8,
     flex: 1,
-    gap: 40,
+    gap: 20,
     position:'relative'
   },
   logoContainer: {
@@ -41,25 +41,46 @@ const styles = StyleSheet.create({
     transform: [{translateY: 2}],
   },
   navContainer: {
-    width: '100%',
     flexDirection: 'column',
     gap: 10,
-    paddingLeft: 30,
-    paddingRight: 30,
+    backgroundColor: '#212129',
+    width: '90%',
+    minHeight: 200,
+    borderRadius: 12,
+    padding: 20,
+    paddingLeft:10,
+    paddingRight:10,
+    justifyContent: 'space-between',
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 1.25,
+    shadowRadius: 3.84,
+    elevation:10
   },
   sec1: {
     gap: 40,
     width: '100%',
+    alignItems:"center"
   },
   sec2: {
-    backgroundColor: '#2d2d35',
+    backgroundColor: '#212129',
     width: '90%',
     minHeight: 200,
     borderRadius: 12,
-    borderColor: '#35353d',
-    borderWidth: 1,
     padding: 20,
     justifyContent: 'space-between',
+    shadowColor: 'black',
+    shadowOffset: {
+      width: 20,
+      height: 2,
+    },
+    shadowOpacity: 1.25,
+    shadowRadius: 3.84,
+    elevation:10
+    
   },
   profilePicContainer: {
     position: 'relative',
@@ -97,6 +118,20 @@ const styles = StyleSheet.create({
     gap:20,
     justifyContent:'space-between'
   },
+  imagePlaceHolder:{
+    width: 60,
+    height: 60,
+    borderRadius: 100,
+    backgroundColor:'#6441A5',
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  pfpText:{
+    fontFamily:'Roboto',
+    color:'white',
+    fontSize:20
+  }
 });
 
 export default styles;

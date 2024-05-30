@@ -9,8 +9,7 @@ const styles = StyleSheet.create({
         height:'100%',
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor:'#1c1d22',
-        borderRadius:8,
+        backgroundColor:'#111216',
         gap:80
     },
     btn:{

@@ -1,7 +1,7 @@
 import {Text, View} from 'react-native';
 import React, {Component, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import AuthProvider from '../context/AuthContext';
+import DashboardContextProvider from '../context/DashboardContext';
 const Stack = createNativeStackNavigator();
 
 //screens
@@ -14,7 +14,7 @@ import Settings from '../screens/Settings';
 const AppStack = () => {
 
   return (
-      <>
+      <DashboardContextProvider>
         <Stack.Navigator>
           <Stack.Screen
             name="Home"
@@ -42,7 +42,7 @@ const AppStack = () => {
             options={{headerShown: false, animation: 'none'}}
           />
         </Stack.Navigator>
-      </>
+      </DashboardContextProvider>
   );
 };
 

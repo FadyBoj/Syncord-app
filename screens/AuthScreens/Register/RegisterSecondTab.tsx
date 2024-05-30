@@ -35,7 +35,6 @@ const RegisterSecondTab: FC<Props> = ({navigation, route}) => {
 
   const handleSubmit = () =>{
     const userData = {email:params?.email,...formData};
-    console.log(userData)
     setIsLoading(true)
     setTimeout(() =>{
       navigation.jumpTo('RegisterThirdTab',userData)

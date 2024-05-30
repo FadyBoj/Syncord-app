@@ -1,5 +1,5 @@
 import {View, Text, ScrollView} from 'react-native';
-import {useState, useEffect, FC} from 'react';
+import {useState, useEffect, FC, useContext} from 'react';
 import styles from '../../styles/LoginStyles';
 import validator from 'validator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,6 +9,7 @@ import CustomTextInput from '../../components/Inputs/CustomTextInput/Index';
 import ShrinkButton from '../../components/Buttons/ShrinkButton';
 import NavHeader from '../../components/NavHeader/NavHeader';
 import axios from 'axios';
+import {AuthContext} from '../../context/AuthContext';
 
 interface Props {
   navigation: any;
@@ -23,7 +24,7 @@ const Login: FC<Props> = ({navigation}) => {
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [emailError,setEmailError] = useState<string>("");
+  const [emailError, setEmailError] = useState<string>('');
 
   const handleChnage = (value: string, name: string) => {
     setFormData(prevData => {
@@ -37,32 +38,42 @@ const Login: FC<Props> = ({navigation}) => {
 
   //Validate form
   useEffect(() => {
-    if (!validator.isEmail(formData.email))
-      return setIsFormValid(false);
+    if (!validator.isEmail(formData.email)) return setIsFormValid(false);
 
-    if (formData.password.length < 8)
-      return setIsFormValid(false);
+    if (formData.password.length < 8) return setIsFormValid(false);
 
     setIsFormValid(true);
   }, [formData]);
 
-  const handleLogin = async() =>{
+  const setUser = useContext(AuthContext)?.setUser;
+  const startConnection = useContext(AuthContext)?.startConnection;
+
+  const handleLogin = async () => {
     try {
-      setIsLoading(true)
-      const response = await axios.post('http://syncord.somee.com/user/login',{
-      email:formData.email.toLocaleLowerCase(),
-      password:formData.password
-      })
+      setIsLoading(true);
+      const response = await axios.post('https://syncord.runasp.net/user/login', {
+        email: formData.email.toLocaleLowerCase(),
+        password: formData.password,
+      });
       const token = response.data.token;
-      await AsyncStorage.setItem('token',token);
-      navigation.replace('AppStack',{screen:'Chats'}); 
-      setIsLoading(false)
+      await AsyncStorage.setItem('token', token);
+      const userResponse = await axios.get(
+        'https://syncord.runasp.net/user/dashboard',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (setUser) setUser(userResponse.data);
+      navigation.replace('AppStack', {screen: 'Chats'});
+      setIsLoading(false);
     } catch (error) {
-      setEmailError("Email and password are mismatched")
-      setIsFormValid(false)
+      setEmailError('Email and password are mismatched');
+      setIsFormValid(false);
       setIsLoading(false);
     }
-  }
+  };
 
   return (
     <>

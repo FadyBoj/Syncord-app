@@ -33,6 +33,11 @@ interface Props {
   color?:string
   radius?: number;
   icon?:ImageSourcePropType
+  fit?:boolean
+  padding?:number
+  paddingLeft?:number,
+  paddingRight?:number,
+  iconMove?:number
 }
 
 const screenWidth = Dimensions.get('window').width;
@@ -50,7 +55,12 @@ const Index: FC<Props> = ({
   borderWidth = 0,
   radius = 4,
   color='white',
-  icon
+  icon,
+  fit=false,
+  padding=0,
+  paddingLeft=0,
+  paddingRight=0,
+  iconMove=0
 }) => {
   const scaleValue = useSharedValue(1);
   const animatedOpacity = useSharedValue(1);
@@ -97,15 +107,25 @@ const Index: FC<Props> = ({
         style={[
           {
             backgroundColor: disabled || isLoading ? disabledBg : bgColor,
-            width: width,
+            width: fit ? 'auto' : width,
             height: height,
             borderColor: borderColor,
             borderWidth: borderWidth,
             borderRadius: radius,
+            padding:padding,
+            paddingLeft:paddingLeft,
+            paddingRight:paddingRight
           },
           styles.container,
           btnAnimatedStyles,
         ]}>
+           {
+          icon && 
+          <Image
+          source={icon}
+          style={[styles.icon,{transform:[{translateY:iconMove}]}]}
+          />
+        }
         {isLoading ? (
           <ActivityIndicator size={30} />
         ) : (
@@ -117,13 +137,7 @@ const Index: FC<Props> = ({
             {label}
           </Text>
         )}
-        {
-          icon && 
-          <Image
-          source={icon}
-          style={styles.icon}
-          />
-        }
+       
       </Animated.View>
     </Pressable>
   );
@@ -134,7 +148,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection:'row',
-    gap:10
+    gap:8
   },
   registerText: {
     fontSize: 14,
@@ -144,7 +158,6 @@ const styles = StyleSheet.create({
     width:18,
     height:18,
     objectFit:'contain',
-    transform:[{translateY:2}]
   }
 });
 

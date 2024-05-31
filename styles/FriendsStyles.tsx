@@ -5,15 +5,16 @@ const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow:1,
     width: screenWidth,
-    height: '100%',
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#111216',
-    paddingTop: 40,
+    paddingTop: 10,
     paddingRight: 20,
     paddingLeft: 20,
     gap: 30,
+    paddingBottom:30
   },
   titleContainer: {
     justifyContent: 'center',

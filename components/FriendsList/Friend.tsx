@@ -1,5 +1,11 @@
 import {View, Text, StyleSheet, Image} from 'react-native';
-import {FC} from 'react';
+import {FC,memo} from 'react';
+
+//Assets
+import chatIcon from '../../assets/friendChat.png';
+
+//Components
+import StatusBadge from '../StatusBadge/StatusBadge';
 
 interface IFriend {
   id: string;
@@ -37,6 +43,7 @@ const Friend: FC<Props> = ({friend, length, index}) => {
               </Text>
             </View>
           )}
+          <StatusBadge  status='online' right={13} bgColor='#23232a' size={11}/>
         </View>
         <View>
           <Text
@@ -44,6 +51,13 @@ const Friend: FC<Props> = ({friend, length, index}) => {
               styles.friendName
             }>{`${friend.firstname} ${friend.lastname}`}</Text>
         </View>
+      </View>
+      {/* Section 2  */}
+      <View>
+        <Image
+        source={chatIcon}
+        style={styles.chatIcon}
+        />
       </View>
       {
          index !== length - 1 &&
@@ -57,8 +71,8 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: 70,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingLeft: 30,
+    paddingRight: 40,
     flexDirection: 'row',
     alignItems: 'center',
     borderColor: '#2f2f39',
@@ -109,6 +123,11 @@ const styles = StyleSheet.create({
     transformOrigin: 'center',
     transform:[{scaleX:0.5}]
   },
+  chatIcon:{
+    width:22,
+    height:22,
+    objectFit:'contain'
+  }
 });
 
-export default Friend;
+export default memo(Friend);

@@ -1,4 +1,4 @@
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Image, ScrollView,FlatList} from 'react-native';
 import {useState, FC, useRef, useEffect, useContext, useId, memo} from 'react';
 import styles from '../styles/FriendsStyles';
 
@@ -124,65 +124,66 @@ const Friends: FC = props => {
       console.log(user?.friends)
 
   return (
-    <MainLayout isDrawerOpen={isDrawerOpen} activeScreen="Friends">
-      <View style={styles.container}>
-        <View style={styles.sec1}>
-          <View style={styles.addFriendContainer}>
-            {/* <Image style={styles.addFriendIcon} source={addFriend} /> */}
-            <ShrinkButton
-              label="Add friends"
-              icon={addFriendIcon}
-              fit
-              radius={100}
-              paddingLeft={20}
-              paddingRight={20}
-              bgColor="#26262e"
-              iconMove={0}
-              action={() => {
-                console.log('Adding friend');
-              }}
-            />
-          </View>
-          {/* Search input container */}
-          <View>
-            <CustomTextInput
-              showLabel={false}
-              label="Search"
-              value={filterData.search}
-              changeFunction={handleChange}
-              name="search"
-              radius={18}
-              bgColor="black"
-              icon={searchIcon}
-            />
-          </View>
-        </View>
-        {/* Sec 2 */}
-        <View style={styles.sec2}>
-          <View style={styles.filtersContainer}>
-            {filters.map(item => {
-              return (
-                <FilterBtn
-                  key={useId()}
-                  name={item}
-                  isActive={
-                    item.toLocaleLowerCase() ===
-                    statusFilter.toLocaleLowerCase()
-                  }
-                  handleFilterChange={handleFilterChange}
-                />
-              );
-            })}
-          </View>
-          <View style={styles.friendsListContainer}>
-            {filteredFriends && statusFilter === 'online' &&
-              filteredFriends?.filter(f => f.isOnline).length > 0 && (
-                <FriendsList status='Online' friends={filteredFriends}/>
-              )}
-          </View>
-        </View>
-      </View>
-    </MainLayout>
+     <FlatList
+     contentContainerStyle={styles.container}
+     data={[1]}
+     renderItem={({item}) =>  <View style={styles.container}>
+     <View style={styles.sec1}>
+       {/* <View style={styles.addFriendContainer}>
+         <ShrinkButton
+           label="Add friends"
+           icon={addFriendIcon}
+           fit
+           radius={100}
+           paddingLeft={20}
+           paddingRight={20}
+           bgColor="#26262e"
+           iconMove={0}
+           action={() => {
+             console.log('Adding friend');
+           }}
+         />
+       </View> */}
+       {/* Search input container */}
+       <View>
+         <CustomTextInput
+           showLabel={false}
+           label="Search"
+           value={filterData.search}
+           changeFunction={handleChange}
+           name="search"
+           radius={18}
+           bgColor="black"
+           icon={searchIcon}
+         />
+       </View>
+     </View>
+     {/* Sec 2 */}
+     <View style={styles.sec2}>
+       <View style={styles.filtersContainer}>
+         {filters.map((item,index) => {
+           return (
+             <FilterBtn
+               key={index}
+               name={item}
+               isActive={
+                 item.toLocaleLowerCase() ===
+                 statusFilter.toLocaleLowerCase()
+               }
+               handleFilterChange={handleFilterChange}
+             />
+           );
+         })}
+       </View>
+       <View style={styles.friendsListContainer}>
+         {filteredFriends && statusFilter === 'online' &&
+           filteredFriends?.filter(f => f.isOnline).length > 0 && (
+             <FriendsList status='Online' friends={filteredFriends}/>
+           )}
+       </View>
+     </View>
+   </View>}
+     />
   );
 };
 

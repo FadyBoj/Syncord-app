@@ -3,12 +3,26 @@ import {FC} from 'react';
 
 interface Props{
     status:string
+    right?:number,
+    bgColor?:string,
+    size?:number
 }
 
-const StatusBadge:FC<Props> = () => {
+const StatusBadge:FC<Props> = ({right=0,bgColor="#2d2d35",size=13}) => {
+
+  const dynamicStyles = {
+    right:right,
+    backgroundColor:bgColor,
+  }
+
+  const ballStyles=  {
+    width:size,
+    height:size
+  }
+
   return (
-    <View style={styles.container}>
-        <View style={styles.ball}></View>
+    <View style={[styles.container,dynamicStyles]}>
+        <View style={[styles.ball,ballStyles]}></View>
     </View>
   );
 };

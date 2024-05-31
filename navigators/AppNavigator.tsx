@@ -1,8 +1,9 @@
 import {Text, View} from 'react-native';
 import React, {Component, useState} from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import DashboardContextProvider from '../context/DashboardContext';
-const Stack = createNativeStackNavigator();
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+const Tab = createBottomTabNavigator();
 
 //screens
 import Home from '../screens/Home';
@@ -11,37 +12,32 @@ import Friends from '../screens/Friends';
 import Notifications from '../screens/Notifications';
 import Settings from '../screens/Settings';
 
+//Components
+import MyTabBar from '../components/TabBar/TabBar';
+
 const AppStack = () => {
 
   return (
       <DashboardContextProvider>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{headerShown: false, animation: 'none'}}
+        <Tab.Navigator tabBar={props => <MyTabBar {...props} />}>
+  
+          <Tab.Screen
+            name="Messages"
+            component={Chats}
           />
-          <Stack.Screen
+          <Tab.Screen
             name="Friends"
             component={Friends}
-            options={{headerShown: false, animation: 'none'}}
           />
-          <Stack.Screen
-            name="Chats"
-            component={Chats}
-            options={{headerShown: false, animation: 'none'}}
-          />
-          <Stack.Screen
+          <Tab.Screen
             name="Notifications"
             component={Notifications}
-            options={{headerShown: false, animation: 'none'}}
           />
-          <Stack.Screen
-            name="Settings"
+          <Tab.Screen
+            name="You"
             component={Settings}
-            options={{headerShown: false, animation: 'none'}}
           />
-        </Stack.Navigator>
+        </Tab.Navigator>
       </DashboardContextProvider>
   );
 };

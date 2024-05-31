@@ -22,13 +22,11 @@ const Settings:FC = (props) => {
 
   
   return (
-    <MainLayout  isDrawerOpen={isDrawerOpen} activeScreen='Settings'>
       <View  style={styles.container}>
         <TouchableOpacity style={styles.btn} onPress={openDrawer}>
           <Text>open Drawe Settingsr</Text>
         </TouchableOpacity>
       </View>
-    </MainLayout>
   );
 };
 

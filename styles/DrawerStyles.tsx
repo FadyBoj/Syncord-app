@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     fontFamily:'Roboto',
     color:'white',
     fontSize:20
-  }
+  },
 });
 
 export default styles;

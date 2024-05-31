@@ -19,13 +19,11 @@ const Chats: FC = props => {
   };
 
   return (
-      <MainLayout isDrawerOpen={isDrawerOpen} activeScreen="Chats">
         <View style={styles.container}>
           <TouchableOpacity style={styles.btn} onPress={openDrawer}>
             <Text>open Drawer</Text>
           </TouchableOpacity>
         </View>
-      </MainLayout>
   );
 };
 

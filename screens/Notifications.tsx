@@ -22,13 +22,11 @@ const Notifications:FC = (props) => {
 
   
   return (
-    <MainLayout  isDrawerOpen={isDrawerOpen} activeScreen='Notifications'>
       <View  style={styles.container}>
         <TouchableOpacity style={styles.btn} onPress={openDrawer}>
           <Text>Notifications</Text>
         </TouchableOpacity>
       </View>
-    </MainLayout>
   );
 };
 

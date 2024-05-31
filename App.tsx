@@ -6,6 +6,7 @@ import AuthStack from './navigators/AuthStack';
 import AppStack from './navigators/AppNavigator';
 import {View} from 'react-native';
 
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {

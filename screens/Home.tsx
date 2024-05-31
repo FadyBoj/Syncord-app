@@ -21,13 +21,11 @@ const Home: FC = () => {
 
   return (
     <LoadingLayout onFailNav="AuthStack">
-      <MainLayout isDrawerOpen={isDrawerOpen} activeScreen="Home">
         <View style={styles.container}>
           <TouchableOpacity style={styles.btn} onPress={openDrawer}>
             <Text>open Drawer</Text>
           </TouchableOpacity>
         </View>
-      </MainLayout>
     </LoadingLayout>
   );
 };

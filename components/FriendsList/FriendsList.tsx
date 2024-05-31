@@ -1,5 +1,5 @@
-import {View, Text, StyleSheet} from 'react-native';
-import {FC, useEffect, useId} from 'react';
+import {View, Text, StyleSheet, VirtualizedList} from 'react-native';
+import {FC, useEffect, useId, memo, useState} from 'react';
 
 //Components
 import Friend from './Friend';
@@ -20,12 +20,16 @@ interface Props {
 }
 
 const FriendsList: FC<Props> = ({status, friends}) => {
-  const newFriends = [friends[0], friends[0]];
+
+  const getItem = (data: IFriend[], index: number): IFriend => data[index]
+
+  const getItemCount = (data:IFriend[]) => data.length
+
   return (
     <View style={styles.container}>
       <Text style={styles.statusText}>{`${status}- ${friends.length}`}</Text>
-      <View style={styles.secondContent}>
-        {newFriends.map((item, index) => {
+      <View style={[styles.secondContent,]}>
+        {/* {newFriends.map((item, index) => {
           return (
             <Friend
               friend={item}
@@ -34,7 +38,25 @@ const FriendsList: FC<Props> = ({status, friends}) => {
               index={index}
             />
           );
-        })}
+        })} */}
+        <VirtualizedList
+         removeClippedSubviews={true}
+         onEndReached={() => {console.log("Ended")}}
+         onEndReachedThreshold={20}
+         updateCellsBatchingPeriod={2000}
+         windowSize={21}
+          data={friends}
+          renderItem={({item,index}) => (
+            <Friend
+            friend={item}
+              length={friends.length}
+              index={index}
+            />
+          )}
+          keyExtractor={item => item.id}
+          getItemCount={getItemCount}
+          getItem={getItem}
+        />
       </View>
     </View>
   );
@@ -43,7 +65,7 @@ const FriendsList: FC<Props> = ({status, friends}) => {
 const styles = StyleSheet.create({
   container: {
     gap: 10,
-    width:'100%'
+    width: '100%',
   },
   secondContent: {
     width: '100%',
@@ -58,4 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FriendsList;
+export default memo(FriendsList);

@@ -1,4 +1,4 @@
-import {View, Text, Image, ScrollView,FlatList} from 'react-native';
+import {View, Text, Image, ScrollView, FlatList} from 'react-native';
 import {useState, FC, useRef, useEffect, useContext, useId, memo} from 'react';
 import styles from '../styles/FriendsStyles';
 
@@ -9,11 +9,13 @@ import ShrinkButton from '../components/Buttons/ShrinkButton';
 import FriendsList from '../components/FriendsList/FriendsList';
 import CustomTextInput from '../components/Inputs/CustomTextInput/Index';
 import FilterBtn from '../components/FilterBtn/FilterBtn';
+import Header from '../components/Header/Header';
 
 //Assets
 import addFriendIcon from '../assets/addFriend.png';
 import searchIcon from '../assets/search.png';
 import {DashboardContext} from '../context/DashboardContext';
+import emptyFriends from '../assets/emptyFriends.png';
 
 interface IRequest {
   id: number;
@@ -29,7 +31,7 @@ interface IFriend {
   firstname: string;
   lastname: string;
   isOnline: boolean;
-  image:string
+  image: string;
 }
 
 interface IUser {
@@ -81,24 +83,22 @@ const Friends: FC = props => {
       };
     });
   };
-  useEffect(() =>{
-    connection?.on('hoppedOnline',handleHoppingOnline);
+  useEffect(() => {
+    connection?.on('hoppedOnline', handleHoppingOnline);
     connection?.on('wentOffline', handleGoOffline);
-
-  },[0])
+  }, [0]);
 
   const filters = ['Online', 'Offline', 'All'];
 
   //States
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [statusFilter, setStatusFilter] = useState('online');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [filteredFriends, setFilteredFriends] = useState<IFriend[] | null>(
     null,
   );
   const [filterData, setFilterData] = useState({
     search: '',
   });
-  
 
   //Handle search text input change
   const handleChange = (text: string, name: string) => {
@@ -113,77 +113,123 @@ const Friends: FC = props => {
   };
 
   useEffect(() => {
-    // Filtering logic
+    setFilteredFriends(prevData => {
+      if (!prevData || !user) return prevData;
+
+      return user?.friends.filter(f =>
+        `${f.firstname} ${f.lastname}`
+          .toLocaleLowerCase()
+          .startsWith(filterData.search.toLocaleLowerCase().trim()),
+      );
+    });
   }, [filterData.search, statusFilter]);
 
-  useEffect(() =>{
-   user?.friends && setFilteredFriends(user?.friends)
-  },[user])
+  useEffect(() => {
+    user?.friends && setFilteredFriends(user.friends);
+  }, [user]);
 
-
-      console.log(user?.friends)
+  const addFriendsBtn = () => {
+    return (
+      <View style={styles.addFriendContainer}>
+        <ShrinkButton
+          label="Add friends"
+          icon={addFriendIcon}
+          fit
+          radius={100}
+          paddingLeft={20}
+          paddingRight={20}
+          bgColor="#26262e"
+          iconMove={0}
+          action={() => {
+            console.log('Adding friend');
+          }}
+        />
+      </View>
+    );
+  };
 
   return (
-     <FlatList
-     contentContainerStyle={styles.container}
-     data={[1]}
-     renderItem={({item}) =>  <View style={styles.container}>
-     <View style={styles.sec1}>
-       {/* <View style={styles.addFriendContainer}>
-         <ShrinkButton
-           label="Add friends"
-           icon={addFriendIcon}
-           fit
-           radius={100}
-           paddingLeft={20}
-           paddingRight={20}
-           bgColor="#26262e"
-           iconMove={0}
-           action={() => {
-             console.log('Adding friend');
-           }}
-         />
-       </View> */}
-       {/* Search input container */}
-       <View>
-         <CustomTextInput
-           showLabel={false}
-           label="Search"
-           value={filterData.search}
-           changeFunction={handleChange}
-           name="search"
-           radius={18}
-           bgColor="black"
-           icon={searchIcon}
-         />
-       </View>
-     </View>
-     {/* Sec 2 */}
-     <View style={styles.sec2}>
-       <View style={styles.filtersContainer}>
-         {filters.map((item,index) => {
-           return (
-             <FilterBtn
-               key={index}
-               name={item}
-               isActive={
-                 item.toLocaleLowerCase() ===
-                 statusFilter.toLocaleLowerCase()
-               }
-               handleFilterChange={handleFilterChange}
-             />
-           );
-         })}
-       </View>
-       <View style={styles.friendsListContainer}>
-         {filteredFriends && statusFilter === 'online' &&
-           filteredFriends?.filter(f => f.isOnline).length > 0 && (
-             <FriendsList status='Online' friends={filteredFriends}/>
-           )}
-       </View>
-     </View>
-   </View>}
-     />
+    <FlatList
+      contentContainerStyle={styles.container}
+      data={[1]}
+      renderItem={({item}) => (
+        <>
+          <Header title="Friends" rightComponent={addFriendsBtn} />
+          <View style={styles.container}>
+            <View style={styles.sec1}>
+              {/* Search input container */}
+              <View>
+                <CustomTextInput
+                  showLabel={false}
+                  label="Search"
+                  value={filterData.search}
+                  changeFunction={handleChange}
+                  name="search"
+                  radius={18}
+                  bgColor="black"
+                  icon={searchIcon}
+                />
+              </View>
+            </View>
+            {/* Sec 2 */}
+            <View style={styles.sec2}>
+              <View style={styles.filtersContainer}>
+                {filters.map((item, index) => {
+                  return (
+                    <FilterBtn
+                      key={index}
+                      name={item}
+                      isActive={
+                        item.toLocaleLowerCase() ===
+                        statusFilter.toLocaleLowerCase()
+                      }
+                      handleFilterChange={handleFilterChange}
+                    />
+                  );
+                })}
+              </View>
+              {filteredFriends &&
+                (statusFilter === 'online' || statusFilter === 'all') &&
+                filteredFriends?.filter(f => f.isOnline).length > 0 && (
+                  <View style={styles.friendsListContainer}>
+                    <FriendsList status="Online" friends={filteredFriends} />
+                  </View>
+                )}
+              {filteredFriends &&
+                (statusFilter === 'offline' || statusFilter === 'all') &&
+                filteredFriends?.filter(f => !f.isOnline).length > 0 && (
+                  <View style={styles.friendsListContainer}>
+                    <FriendsList status="Offline" friends={filteredFriends} />
+                  </View>
+                )}
+              {statusFilter === 'online' &&
+              filteredFriends?.filter(f => f.isOnline).length === 0 ? (
+                <View style={styles.emptyContainer}>
+                  <Image source={emptyFriends} style={styles.emptyImage} />
+                  <Text style={styles.emptyText}>No online friends</Text>
+                </View>
+              ) : statusFilter === 'offline' &&
+                filteredFriends?.filter(f => !f.isOnline).length === 0 ? (
+                <View style={styles.emptyContainer}>
+                  <Image source={emptyFriends} style={styles.emptyImage} />
+                  <Text style={styles.emptyText}>No offline friends</Text>
+                </View>
+              ) : (
+                statusFilter === 'all' &&
+                filteredFriends?.length === 0 && (
+                  <View style={styles.emptyContainer}>
+                    <Image source={emptyFriends} style={styles.emptyImage} />
+                    <Text style={styles.emptyText}>
+                      You don't have any friends yet ..
+                    </Text>
+                  </View>
+                )
+              )}
+            </View>
+          </View>
+        </>
+      )}
+    />
   );
 };
 

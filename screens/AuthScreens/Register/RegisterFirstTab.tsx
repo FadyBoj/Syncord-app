@@ -24,7 +24,7 @@ const RegisterFirstTab: FC<Props> = ({navigation, openModal}) => {
     try {
       setIsLoading(true);
       const {data} = await axios.post(
-        'http://syncord.somee.com/user/check-user-exist',
+        'https://syncord.runasp.net/user/check-user-exist',
         {
           email: formData.email,
         },

@@ -42,7 +42,7 @@ export const AuthContext = createContext<IContext | null>(null);
 
 const AuthProvider: FC<Props> = ({children}) => {
   //Configure real time connection
-  
+
   const [user, setUser] = useState<IUser | null>(null);
   const [validToken, setValidToken] = useState(false);
   const [reConnect, setReconnext] = useState(false);
@@ -65,23 +65,15 @@ const AuthProvider: FC<Props> = ({children}) => {
     return null;
   };
 
-  //Time threshold
-  useEffect(() => {
-    setTimeout(() => {
-      setTimeThreshold(true);
-    }, 2000);
-  }, []);
-
   //Getting user dashboard
   useEffect(() => {
     const getDashboard = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         if (!token) {
-          setTimeThreshold(true);
           setTimeout(() => {
             setIsLoading({value: false});
-          }, 2000);
+          }, 1000);
           return;
         }
         setValidToken(true);
@@ -95,6 +87,9 @@ const AuthProvider: FC<Props> = ({children}) => {
           },
         );
         setUser(response.data);
+        setTimeout(() => {
+          setIsLoading({value: false});
+        }, 1000);
       } catch (error) {
         console.log(error);
         setIsLoading({value: false});
@@ -105,17 +100,11 @@ const AuthProvider: FC<Props> = ({children}) => {
 
   useEffect(() => {
     if (timeThreshold && user !== null) setIsLoading({value: false});
-  }, [validToken, timeThreshold]);  
-
- 
-
+  }, [validToken, timeThreshold]);
 
   return (
     <View style={styles.appContainer}>
-      <AuthContext.Provider
-        value={{getToken}}>
-        {children}
-      </AuthContext.Provider>
+      <AuthContext.Provider value={{getToken}}>{children}</AuthContext.Provider>
       {isLoading.value && (
         <View style={styles.container}>
           <ActivityIndicator size={40} />

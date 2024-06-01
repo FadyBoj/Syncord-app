@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet, Image} from 'react-native';
-import {FC,memo} from 'react';
-
+import {FC, memo} from 'react';
+import FastImage from 'react-native-fast-image';
 //Assets
 import chatIcon from '../../assets/friendChat.png';
 
@@ -21,18 +21,21 @@ interface Props {
   friend: IFriend;
   length: number;
   index: number;
+  status: string;
 }
 
-const Friend: FC<Props> = ({friend, length, index}) => {
+const Friend: FC<Props> = ({friend, length, index, status}) => {
   return (
-    <View
-      style={[
-        styles.container,
-      ]}>
+    <View style={[styles.container]}>
       <View style={styles.sec1}>
         <View style={styles.profilePicContainer}>
           {friend && friend.image ? (
-            <Image source={{uri: friend?.image}} style={styles.profilePic} />
+            <Image
+              source={{
+                uri: friend?.image.replace('http', 'https'),
+              }}
+              style={styles.profilePic}
+            />
           ) : (
             <View style={styles.imagePlaceHolder}>
               <Text style={styles.pfpText}>
@@ -43,7 +46,15 @@ const Friend: FC<Props> = ({friend, length, index}) => {
               </Text>
             </View>
           )}
-          <StatusBadge  status='online' right={13} bgColor='#23232a' size={11}/>
+          <StatusBadge
+            status="online"
+            right={13}
+            bgColor="#23232a"
+            size={11}
+            ballBgColor={
+              status.toLocaleLowerCase() === 'online' ? 'green' : 'gray'
+            }
+          />
         </View>
         <View>
           <Text
@@ -54,15 +65,9 @@ const Friend: FC<Props> = ({friend, length, index}) => {
       </View>
       {/* Section 2  */}
       <View>
-        <Image
-        source={chatIcon}
-        style={styles.chatIcon}
-        />
+        <Image source={chatIcon} style={styles.chatIcon} />
       </View>
-      {
-         index !== length - 1 &&
-        <View style={styles.space}></View>
-      }
+      {index !== length - 1 && <View style={styles.space}></View>}
     </View>
   );
 };
@@ -77,7 +82,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: '#2f2f39',
     position: 'relative',
-    justifyContent:'center'
+    justifyContent: 'center',
   },
   profilePicContainer: {
     position: 'relative',
@@ -121,13 +126,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 1,
     transformOrigin: 'center',
-    transform:[{scaleX:0.5}]
+    transform: [{scaleX: 0.5}],
   },
-  chatIcon:{
-    width:22,
-    height:22,
-    objectFit:'contain'
-  }
+  chatIcon: {
+    width: 22,
+    height: 22,
+    objectFit: 'contain',
+  },
 });
 
 export default memo(Friend);

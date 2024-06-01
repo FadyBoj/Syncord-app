@@ -20,15 +20,14 @@ interface Props {
 }
 
 const FriendsList: FC<Props> = ({status, friends}) => {
+  const getItem = (data: IFriend[], index: number): IFriend => data[index];
 
-  const getItem = (data: IFriend[], index: number): IFriend => data[index]
-
-  const getItemCount = (data:IFriend[]) => data.length
+  const getItemCount = (data: IFriend[]) => data.length;
 
   return (
     <View style={styles.container}>
       <Text style={styles.statusText}>{`${status}- ${friends.length}`}</Text>
-      <View style={[styles.secondContent,]}>
+      <View style={[styles.secondContent]}>
         {/* {newFriends.map((item, index) => {
           return (
             <Friend
@@ -40,18 +39,16 @@ const FriendsList: FC<Props> = ({status, friends}) => {
           );
         })} */}
         <VirtualizedList
-         removeClippedSubviews={true}
-         onEndReached={() => {console.log("Ended")}}
-         onEndReachedThreshold={20}
-         updateCellsBatchingPeriod={2000}
-         windowSize={21}
+          removeClippedSubviews={true}
+          onEndReached={() => {
+            console.log('Ended');
+          }}
+          onEndReachedThreshold={20}
+          updateCellsBatchingPeriod={2000}
+          windowSize={21}
           data={friends}
-          renderItem={({item,index}) => (
-            <Friend
-            friend={item}
-              length={friends.length}
-              index={index}
-            />
+          renderItem={({item, index}) => (
+            <Friend friend={item} length={friends.length} index={index} status={status}/>
           )}
           keyExtractor={item => item.id}
           getItemCount={getItemCount}

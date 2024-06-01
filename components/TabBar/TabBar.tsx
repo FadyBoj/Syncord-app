@@ -46,6 +46,7 @@ const MyTabBar: FC<Props> = ({state, descriptors, navigation}) => {
 
         return (
           <TabButton
+          key={useId()}
             isFocused={isFocused}
             onPress={onPress}
             options={options}
@@ -66,7 +67,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor:'#2d2d35',
     height:70,
-    paddingRight:10,
     borderTopWidth:2,
     borderColor:'#33333d'
   },

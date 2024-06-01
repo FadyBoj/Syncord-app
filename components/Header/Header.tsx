@@ -1,105 +1,40 @@
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {useContext, FC} from 'react';
-import { DashboardContext } from '../../context/DashboardContext';
+import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import {FC} from 'react';
+
+const screenWidth = Dimensions.get('window').width;
 
 interface Props {
-  openDrawer: () => void;
-  title?: string;
+  title: string;
+  rightComponent?: () => JSX.Element;
 }
 
-const Header: FC<Props> = ({openDrawer, title = false}) => {
-  const user = useContext(DashboardContext)?.user;
-
+const Header: FC<Props> = ({title, rightComponent}) => {
   return (
     <View style={styles.container}>
-      <View style={styles.secContainer}>
-        <TouchableOpacity
-          onPress={openDrawer}
-          style={styles.profilePicContainer}>
-          <>
-            {user && user.image  ? (
-              <Image source={{uri: user?.image}} style={styles.profilePic} />
-            ) : (
-              <View style={styles.imagePlaceHolder}>
-                <Text style={styles.pfpText}>
-                  {user?.firstname[0].toLocaleUpperCase()}
-                </Text>
-                <Text style={styles.pfpText}>
-                  {user?.lastname[0].toLocaleUpperCase()}
-                </Text>
-              </View>
-            )}
-          </>
-        </TouchableOpacity>
-        <View>
-          <Text style={styles.welcomeText}>{user?.firstname}</Text>
-        </View>
+      <Text style={styles.title}>{title}</Text>
+      <View>
+        {rightComponent && rightComponent()}
       </View>
-      {title && (
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>{title}</Text>
-        </View>
-      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    width: screenWidth,
+    height: 60,
     backgroundColor: '#111216',
-    padding: 17,
-  },
-  secContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
-    position: 'absolute',
-    left: 17,
-    top:17
+    justifyContent: 'space-between',
+    paddingLeft: 20,
+    paddingRight: 20,
   },
-  profilePicContainer: {
-    position: 'relative',
-    width: 60,
-  },
-  profilePic: {
-    width: 50,
-    height: 50,
-    objectFit: 'cover',
-    borderRadius: 100,
-  },
-  imagePlaceHolder: {
-    width: 50,
-    height: 50,
-    borderRadius: 100,
-    backgroundColor: '#6441A5',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  pfpText: {
+  title: {
     fontFamily: 'Roboto',
     color: 'white',
     fontSize: 20,
   },
-  welcomeText: {
-    color: 'white',
-    fontFamily: 'Roboto',
-    fontSize: 0
-  },
-
-  titleContainer:{
-    width:'100%',
-    alignItems:'center',
-    justifyContent:"center",
-    paddingTop:17
-  },
-  titleText:{
-    color:'white',
-    fontFamily:'Roboto',
-  fontSize:18
-  }
 });
 
 export default Header;

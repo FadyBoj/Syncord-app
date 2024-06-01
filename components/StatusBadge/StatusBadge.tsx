@@ -5,10 +5,11 @@ interface Props{
     status:string
     right?:number,
     bgColor?:string,
-    size?:number
+    size?:number,
+    ballBgColor?:string
 }
 
-const StatusBadge:FC<Props> = ({right=0,bgColor="#2d2d35",size=13}) => {
+const StatusBadge:FC<Props> = ({right=0,bgColor="#2d2d35",size=13,ballBgColor='green'}) => {
 
   const dynamicStyles = {
     right:right,
@@ -17,7 +18,8 @@ const StatusBadge:FC<Props> = ({right=0,bgColor="#2d2d35",size=13}) => {
 
   const ballStyles=  {
     width:size,
-    height:size
+    height:size,
+    backgroundColor:ballBgColor
   }
 
   return (
@@ -37,7 +39,6 @@ const styles = StyleSheet.create({
     borderRadius:100
   },
   ball:{
-    backgroundColor:'green',
     width:13,
     height:13,
     borderRadius:100,

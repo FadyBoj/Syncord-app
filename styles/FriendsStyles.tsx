@@ -62,6 +62,19 @@ const styles = StyleSheet.create({
   },
   friendsListContainer: {
   },
+  emptyContainer:{
+    width:'100%',
+    alignItems:'center',
+  },
+  emptyImage:{
+    width:350,
+    height:350,
+    objectFit:'contain'
+  },emptyText:{
+    fontFamily:'Roboto',
+    fontSize:20,
+    color:'gray'
+  }
 });
 
 export default styles;

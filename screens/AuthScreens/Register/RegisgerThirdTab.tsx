@@ -66,7 +66,6 @@ const RegisgerThirdTab: FC<Props> = ({navigation, route}) => {
     setIsFormValid(true);
   }, [formData]);
 
-  const setUser = useContext(AuthContext)?.setUser;
 
   const handleSubmit = async () => {
     try {
@@ -84,7 +83,6 @@ const RegisgerThirdTab: FC<Props> = ({navigation, route}) => {
           },
         },
       );
-      if (setUser) setUser(userResponse.data);
       navigation.replace('AppStack', {screen: 'Chats'});
     } catch (error) {
       setIsLoading(false  )

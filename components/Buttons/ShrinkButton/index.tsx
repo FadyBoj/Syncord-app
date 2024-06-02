@@ -78,7 +78,7 @@ const Index: FC<Props> = ({
     });
   };
 
-  const handlePressOut = () => {
+  const handlePressOut = () => {    
     scaleValue.value = withTiming(1, {
       duration: 100,
       easing: Easing.inOut(Easing.back(0.8)),

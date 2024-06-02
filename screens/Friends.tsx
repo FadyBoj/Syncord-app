@@ -25,7 +25,7 @@ interface IRequest {
 }
 
 interface IFriend {
-  id: string;
+  friendShipId:string
   userId: string;
   email: string;
   firstname: string;
@@ -66,7 +66,7 @@ const Friends: FC = props => {
       return {
         ...prevData,
         friends: prevData.friends.map(item => {
-          return item.id !== id ? item : {...item, isOnline: true};
+          return item.userId !== id ? item : {...item, isOnline: true};
         }),
       };
     });
@@ -78,7 +78,7 @@ const Friends: FC = props => {
       return {
         ...prevData,
         friends: prevData.friends.map(item => {
-          return item.id !== id ? item : {...item, isOnline: false};
+          return item.userId !== id ? item : {...item, isOnline: false};
         }),
       };
     });

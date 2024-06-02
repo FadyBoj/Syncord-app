@@ -5,7 +5,7 @@ import {FC, useEffect, useId, memo, useState} from 'react';
 import Friend from './Friend';
 
 interface IFriend {
-  id: string;
+  friendShipId:string
   userId: string;
   email: string;
   firstname: string;
@@ -23,6 +23,7 @@ const FriendsList: FC<Props> = ({status, friends}) => {
   const getItem = (data: IFriend[], index: number): IFriend => data[index];
 
   const getItemCount = (data: IFriend[]) => data.length;
+
 
   return (
     <View style={styles.container}>
@@ -48,9 +49,14 @@ const FriendsList: FC<Props> = ({status, friends}) => {
           windowSize={21}
           data={friends}
           renderItem={({item, index}) => (
-            <Friend friend={item} length={friends.length} index={index} status={status}/>
+            <Friend
+              friend={item}
+              length={friends.length}
+              index={index}
+              status={status}
+            />
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.userId}
           getItemCount={getItemCount}
           getItem={getItem}
         />
@@ -67,7 +73,7 @@ const styles = StyleSheet.create({
   secondContent: {
     width: '100%',
     backgroundColor: '#23232a',
-    borderRadius: 20,
+    borderRadius: 20
   },
   statusText: {
     fontFamily: 'Roboto',

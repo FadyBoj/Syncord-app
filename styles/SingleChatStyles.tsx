@@ -4,8 +4,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#111216',
-    paddingLeft:20
   },
+  messagesList:{
+    paddingBottom:40
+  }
 });
 
 export default styles;

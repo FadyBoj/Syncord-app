@@ -2,13 +2,18 @@ import { View, Text,StyleSheet } from 'react-native'
 import {FC} from 'react'
 
 interface Props {
-    message:string
+    message:{
+      id:string,
+      text:string,
+      createdAt:string
+    }
 }
 
 const Message:FC<Props> = ({message}) => {
+
   return (
     <View>
-      <Text style={styles.messageText}>{message}</Text>
+      <Text style={styles.messageText}>{message.text}</Text>
     </View>
   )
 }

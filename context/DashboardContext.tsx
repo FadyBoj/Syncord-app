@@ -72,10 +72,14 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
           transport: SignalR.HttpTransportType.WebSockets,
           accessTokenFactory: () => token,
         })
+        .withAutomaticReconnect()
         .build();
       secConnection.start().then(() => {
         console.log('Connection started');
       });
+      secConnection.onreconnected(() =>{
+        console.log("Reconnected")
+      })
       setConnection(secConnection);
     };
     getDashboard();

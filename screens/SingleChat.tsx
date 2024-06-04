@@ -9,6 +9,10 @@ import axios from 'axios';
 //Components
 import MessageChunk from '../components/MessageChunk/MessageChunk';
 
+//Utils
+import convertDate from '../utils/convertDate';
+import getMonth from '../utils/getMonth';
+
 interface IFriend {
   friendShipId: string;
   userId: string;
@@ -40,7 +44,8 @@ interface Message {
 
 interface Chunk {
   userId: string;
-  messages: {id: string; text: string}[];
+  messages: {id: string; text: string; createdAt: string}[];
+  timestampSpace: string | boolean;
 }
 
 const SingleChat: FC<Props> = ({route}) => {
@@ -66,29 +71,75 @@ const SingleChat: FC<Props> = ({route}) => {
         const messages = response.data;
         let tempChunks: Chunk[] = [];
         messages.map(message => {
+          const lastMessage =
+            tempChunks.length > 0 &&
+            tempChunks[tempChunks.length - 1].messages[
+              tempChunks[tempChunks.length - 1].messages.length - 1
+            ];
           //If the chunk empty
           if (tempChunks.length == 0) {
-            const newChunk = {
+            const newChunk: Chunk = {
               userId: message.senderId.toString(),
-              messages: [{id: message.id, text: message.text}],
+              messages: [
+                {
+                  id: message.id,
+                  text: message.text,
+                  createdAt: message.createdAt.toString(),
+                },
+              ],
+              timestampSpace: false,
             };
             tempChunks.push(newChunk);
-            // Adding message to an existing chunk
+          } else if (
+            lastMessage &&
+            !(
+              getMonth(message.createdAt.toString()).month ===
+                getMonth(lastMessage.createdAt.toString()).month &&
+              getMonth(message.createdAt.toString()).year ===
+                getMonth(lastMessage.createdAt.toString()).year &&
+              getMonth(message.createdAt.toString()).day ===
+                getMonth(lastMessage.createdAt.toString()).day
+            )
+          ) {
+            const newChunk: Chunk = {
+              userId: message.senderId,
+              messages: [
+                {
+                  id: message.id,
+                  text: message.text,
+                  createdAt: message.createdAt.toString(),
+                },
+              ],
+              timestampSpace: message.createdAt.toString(),
+            };
+            tempChunks.push(newChunk);
           } else {
+            // Adding message to an existing chunk
             const lastIndex = tempChunks.length - 1;
             if (tempChunks[lastIndex].userId === message.senderId) {
               tempChunks[lastIndex] = {
                 ...tempChunks[lastIndex],
                 messages: [
                   tempChunks[lastIndex].messages.flat(),
-                  {id: message.id, text: message.text},
+                  {
+                    id: message.id,
+                    text: message.text,
+                    createdAt: message.createdAt.toString(),
+                  },
                 ].flat(),
               };
               //Adding new chunk beside the previous chunks
             } else {
               const newChunk: Chunk = {
                 userId: message.senderId,
-                messages: [{id: message.id, text: message.text}],
+                messages: [
+                  {
+                    id: message.id,
+                    text: message.text,
+                    createdAt: message.createdAt.toString(),
+                  },
+                ],
+                timestampSpace: false,
               };
               tempChunks.push(newChunk);
             }
@@ -102,12 +153,13 @@ const SingleChat: FC<Props> = ({route}) => {
     getMessages();
   }, [0]);
 
-  const renderItem = ({item}: {item: Chunk}) => (
+  const renderItem = ({item,index}: {item: Chunk,index:number}) => (
     <MessageChunk
       friendPfp={friend?.image}
       friendId={friend?.userId}
       chunk={item}
       friend={friend}
+      index={index}
     />
   );
 
@@ -119,7 +171,8 @@ const SingleChat: FC<Props> = ({route}) => {
           <FlatList
             data={chatChunks}
             renderItem={renderItem}
-            ItemSeparatorComponent={() => <View style={{height:20}}></View>}
+            ItemSeparatorComponent={() => <View style={{height: 20}}></View>}
+            contentContainerStyle={styles.messagesList}
           />
         )}
       </View>

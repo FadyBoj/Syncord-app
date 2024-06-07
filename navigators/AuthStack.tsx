@@ -15,7 +15,7 @@ const AuthStack = () => {
       <Stack.Screen
         name="Main"
         component={Main}
-        options={{headerShown: false}}
+        options={{headerShown: false,presentation:'fullScreenModal'}}
       />
 
       <Stack.Screen

@@ -67,8 +67,8 @@ const Login: FC<Props> = ({navigation}) => {
       setIsLoading(false);
     } catch (error) {
       setEmailError('Email and password are mismatched');
-      setIsFormValid(false);
       setIsLoading(false);
+      console.log(error)
     }
   };
 

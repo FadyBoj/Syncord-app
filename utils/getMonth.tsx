@@ -1,6 +1,7 @@
 function getMonth(utcDateString: string): { month: number, year: number, day: number } {
   // Create a Date object from the UTC date string
-  const utcDate = new Date(utcDateString);
+  const date = new Date(utcDateString)
+  const utcDate = new Date(date.getTime() - date.getTimezoneOffset() * 70000);
 
   // Get the local month, year, and day
   const localMonth = utcDate.getMonth() + 1; // Adding 1 to convert from 0-based to 1-based

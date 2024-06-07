@@ -1,17 +1,28 @@
-import {View, Text, FlatList} from 'react-native';
-import {FC, useContext, useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  VirtualizedList,
+  TextInput,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import {FC, useContext, useEffect, useRef, useState, memo, useId} from 'react';
 import {RouteProp} from '@react-navigation/native';
 import styles from '../styles/SingleChatStyles';
 import Header from '../components/Header/SingleChatHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import FastImage from 'react-native-fast-image';
+import {DashboardContext} from '../context/DashboardContext';
 
 //Components
 import MessageChunk from '../components/MessageChunk/MessageChunk';
 
 //Utils
-import convertDate from '../utils/convertDate';
-import getMonth from '../utils/getMonth';
+import generateChunks from '../utils/generateChunks';
+
+//Assets
+import sendIcon from '../assets/send.png';
 
 interface IFriend {
   friendShipId: string;
@@ -44,16 +55,24 @@ interface Message {
 
 interface Chunk {
   userId: string;
-  messages: {id: string; text: string; createdAt: string}[];
+  messages: {id: string | null; text: string; createdAt: string}[];
   timestampSpace: string | boolean;
+  id: string;
+  isLoading?: boolean;
 }
 
 const SingleChat: FC<Props> = ({route}) => {
   const friend = route?.params.friend;
 
+  const [messages, setMessages] = useState<null | Message[]>(null);
   const [chatChunks, setChatChunks] = useState<Chunk[] | null>(null);
+  const [inputMsg, setInputMsg] = useState('');
+  const [isValidMessage, setIsValidMessage] = useState(false);
+  const connection = useContext(DashboardContext)?.connection;
 
-  //Fetch messgaes
+  const user = useContext(DashboardContext)?.user;
+
+  //Fetch messages
   useEffect(() => {
     const getMessages = async () => {
       try {
@@ -61,7 +80,7 @@ const SingleChat: FC<Props> = ({route}) => {
         if (!token) return;
 
         const response: {data: Message[]} = await axios.get(
-          `https://syncord.runasp.net/chat/${friend?.friendShipId}`,
+          `https://syncord.runasp.net/chat/${friend?.friendShipId}?skip=0`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -69,83 +88,7 @@ const SingleChat: FC<Props> = ({route}) => {
           },
         );
         const messages = response.data;
-        let tempChunks: Chunk[] = [];
-        messages.map(message => {
-          const lastMessage =
-            tempChunks.length > 0 &&
-            tempChunks[tempChunks.length - 1].messages[
-              tempChunks[tempChunks.length - 1].messages.length - 1
-            ];
-          //If the chunk empty
-          if (tempChunks.length == 0) {
-            const newChunk: Chunk = {
-              userId: message.senderId.toString(),
-              messages: [
-                {
-                  id: message.id,
-                  text: message.text,
-                  createdAt: message.createdAt.toString(),
-                },
-              ],
-              timestampSpace: false,
-            };
-            tempChunks.push(newChunk);
-          } else if (
-            lastMessage &&
-            !(
-              getMonth(message.createdAt.toString()).month ===
-                getMonth(lastMessage.createdAt.toString()).month &&
-              getMonth(message.createdAt.toString()).year ===
-                getMonth(lastMessage.createdAt.toString()).year &&
-              getMonth(message.createdAt.toString()).day ===
-                getMonth(lastMessage.createdAt.toString()).day
-            )
-          ) {
-            const newChunk: Chunk = {
-              userId: message.senderId,
-              messages: [
-                {
-                  id: message.id,
-                  text: message.text,
-                  createdAt: message.createdAt.toString(),
-                },
-              ],
-              timestampSpace: message.createdAt.toString(),
-            };
-            tempChunks.push(newChunk);
-          } else {
-            // Adding message to an existing chunk
-            const lastIndex = tempChunks.length - 1;
-            if (tempChunks[lastIndex].userId === message.senderId) {
-              tempChunks[lastIndex] = {
-                ...tempChunks[lastIndex],
-                messages: [
-                  tempChunks[lastIndex].messages.flat(),
-                  {
-                    id: message.id,
-                    text: message.text,
-                    createdAt: message.createdAt.toString(),
-                  },
-                ].flat(),
-              };
-              //Adding new chunk beside the previous chunks
-            } else {
-              const newChunk: Chunk = {
-                userId: message.senderId,
-                messages: [
-                  {
-                    id: message.id,
-                    text: message.text,
-                    createdAt: message.createdAt.toString(),
-                  },
-                ],
-                timestampSpace: false,
-              };
-              tempChunks.push(newChunk);
-            }
-          }
-        });
-        setChatChunks(tempChunks);
+        setMessages(messages);
       } catch (error) {
         console.log(error);
       }
@@ -153,31 +96,148 @@ const SingleChat: FC<Props> = ({route}) => {
     getMessages();
   }, [0]);
 
-  const renderItem = ({item,index}: {item: Chunk,index:number}) => (
-    <MessageChunk
-      friendPfp={friend?.image}
-      friendId={friend?.userId}
-      chunk={item}
-      friend={friend}
-      index={index}
-    />
+  useEffect(() => {
+    if (messages) {
+      const chunks = generateChunks(messages);
+      setChatChunks(chunks.reverse());
+    }
+  }, [messages]);
+
+  //Handle real time connection
+  const flatListRef = useRef<VirtualizedList<Chunk> | null>(null);
+
+  const handleRecieveMessage = (message: Message) => {
+    const newMessage: Message = message;
+    setMessages(prevData => {
+      if (!prevData) return prevData;
+      return [prevData, newMessage].flat();
+    });
+  };
+
+  useEffect(() => {
+    connection?.on('RecieveMessage', handleRecieveMessage);
+  }, [0]);
+
+  //Handle msg input change
+  const handleChange = (text: string) => {
+    setInputMsg(text);
+  };
+
+  const inputRef = useRef<TextInput | null>(null);
+
+  const sendMessage = async () => {
+    if (!user || inputMsg.length === 0) return;
+    try {
+      const newChunk: Chunk = {
+        id: Math.random().toString(),
+        userId: user.id.toString(),
+        messages: [
+          {id: null, text: inputMsg, createdAt: new Date().toString()},
+        ],
+        timestampSpace: false,
+        isLoading: true,
+      };
+      setChatChunks(prevChunks => {
+        if (!prevChunks) return prevChunks;
+        return [newChunk, ...prevChunks];
+      });
+      const tempMsg = inputMsg;
+      setInputMsg('');
+      const token = await AsyncStorage.getItem('token');
+      if(!token) return;
+      const response = await axios.post('https://syncord.runasp.net/chat', {
+        friendShipId: friend?.friendShipId,
+        message: tempMsg,
+      },{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      });
+      console.log(response.data)
+      const newMessage: Message = {
+        id:response.data.id,
+        text:tempMsg,
+        isSent:true,
+        senderId:user.id,
+        createdAt:new Date
+      };
+      setMessages(prevData => {
+        if (!prevData) return prevData;
+        return [prevData, newMessage].flat();
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //wrapping the VirtualizedList in a memo to prevent it from rerender when the input changes
+
+  const MessageList = () => (
+    <>
+      {chatChunks && (
+        <VirtualizedList
+          ref={flatListRef}
+          inverted
+          extraData={chatChunks}
+          data={chatChunks}
+          getItemCount={() => chatChunks.length}
+          removeClippedSubviews={true}
+          windowSize={5}
+          getItem={(data, index) => data[index]}
+          initialNumToRender={10}
+          renderItem={({item, index}) => (
+            <MessageChunk
+              friendPfp={friend?.image}
+              friendId={friend?.userId}
+              chunk={item}
+              friend={friend}
+              index={index}
+              length={chatChunks.length}
+            />
+          )}
+          keyExtractor={item => item.id}
+          ItemSeparatorComponent={() => <View style={{height: 20}} />}
+          contentContainerStyle={styles.messagesList}
+        />
+      )}
+    </>
   );
 
   return (
-    <>
+    <View style={styles.wrapper}>
       <Header friendName={friend?.firstname} />
       <View style={styles.container}>
-        {chatChunks && (
-          <FlatList
-            data={chatChunks}
-            renderItem={renderItem}
-            ItemSeparatorComponent={() => <View style={{height: 20}}></View>}
-            contentContainerStyle={styles.messagesList}
+        <MessageList />
+        <View style={styles.chatInputContainer}>
+          <TextInput
+            placeholder={`Message @${friend?.firstname}`}
+            placeholderTextColor={'gray'}
+            style={styles.msgInput}
+            onChangeText={handleChange}
+            value={inputMsg}
+            ref={inputRef}
           />
-        )}
+          <TouchableOpacity
+            onPress={sendMessage}
+            activeOpacity={inputMsg.length > 0 ? 0.2 : 1}
+            style={[
+              styles.sendIconContainer,
+              {
+                backgroundColor: inputMsg.length > 0 ? 'green' : '#6f6f6f',
+              },
+            ]}>
+            <Image
+              source={sendIcon}
+              style={[
+                styles.sendIcon,
+                {tintColor: inputMsg.length > 0 ? 'white' : '#919197'},
+              ]}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
-    </>
+    </View>
   );
 };
 
-export default SingleChat;
+export default memo(SingleChat);

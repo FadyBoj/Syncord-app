@@ -39,7 +39,7 @@ const AppStack = () => {
         <Stack.Screen
           name="singleChat"
           component={SingleChat}
-          options={{animation: 'simple_push',headerShown:false}}
+          options={{animation: 'ios',headerShown:false}}
         />
       </Stack.Navigator>
     </DashboardContextProvider>

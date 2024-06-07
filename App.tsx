@@ -5,21 +5,27 @@ import AuthProvider from './context/AuthContext';
 import AuthStack from './navigators/AuthStack';
 import AppStack from './navigators/AppNavigator';
 import {View} from 'react-native';
+import * as ReactNative from 'react-native';
 
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
 
+  try {
+    ReactNative.I18nManager.allowRTL(false)
+  } catch (error) {
+    console.log(error)
+  }
 
   return (
     <AuthProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
+      <NavigationContainer >
+        <Stack.Navigator >
+          <Stack.Screen 
             name="AuthStack"
             component={AuthStack}
-            options={{headerShown: false}}
+            options={{headerShown: false,}}
           />
           <Stack.Screen
             name="AppStack"

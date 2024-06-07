@@ -6,7 +6,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {FC, useContext, useEffect, useRef, useState, memo, useId} from 'react';
+import {FC, useContext, useEffect, useRef, useState, memo, useCallback} from 'react';
 import {RouteProp} from '@react-navigation/native';
 import styles from '../styles/SingleChatStyles';
 import Header from '../components/Header/SingleChatHeader';
@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import FastImage from 'react-native-fast-image';
 import {DashboardContext} from '../context/DashboardContext';
+import moment from 'moment-timezone';
 
 //Components
 import MessageChunk from '../components/MessageChunk/MessageChunk';
@@ -67,12 +68,10 @@ const SingleChat: FC<Props> = ({route}) => {
   const [messages, setMessages] = useState<null | Message[]>(null);
   const [chatChunks, setChatChunks] = useState<Chunk[] | null>(null);
   const [inputMsg, setInputMsg] = useState('');
-  const [isValidMessage, setIsValidMessage] = useState(false);
   const connection = useContext(DashboardContext)?.connection;
-
   const user = useContext(DashboardContext)?.user;
 
-  //Fetch messages
+  // Fetch messages
   useEffect(() => {
     const getMessages = async () => {
       try {
@@ -103,7 +102,7 @@ const SingleChat: FC<Props> = ({route}) => {
     }
   }, [messages]);
 
-  //Handle real time connection
+  // Handle real-time connection
   const flatListRef = useRef<VirtualizedList<Chunk> | null>(null);
 
   const handleRecieveMessage = (message: Message) => {
@@ -118,7 +117,7 @@ const SingleChat: FC<Props> = ({route}) => {
     connection?.on('RecieveMessage', handleRecieveMessage);
   }, [0]);
 
-  //Handle msg input change
+  // Handle message input change
   const handleChange = (text: string) => {
     setInputMsg(text);
   };
@@ -136,7 +135,7 @@ const SingleChat: FC<Props> = ({route}) => {
         ],
         timestampSpace: false,
         isLoading: true,
-      };
+      };  
       setChatChunks(prevChunks => {
         if (!prevChunks) return prevChunks;
         return [newChunk, ...prevChunks];
@@ -144,7 +143,7 @@ const SingleChat: FC<Props> = ({route}) => {
       const tempMsg = inputMsg;
       setInputMsg('');
       const token = await AsyncStorage.getItem('token');
-      if(!token) return;
+      if (!token) return;
       const response = await axios.post('https://syncord.runasp.net/chat', {
         friendShipId: friend?.friendShipId,
         message: tempMsg,
@@ -153,13 +152,12 @@ const SingleChat: FC<Props> = ({route}) => {
           Authorization:`Bearer ${token}`
         }
       });
-      console.log(response.data)
       const newMessage: Message = {
-        id:response.data.id,
-        text:tempMsg,
-        isSent:true,
-        senderId:user.id,
-        createdAt:new Date
+        id: response.data.id,
+        text: tempMsg,
+        isSent: true,
+        senderId: user.id,
+        createdAt: response.data.createdAt
       };
       setMessages(prevData => {
         if (!prevData) return prevData;
@@ -170,44 +168,41 @@ const SingleChat: FC<Props> = ({route}) => {
     }
   };
 
-  //wrapping the VirtualizedList in a memo to prevent it from rerender when the input changes
-
-  const MessageList = () => (
-    <>
-      {chatChunks && (
-        <VirtualizedList
-          ref={flatListRef}
-          inverted
-          extraData={chatChunks}
-          data={chatChunks}
-          getItemCount={() => chatChunks.length}
-          removeClippedSubviews={true}
-          windowSize={5}
-          getItem={(data, index) => data[index]}
-          initialNumToRender={10}
-          renderItem={({item, index}) => (
-            <MessageChunk
-              friendPfp={friend?.image}
-              friendId={friend?.userId}
-              chunk={item}
-              friend={friend}
-              index={index}
-              length={chatChunks.length}
-            />
-          )}
-          keyExtractor={item => item.id}
-          ItemSeparatorComponent={() => <View style={{height: 20}} />}
-          contentContainerStyle={styles.messagesList}
+  const MemoizedVirtualizedList = memo(({data}: {data: Chunk[]}) => (
+    <VirtualizedList
+      ref={flatListRef}
+      inverted
+      data={data}
+      getItemCount={() => data.length}
+      removeClippedSubviews={true}
+      windowSize={5}
+      getItem={(data, index) => data[index]}
+      initialNumToRender={10}
+      renderItem={({item, index}) => (
+        <MessageChunk
+          friendPfp={friend?.image}
+          friendId={friend?.userId}
+          chunk={item}
+          friend={friend}
+          index={index}
+          length={data.length}
         />
       )}
-    </>
-  );
+      keyExtractor={item => item.id}
+      ItemSeparatorComponent={() => <View style={{height: 20}} />}
+      contentContainerStyle={styles.messagesList}
+    />
+  ));
+
+  const memoizedList = useCallback(() => {
+    return <MemoizedVirtualizedList data={chatChunks || []} />;
+  }, [chatChunks]);
 
   return (
     <View style={styles.wrapper}>
       <Header friendName={friend?.firstname} />
       <View style={styles.container}>
-        <MessageList />
+        {chatChunks && memoizedList()}
         <View style={styles.chatInputContainer}>
           <TextInput
             placeholder={`Message @${friend?.firstname}`}
@@ -240,4 +235,4 @@ const SingleChat: FC<Props> = ({route}) => {
   );
 };
 
-export default memo(SingleChat);
+export default SingleChat;

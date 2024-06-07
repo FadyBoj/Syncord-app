@@ -62,6 +62,25 @@ const generateChunks = (messages: Message[]) => {
         timestampSpace: message.createdAt.toString(),
       };
       tempChunks.push(newChunk);
+    } else if (
+      lastMessage &&
+      getMonth(message.createdAt.toString()).hour.toString() !==
+        getMonth(lastMessage.createdAt).hour.toString()
+    ) {
+      const newChunk: Chunk = {
+        id: message.id,
+
+        userId: message.senderId,
+        messages: [
+          {
+            id: message.id,
+            text: message.text,
+            createdAt: message.createdAt.toString(),
+          },
+        ],
+        timestampSpace: false,
+      };
+      tempChunks.push(newChunk);
     } else {
       // Adding message to an existing chunk
       const lastIndex = tempChunks.length - 1;

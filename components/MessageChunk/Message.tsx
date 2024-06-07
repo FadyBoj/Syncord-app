@@ -12,8 +12,9 @@ interface Props {
 
 const Message: FC<Props> = ({message, isLoading = false}) => {
   return (
-    <View>
+    <View style={styles.container}>
       <Text
+      lineBreakMode='tail'
         style={[
           styles.messageText,
           {
@@ -31,6 +32,10 @@ const styles = StyleSheet.create({
   messageText: {
     fontFamily: 'Roboto',
   },
+  container:{
+    width:'90%',
+    paddingRight:10
+  }
 });
 
 export default Message;

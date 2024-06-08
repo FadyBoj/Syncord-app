@@ -269,7 +269,7 @@ const SingleChat: FC<Props> = ({route}) => {
             keyExtractor={item => item.id}
             ItemSeparatorComponent={() => <View style={{height: 20}} />}
             contentContainerStyle={styles.messagesList}
-            onEndReachedThreshold={0.5}
+            onEndReachedThreshold={0.9}
             ListFooterComponent={
               <>
                 {isFetchingPreviousMsgs ? (

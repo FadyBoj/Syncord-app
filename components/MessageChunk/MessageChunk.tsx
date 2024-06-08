@@ -49,6 +49,7 @@ const MessageChunk: FC<Props> = ({
 }) => {
   const user = useContext(DashboardContext)?.user;
 
+
   return (
     <View style={styles.wrapper}>
       {(chunk.timestampSpace || index === length - 1) && (

@@ -29,6 +29,7 @@ import moment from 'moment-timezone';
 //Components
 import MessageChunk from '../components/MessageChunk/MessageChunk';
 import ChatBeginning from '../components/ChatBeginning/ChatBeginning';
+import MessagesList from '../components/MessagesList/MessagesList';
 
 //Utils
 import generateChunks from '../utils/generateChunks';
@@ -125,7 +126,6 @@ const SingleChat: FC<Props> = ({route}) => {
     }
   }, [messages]);
 
-  console.log(isRecordsEnded);
 
   // Handle real-time connection
 
@@ -249,40 +249,13 @@ const SingleChat: FC<Props> = ({route}) => {
       <Header friendName={friend?.firstname} />
 
       <View style={styles.container}>
-        {chatChunks && (
-          <VirtualizedList
-            data={chatChunks}
-            inverted
-            onEndReached={handleReachEnd}
-            getItemCount={() => chatChunks.length}
-            getItem={(data, index) => data[index]}
-            renderItem={({item, index}) => (
-              <MessageChunk
-                friendPfp={friend?.image}
-                friendId={friend?.userId}
-                chunk={item}
-                friend={friend}
-                index={index}
-                length={chatChunks.length}
-              />
-            )}
-            keyExtractor={item => item.id}
-            ItemSeparatorComponent={() => <View style={{height: 20}} />}
-            contentContainerStyle={styles.messagesList}
-            onEndReachedThreshold={0.9}
-            ListFooterComponent={
-              <>
-                {isFetchingPreviousMsgs ? (
-                  <View style={styles.loadingContainer}>
-                    <ActivityIndicator size={30} color="gray" />
-                  </View>
-                ) : isRecordsEnded ? (
-                  <ChatBeginning friend={friend} />
-                ) : (
-                  <></>
-                )}
-              </>
-            }
+        {chatChunks && friend && (
+          <MessagesList
+          friend={friend}
+          chatChunks={chatChunks}
+          handleReachEnd={handleReachEnd}
+          isFetchingPreviousMsgs={isFetchingPreviousMsgs}
+          isRecordsEnded={isRecordsEnded}
           />
         )}
         <View style={styles.chatInputContainer}>

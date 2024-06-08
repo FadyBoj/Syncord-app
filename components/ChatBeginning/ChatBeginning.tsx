@@ -45,7 +45,7 @@ const ChatBeginning: FC<Props> = ({friend}) => {
         </View>
         <View>
           <Text style={styles.description}>
-            This is the very beginning of your awesome  chat with {friend?.firstname}
+            This is the very beginning of your awesome chat with {friend?.firstname}
           </Text>
         </View>
       </View>
@@ -57,7 +57,9 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 20,
     gap:20,
-    paddingBottom:20
+    paddingBottom:20,
+    paddingTop:20
+
   },
   pfp: {
     width: 100,
@@ -74,14 +76,14 @@ const styles = StyleSheet.create({
     color: '#777781',
   },
   description: {
-    color: '#777781',
-    fontFamily: 'Robot',
-    fontSize: 16,
+    color: 'gray',
+    fontFamily: 'Roboto',
+    fontSize: 14,
     width: '80%',
-    lineHeight:24
+    lineHeight:24,
   },
   textsContainer: {
-    gap: 10,
+    gap: 6,
   },
   profilePicContainer: {
     position: 'relative',

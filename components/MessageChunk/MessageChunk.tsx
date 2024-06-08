@@ -15,6 +15,7 @@ interface Chunk {
   userId: string;
   messages: {id: string; text: string; createdAt: string}[];
   timestampSpace: string | boolean;
+  id:string
   isLoading?:boolean
 }
 

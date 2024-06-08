@@ -3,15 +3,10 @@ import {StyleSheet, Dimensions} from 'react-native';
 const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
-  wrapper: {
-    height: screenHeight,
-    flex: 1,
-    backgroundColor: 'red',
-  },
+
   container: {
     flex: 1,
     backgroundColor: '#111216',
-    height: '100%',
   },
   messagesList: {
     paddingTop: 20,
@@ -46,6 +41,12 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     borderRadius:100,
     padding:10,
+  },
+  loadingContainer:{
+    backgroundColor: '#111216',
+    width:'100%',
+    height:50,
+    alignItems:'center',
   }
 });
 

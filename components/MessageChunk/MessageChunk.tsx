@@ -15,6 +15,7 @@ interface Chunk {
   userId: string;
   messages: {id: string; text: string; createdAt: string}[];
   timestampSpace: string | boolean;
+  id:string
   isLoading?:boolean
 }
 
@@ -47,6 +48,7 @@ const MessageChunk: FC<Props> = ({
   
 }) => {
   const user = useContext(DashboardContext)?.user;
+
 
   return (
     <View style={styles.wrapper}>

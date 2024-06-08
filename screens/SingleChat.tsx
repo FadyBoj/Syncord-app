@@ -201,7 +201,7 @@ const SingleChat: FC<Props> = ({route}) => {
   };
 
   const handleReachEnd = async () => {
-    if(isRecordsEnded) return
+    if (isRecordsEnded) return;
     setIsFetchingPreviousMsgs(true);
     try {
       const token = await AsyncStorage.getItem('token');
@@ -217,13 +217,21 @@ const SingleChat: FC<Props> = ({route}) => {
       );
       setSkip(skip + 50);
       const newMessages: Message[] = response.data;
+
       setMessages(prevMessages => {
         if (!prevMessages) return prevMessages;
-        return [newMessages, prevMessages].flat();
+
+        const messageIds = prevMessages.map(msg => msg.id);
+        const filteredNewMessages = newMessages.filter(
+          msg => !messageIds.includes(msg.id),
+        );
+        return [...filteredNewMessages,...prevMessages, ];
       });
       setIsFetchingPreviousMsgs(false);
       const checkEnd: {data: Message[]} = await axios.get(
-        `https://syncord.runasp.net/chat/${friend?.friendShipId}?skip=${skip + 50}&take=1`,
+        `https://syncord.runasp.net/chat/${friend?.friendShipId}?skip=${
+          skip + 50
+        }&take=1`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -261,7 +269,7 @@ const SingleChat: FC<Props> = ({route}) => {
             keyExtractor={item => item.id}
             ItemSeparatorComponent={() => <View style={{height: 20}} />}
             contentContainerStyle={styles.messagesList}
-            onEndReachedThreshold={0.7}
+            onEndReachedThreshold={0.5}
             ListFooterComponent={
               <>
                 {isFetchingPreviousMsgs ? (

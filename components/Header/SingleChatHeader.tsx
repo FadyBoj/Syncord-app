@@ -43,6 +43,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
+    borderBottomWidth:1,
+    borderColor:'#22222a'
   },
   name: {
     fontFamily: 'Roboto',

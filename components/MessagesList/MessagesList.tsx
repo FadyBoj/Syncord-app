@@ -86,12 +86,4 @@ const MessagesList: FC<Props> = ({
   );
 };
 
-export default memo(MessagesList, (prevProps, nextProps) => {
-  return (
-    prevProps.friend === nextProps.friend &&
-    prevProps.chatChunks === nextProps.chatChunks &&
-    prevProps.handleReachEnd === nextProps.handleReachEnd &&
-    prevProps.isFetchingPreviousMsgs === nextProps.isFetchingPreviousMsgs &&
-    prevProps.isRecordsEnded === nextProps.isRecordsEnded
-  );
-});
+export default memo(MessagesList)

@@ -27,9 +27,8 @@ import {DashboardContext} from '../context/DashboardContext';
 import moment from 'moment-timezone';
 
 //Components
-import MessageChunk from '../components/MessageChunk/MessageChunk';
-import ChatBeginning from '../components/ChatBeginning/ChatBeginning';
 import MessagesList from '../components/MessagesList/MessagesList';
+import ChatSkeleton from '../components/Skeletons/ChatSkeleton';
 
 //Utils
 import generateChunks from '../utils/generateChunks';
@@ -125,7 +124,6 @@ const SingleChat: FC<Props> = ({route}) => {
       setChatChunks(chunks.reverse());
     }
   }, [messages]);
-
 
   // Handle real-time connection
 
@@ -225,7 +223,7 @@ const SingleChat: FC<Props> = ({route}) => {
         const filteredNewMessages = newMessages.filter(
           msg => !messageIds.includes(msg.id),
         );
-        return [...filteredNewMessages,...prevMessages, ];
+        return [...filteredNewMessages, ...prevMessages];
       });
       setIsFetchingPreviousMsgs(false);
       const checkEnd: {data: Message[]} = await axios.get(
@@ -249,15 +247,18 @@ const SingleChat: FC<Props> = ({route}) => {
       <Header friendName={friend?.firstname} />
 
       <View style={styles.container}>
-        {chatChunks && friend && (
-          <MessagesList
-          friend={friend}
-          chatChunks={chatChunks}
-          handleReachEnd={handleReachEnd}
-          isFetchingPreviousMsgs={isFetchingPreviousMsgs}
-          isRecordsEnded={isRecordsEnded}
-          />
-        )}
+        <View style={styles.content}>
+          {chatChunks && friend && (
+            <MessagesList
+              friend={friend}
+              chatChunks={chatChunks}
+              handleReachEnd={handleReachEnd}
+              isFetchingPreviousMsgs={isFetchingPreviousMsgs}
+              isRecordsEnded={isRecordsEnded}
+            />
+          )}
+         {!chatChunks && <ChatSkeleton />}
+        </View>
         <View style={styles.chatInputContainer}>
           <TextInput
             placeholder={`Message @${friend?.firstname}`}

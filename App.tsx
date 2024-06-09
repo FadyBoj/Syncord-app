@@ -6,6 +6,8 @@ import AuthStack from './navigators/AuthStack';
 import AppStack from './navigators/AppNavigator';
 import {View} from 'react-native';
 import * as ReactNative from 'react-native';
+import 'react-native-reanimated';
+import 'react-native-gesture-handler';
 
 
 const Stack = createNativeStackNavigator();

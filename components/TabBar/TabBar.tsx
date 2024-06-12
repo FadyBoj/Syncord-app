@@ -1,5 +1,10 @@
 import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
-import {FC,useId} from 'react';
+import {FC, useEffect, useId} from 'react';
+import Animated, {
+  useSharedValue,
+  withTiming,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 
 //Components
 import TabButton from './TabButton';
@@ -8,12 +13,33 @@ interface Props {
   state?: any;
   descriptors?: any;
   navigation?: any;
+  addFriendModal: boolean;
 }
 
-const MyTabBar: FC<Props> = ({state, descriptors, navigation}) => {
+const MyTabBar: FC<Props> = ({
+  state,
+  descriptors,
+  navigation,
+  addFriendModal,
+}) => {
+  const animTransform = useSharedValue(0);
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      bottom:animTransform.value
+    };
+  });
 
+  useEffect(() => {
+    if (addFriendModal && state.index === 1) {
+      animTransform.value = withTiming(-80);
+    } else {
+      animTransform.value = withTiming(0);
+    }
+  }, [addFriendModal,state]);
+  
+  
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, animatedStyles]}>
       {state.routes.map((route: any, index: number) => {
         const {options} = descriptors[route.key];
         const label =
@@ -46,7 +72,7 @@ const MyTabBar: FC<Props> = ({state, descriptors, navigation}) => {
 
         return (
           <TabButton
-          key={useId()}
+            key={useId()}
             isFocused={isFocused}
             onPress={onPress}
             options={options}
@@ -55,7 +81,7 @@ const MyTabBar: FC<Props> = ({state, descriptors, navigation}) => {
           />
         );
       })}
-    </View>
+    </Animated.View>
   );
 };
 
@@ -65,10 +91,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:'#2d2d35',
-    height:70,
-    borderTopWidth:2,
-    borderColor:'#33333d'
+    backgroundColor: '#2d2d35',
+    height: 70,
+    borderTopWidth: 2,
+    borderColor: '#33333d',
+    position: 'absolute',
+    bottom: 100,
   },
   barContainer: {
     flexDirection: 'column',

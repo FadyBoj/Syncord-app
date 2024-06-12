@@ -74,6 +74,9 @@ const styles = StyleSheet.create({
     fontFamily:'Roboto',
     fontSize:20,
     color:'gray'
+  },
+  wrapper:{
+    position:'relative'
   }
 });
 

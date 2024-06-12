@@ -67,7 +67,7 @@ const MessageChunk: FC<Props> = ({
           <View style={styles.pfpContainer}>
             {chunk.userId === user?.id ? (
               user.image ? (
-                <Image style={styles.pfp} source={{uri: user.image}} />
+                <Image style={styles.pfp} source={{uri: user.image.replace('http','https')}} />
               ) : (
                 // Place Holder
                 <View style={styles.profilePicContainer}>
@@ -82,7 +82,7 @@ const MessageChunk: FC<Props> = ({
               </View>
               )
             ) : friendPfp ? (
-              <Image style={styles.pfp} source={{uri: friendPfp}} />
+              <Image style={styles.pfp} source={{uri: friendPfp.replace('http','https')}} />
             ) : (
               <View style={styles.profilePicContainer}>
                 <View style={styles.imagePlaceHolder}>

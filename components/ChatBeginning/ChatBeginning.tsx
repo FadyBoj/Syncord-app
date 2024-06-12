@@ -21,7 +21,7 @@ const ChatBeginning: FC<Props> = ({friend}) => {
       <View>
         <View style={styles.profilePicContainer}>
           {friend && friend.image ? (
-            <Image source={{uri: friend?.image}} style={styles.profilePic} />
+            <Image source={{uri: friend?.image.replace('http','https')}} style={styles.profilePic} />
           ) : (
             <View style={styles.imagePlaceHolder}>
               <Text style={styles.pfpText}>

@@ -54,7 +54,7 @@ const MessagesList: FC<Props> = ({
   const ItemSeparatorComponent = useCallback(() => <View style={{height: 20}} />, []);
 
   // Memoize ListFooterComponent
-  const ListFooterComponent = useMemo(() => (
+    const ListFooterComponent = useMemo(() => (
     <>
       {isFetchingPreviousMsgs ? (
         <View style={styles.loadingContainer}>

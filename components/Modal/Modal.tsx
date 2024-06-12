@@ -39,11 +39,11 @@ const Modal: FC<Props> = ({closeModal, children, height = 300, width}) => {
           }}>
           <>
             {/* Close button */}
-            {/* <TouchableOpacity
+            <TouchableOpacity
               onPress={closeModal}
               style={styles.closeContainer}>
               <Image style={styles.closeIcon} source={closeIcon} />
-            </TouchableOpacity> */}
+            </TouchableOpacity>
 
             {children}
           </>
@@ -55,9 +55,9 @@ const Modal: FC<Props> = ({closeModal, children, height = 300, width}) => {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 8,
-    backgroundColor: '#2c2e36',
-    paddingTop: 35,
+    borderRadius: 20,
+    backgroundColor: '#1c1d22',
+    paddingTop: 45,
     alignItems: 'center',
     zIndex: 30,
     position: 'relative',

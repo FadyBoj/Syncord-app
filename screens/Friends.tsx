@@ -10,6 +10,7 @@ import FriendsList from '../components/FriendsList/FriendsList';
 import CustomTextInput from '../components/Inputs/CustomTextInput/Index';
 import FilterBtn from '../components/FilterBtn/FilterBtn';
 import Header from '../components/Header/Header';
+import AddFriendModal from '../components/CustomModals/AddFriendModal';
 
 //Assets
 import addFriendIcon from '../assets/addFriend.png';
@@ -25,7 +26,7 @@ interface IRequest {
 }
 
 interface IFriend {
-  friendShipId:string
+  friendShipId: string;
   userId: string;
   email: string;
   firstname: string;
@@ -44,7 +45,17 @@ interface IUser {
   friends: IFriend[];
 }
 
-const Friends: FC = props => {
+interface Props {
+  openAddFriendModal: () => void;
+  closeAddFriendModal: () => void;
+  addFriendModal: boolean;
+}
+
+const Friends: FC<Props> = ({
+  openAddFriendModal,
+  closeAddFriendModal,
+  addFriendModal,
+}) => {
   const getDashboard = useContext(DashboardContext)?.getDashboard;
   const connection = useContext(DashboardContext)?.connection;
   const [user, setUser] = useState<IUser | null>(null);
@@ -99,6 +110,12 @@ const Friends: FC = props => {
   const [filterData, setFilterData] = useState({
     search: '',
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  //Handle add friend modal state
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   //Handle search text input change
   const handleChange = (text: string, name: string) => {
@@ -140,9 +157,7 @@ const Friends: FC = props => {
           paddingRight={20}
           bgColor="#26262e"
           iconMove={0}
-          action={() => {
-            console.log('Adding friend');
-          }}
+          action={openAddFriendModal}
         />
       </View>
     );
@@ -153,7 +168,7 @@ const Friends: FC = props => {
       contentContainerStyle={styles.container}
       data={[1]}
       renderItem={({item}) => (
-        <>
+        <View style={styles.wrapper}>
           <Header title="Friends" rightComponent={addFriendsBtn} />
           <View style={styles.container}>
             <View style={styles.sec1}>
@@ -227,7 +242,8 @@ const Friends: FC = props => {
               )}
             </View>
           </View>
-        </>
+          {addFriendModal && <AddFriendModal closeModal={closeAddFriendModal} />}
+        </View>
       )}
     />
   );

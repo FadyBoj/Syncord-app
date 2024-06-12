@@ -147,7 +147,7 @@ const SingleChat: FC<Props> = ({route}) => {
   const inputRef = useRef<TextInput | null>(null);
 
   const sendMessage = async () => {
-    if (!user || inputMsg.length === 0) return;
+    if (!user || inputMsg.length === 0 || !chatChunks) return;
     try {
       const newChunk: Chunk = {
         id: Math.random().toString(),

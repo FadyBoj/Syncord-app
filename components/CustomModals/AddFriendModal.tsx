@@ -10,6 +10,7 @@ import {FC, useState, useContext, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import validator from 'validator';
 import axios from 'axios';
+import Toast, {BaseToast} from 'react-native-toast-message';
 
 //Components
 import Modal from '../Modal/Modal';
@@ -38,13 +39,14 @@ const AddFriendModal: FC<Props> = ({closeModal}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [validForm, setIsValidForm] = useState(false);
   const connection = useContext(DashboardContext)?.connection;
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [delay, setDelay] = useState<NodeJS.Timeout | null>(null);
   const [searchState, setSearchState] = useState({
     skeletonVisible: false,
     searchHelperVisible: false,
   });
   const [searchedUsers, setSearchedusers] = useState<IUser[] | null>(null);
+  const [isSending, setIsSending] = useState(false);
 
   const user = useContext(DashboardContext)?.user;
 
@@ -86,7 +88,7 @@ const AddFriendModal: FC<Props> = ({closeModal}) => {
           });
           let filterdUsers: IUser[] = [];
           if (response.data) {
-            response.data.map((item: IUser,index:number) => {
+            response.data.map((item: IUser, index: number) => {
               // console.log(item.id,friendsIds && friendsIds[index])
               if (!friendsIds?.includes(item.id)) filterdUsers.push(item);
             });
@@ -95,14 +97,14 @@ const AddFriendModal: FC<Props> = ({closeModal}) => {
           setSearchState({
             skeletonVisible: false,
             searchHelperVisible:
-              response.data && response.data.length > 0 ? true : false,
+              response.data && filterdUsers.length > 0 ? true : false,
           });
         } catch (error) {
           setSearchState({
             skeletonVisible: false,
             searchHelperVisible: false,
           });
-          console.log(error)
+          console.log(error);
         }
       }, 500),
     );
@@ -116,12 +118,51 @@ const AddFriendModal: FC<Props> = ({closeModal}) => {
     });
   };
 
+  useEffect(() => {
+    if (validator.isEmail(email)) {
+      setIsValidForm(true);
+    } else {
+      setIsValidForm(false);
+    }
+  }, [email]);
 
   //Hanlde sending friend request
- 
-  const handleSubmit = () =>{
-  }
 
+  const handleSubmit = async () => {
+    if (!validator.isEmail(email)) return;
+
+    try {
+      setIsSending(true);
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.post(
+        'https://syncord.runasp.net/friendship/send-request',
+        {
+          recieverEmail: email.toString(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type':'application/json'
+          },
+        },
+      );
+      Toast.show({
+        type: 'success',
+        text1: 'Your request has been sent successfully 🎉',
+        topOffset: 20,
+      });
+      setIsSending(false);
+      closeModal()
+    } catch (error:any) {
+      Toast.show({
+        type: 'error',
+        text1: error.response.data,
+        topOffset: 20,
+      });
+      setIsSending(false);
+      
+    }
+  };
 
   return (
     <Modal
@@ -172,7 +213,7 @@ const AddFriendModal: FC<Props> = ({closeModal}) => {
             bgColor="#5865f2"
             disabledBg="#3a408a"
             disabled={!validForm}
-            isLoading={isLoading}
+            isLoading={isSending}
             fit
             radius={100}
           />

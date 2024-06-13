@@ -207,14 +207,14 @@ const Friends: FC<Props> = ({
                 (statusFilter === 'online' || statusFilter === 'all') &&
                 filteredFriends?.filter(f => f.isOnline).length > 0 && (
                   <View style={styles.friendsListContainer}>
-                    <FriendsList status="Online" friends={filteredFriends} />
+                    <FriendsList status="Online" friends={filteredFriends?.filter(f => f.isOnline)} />
                   </View>
                 )}
               {filteredFriends &&
                 (statusFilter === 'offline' || statusFilter === 'all') &&
                 filteredFriends?.filter(f => !f.isOnline).length > 0 && (
                   <View style={styles.friendsListContainer}>
-                    <FriendsList status="Offline" friends={filteredFriends} />
+                    <FriendsList status="Offline" friends={filteredFriends?.filter(f => !f.isOnline)} />
                   </View>
                 )}
               {statusFilter === 'online' &&

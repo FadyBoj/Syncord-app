@@ -17,8 +17,11 @@ interface IRequest {
   userId: string;
   email: string;
   outGoing: boolean;
+  firstname: string;
+  lastname: string;
+  image: string;
+  createdAt: string;
 }
-
 interface IFriend {
   id: string;
   userId: string;
@@ -43,7 +46,7 @@ interface IUser {
   image: string;
   requests: IRequest[];
   friends: IFriend[];
-  messages : Friendship[]
+  messages: Friendship[];
 }
 
 interface Props {
@@ -55,10 +58,8 @@ interface IContext {
   isFetchingDashboard: boolean;
   getDashboard: () => Promise<any>;
   connection: SignalR.HubConnection | null;
-  isLoading:boolean
+  isLoading: boolean;
 }
-
-
 
 export const DashboardContext = createContext<IContext | null>(null);
 
@@ -68,7 +69,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
   const [connection, setConnection] = useState<SignalR.HubConnection | null>(
     null,
   );
-  const [isLoading,setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   //Fetching dashboard
   useEffect(() => {
     const getDashboard = async () => {
@@ -92,7 +93,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
             },
           },
         );
-        setUser({...response.data,messages:messages.data});
+        setUser({...response.data, messages: messages.data});
         setIsFetchingDashboard(false);
         //Establishing stream
         const secConnection = new SignalR.HubConnectionBuilder()
@@ -111,9 +112,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
         });
         setConnection(secConnection);
         setIsLoading(false);
-      } catch (error) {
-        
-      }
+      } catch (error) {}
     };
     getDashboard();
   }, [0]);
@@ -134,7 +133,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
 
   return (
     <DashboardContext.Provider
-      value={{user, isFetchingDashboard, getDashboard, connection,isLoading}}>
+      value={{user, isFetchingDashboard, getDashboard, connection, isLoading}}>
       {children}
     </DashboardContext.Provider>
   );

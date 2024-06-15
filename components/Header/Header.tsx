@@ -22,13 +22,15 @@ const Header: FC<Props> = ({title, rightComponent}) => {
 const styles = StyleSheet.create({
   container: {
     width: screenWidth,
-    height: 60,
     backgroundColor: '#111216',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingLeft: 20,
     paddingRight: 20,
+    paddingTop:20,
+    paddingBottom:10,
+    height:80
   },
   title: {
     fontFamily: 'Roboto',

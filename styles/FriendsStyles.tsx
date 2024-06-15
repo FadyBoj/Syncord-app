@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#111216',
-    paddingTop: 10,
     paddingRight: 20,
     paddingLeft: 20,
     gap: 30,
@@ -38,6 +37,7 @@ const styles = StyleSheet.create({
     width: '100%',
     gap: 20,
     alignItems: 'flex-end',
+    paddingTop:10
   },
   searchContainer: {
     flexDirection: 'row',
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     color:'gray'
   },
   wrapper:{
-    position:'relative'
+    position:'relative',
   }
 });
 

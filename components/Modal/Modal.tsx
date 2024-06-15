@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 20,
     backgroundColor: '#1c1d22',
-    paddingTop: 45,
+    paddingTop: 60,
     alignItems: 'center',
     zIndex: 30,
     position: 'relative',
@@ -68,8 +68,9 @@ const styles = StyleSheet.create({
   },
   closeContainer: {
     position: 'absolute',
-    top: 20,
-    right: 20,
+    top: 10,
+    right: 10,
+    padding:10
   },
 });
 

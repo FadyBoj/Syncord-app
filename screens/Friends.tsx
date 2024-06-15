@@ -1,10 +1,8 @@
-import {View, Text, Image, ScrollView, FlatList} from 'react-native';
-import {useState, FC, useRef, useEffect, useContext, useId, memo} from 'react';
+import {View, Text, Image, FlatList} from 'react-native';
+import {useState, FC, useEffect, useContext} from 'react';
 import styles from '../styles/FriendsStyles';
 
 //Components
-import MainLayout from '../components/MainLayout';
-import {AuthContext} from '../context/AuthContext';
 import ShrinkButton from '../components/Buttons/ShrinkButton';
 import FriendsList from '../components/FriendsList/FriendsList';
 import CustomTextInput from '../components/Inputs/CustomTextInput/Index';

@@ -1,13 +1,15 @@
-import {View, Text, TouchableOpacity, ViewComponent} from 'react-native';
-import {useState  ,FC, useRef, useEffect} from 'react';
-import styles from '../styles/HomeStyles';
-import {Gesture, GestureDetector} from 'react-native-gesture-handler';
+import {View, Text} from 'react-native';
+import {useState, FC, useContext, useEffect} from 'react';
+import styles from '../styles/NotificationStyles';
+
 //Components
-import MainLayout from '../components/MainLayout';
+import Header from '../components/Header/Header';
+import {DashboardContext} from '../context/DashboardContext';
+import NotificationSkeleton from '../components/Skeletons/NotificationSkeleton';
+import NotificationItem from '../components/Notifications/NotificationItem';
 
 
-
-const Notifications:FC = (props) => {
+const Notifications: FC = props => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const closeDrawer = () => {
@@ -15,18 +17,35 @@ const Notifications:FC = (props) => {
   };
 
   const openDrawer = () => {
-    setIsDrawerOpen((prev) =>{
-      return !prev
-    })
+    setIsDrawerOpen(prev => {
+      return !prev;
+    });
   };
 
-  
+  //Handling real time functions
+  const dashboard = useContext(DashboardContext);
+  const connection = dashboard?.connection;
+  const isDashboardLoading = dashboard?.isLoading;
+
+  useEffect(() => {
+    connection?.on('SentRequest', user => {
+      console.log(user);
+    });
+  }, [0]);
+
+
   return (
-      <View  style={styles.container}>
-        <TouchableOpacity style={styles.btn} onPress={openDrawer}>
-          <Text>Notifications</Text>
-        </TouchableOpacity>
+    <>
+      <Header title="Notifications" />
+      <View style={styles.container}>
+        {isDashboardLoading && <NotificationSkeleton />}
+        {
+          dashboard?.user?.requests.map((item,index:number) =>{
+            return <NotificationItem item={item} key={index}/>
+          })
+        }
       </View>
+    </>
   );
 };
 

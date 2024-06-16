@@ -15,9 +15,9 @@ const getRelativeTime = (utcDate: string): string => {
     const yearsDifference = differenceInYears(now, date);
 
     if (daysDifference === 0) {
-        return "today";
+        return "Today";
     } else if (daysDifference === 1) {
-        return "yesterday";
+        return "Yesterday";
     } else if (daysDifference < 30) {
         return `${daysDifference}d ago`;
     } else if (monthsDifference < 12) {

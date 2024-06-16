@@ -9,6 +9,7 @@ import * as ReactNative from 'react-native';
 import 'react-native-reanimated';
 import 'react-native-gesture-handler';
 import Toast,{BaseToast} from 'react-native-toast-message';
+import DashboardContextProvider from './context/DashboardContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,7 +53,7 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <>
+      <DashboardContextProvider>
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen
@@ -69,7 +70,7 @@ export default function App() {
         </NavigationContainer>
         <Toast config={toastConfig}/>
 
-      </>
+      </DashboardContextProvider>
     </AuthProvider>
   );
 }

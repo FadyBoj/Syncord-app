@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Pressable,
   ImageSourcePropType,
+  Image
 } from 'react-native';
 import {FC} from 'react';
 import Animated, {
@@ -13,7 +14,8 @@ import Animated, {
   Easing,
   ReduceMotion,
 } from 'react-native-reanimated';
-import { Image } from 'moti';
+
+
 
 interface Props {
   icon: ImageSourcePropType;

@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet} from 'react-native';
-import {FC} from 'react';
+import {FC,memo} from 'react';
 
 //Components
 import ImagePlaceHolder from '../ImagePlaceHolder/ImagePlaceHolder';
@@ -27,7 +27,10 @@ interface Props {
   item: IFriendRequest;
 }
 
+
 const NotificationItem: FC<Props> = ({item}) => {
+  console.log("Rerendred")
+
   return (
     <View style={styles.container}>
       {!item.outGoing ? (
@@ -42,8 +45,8 @@ const NotificationItem: FC<Props> = ({item}) => {
             />
             <View style={styles.content}>
               <View style={styles.nameContainer}>
-                <Text lineBreakMode="head" style={styles.name}>
-                  {item.firstname} Sent you a friend request
+                <Text  style={styles.name}>
+                  {item.firstname}  Sent you a friend request
                 </Text>
                 <Text style={styles.email}>{item.email}</Text>
               </View>
@@ -55,7 +58,6 @@ const NotificationItem: FC<Props> = ({item}) => {
                   radius={100}
                   bgColor="#2d2e33"
                   action={() => {
-                    console.log('Accepting');
                   }}
                   iconSize={15}
                 />
@@ -66,7 +68,6 @@ const NotificationItem: FC<Props> = ({item}) => {
                   radius={100}
                   bgColor="#2d2e33"
                   action={() => {
-                    console.log('Accepting');
                   }}
                   iconSize={11}
                 />
@@ -76,8 +77,11 @@ const NotificationItem: FC<Props> = ({item}) => {
           <View></View>
         </>
       ) : (
-        <View></View>
+        <View><Text>Hiiiii</Text></View>
       )}
+      <View style={styles.time}>
+        <Text style={styles.timeText}>{getRelativeTime(item.createdAt)}</Text>
+      </View>
     </View>
   );
 };
@@ -88,19 +92,22 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 20,
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(52, 52, 52, 0.463)',
+    backgroundColor: 'rgba(118, 118, 118, 0.129)',
     position: 'relative',
-    width:'100%'
+    width:'100%',
   },
   col1: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 15,
-    width:'100%'
+    width:'100%',
+    paddingBottom:10
+
   },
   nameContainer: {
     flexDirection: 'column',
     gap: 5,
+    maxWidth:200
   },
   name: {
     color: '#babfc0',
@@ -114,8 +121,8 @@ const styles = StyleSheet.create({
 
   time: {
     position: 'absolute',
-    right: 20,
-    top: 10,
+    left: 20,
+    bottom: 10,
   },
   timeText: {
     color: '#818491',
@@ -136,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NotificationItem;
+export default memo(NotificationItem);

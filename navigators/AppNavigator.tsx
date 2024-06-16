@@ -23,7 +23,6 @@ const AppStack = () => {
   const openAddFriendModal = () => setAddFriendModal(true);
   const closeAddFriendModal = () => setAddFriendModal(false);
   return (
-    <DashboardContextProvider>
       <Stack.Navigator>
         <Stack.Screen name="MainTabs" options={{headerShown: false}}>
           {props => (
@@ -60,7 +59,6 @@ const AppStack = () => {
           options={{animation: 'ios', headerShown: false}}
         />
       </Stack.Navigator>
-    </DashboardContextProvider>
   );
 };
 

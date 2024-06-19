@@ -77,7 +77,6 @@ const AuthProvider: FC<Props> = ({children}) => {
           return;
         }
         setValidToken(true);
-
         const response = await axios.get(
           'https://syncord.runasp.net/user/dashboard',
           {

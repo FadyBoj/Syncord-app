@@ -10,12 +10,31 @@ import ShrinkButton from '../../components/Buttons/ShrinkButton';
 import NavHeader from '../../components/NavHeader/NavHeader';
 import axios from 'axios';
 import {AuthContext} from '../../context/AuthContext';
+import { DashboardContext } from '../../context/DashboardContext';
+
+interface Friendship {
+  friendShipId: string;
+  userId: string;
+  latesMessageDate: string;
+  messages: Message[];
+}
+interface Message {
+  id: string;
+  isSent: boolean;
+  text: string;
+  createdAt: Date;
+  senderId: string;
+}
 
 interface Props {
   navigation: any;
 }
 
 const Login: FC<Props> = ({navigation}) => {
+
+  //Context
+  const dashboard = useContext(DashboardContext)
+  const setDashboard = dashboard?.setUser;
   //Getting previous screen params
 
   const [formData, setFormData] = useState({
@@ -63,8 +82,21 @@ const Login: FC<Props> = ({navigation}) => {
           },
         },
       );
+      const messages: {data: Friendship[]} = await axios.get(
+        'https://syncord.runasp.net/chat/all-messages',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if(setDashboard)
+        {
+          setDashboard({...userResponse.data, messages: messages.data});
+        }
       navigation.replace('AppStack', {screen: 'Chats'});
       setIsLoading(false);
+      dashboard?.setIsLoading(false);
     } catch (error) {
       setEmailError('Email and password are mismatched');
       setIsLoading(false);

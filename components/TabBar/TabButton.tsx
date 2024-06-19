@@ -69,12 +69,6 @@ const TabButton: FC<Props> = ({
       <View style={styles.iconCotainer}>
         {label.toLocaleLowerCase() === 'you' ? (
           <View>
-            {user && user.image ? (
-              <Image
-                source={{uri: user?.image.replace('http', 'https')}}
-                style={styles.pfp}
-              />
-            ) : (
               <View style={styles.profilePicContainer}>
                 {user && user.image ? (
                   <Image
@@ -92,7 +86,6 @@ const TabButton: FC<Props> = ({
                   </View>
                 )}
               </View>
-            )}
           </View>
         ) : label.toLocaleLowerCase() === 'messages' ? (
           <Image

@@ -1,10 +1,11 @@
-import { View, Text, VirtualizedList } from 'react-native';
-import { useState, FC, useContext, useEffect } from 'react';
+import {View, Text, VirtualizedList} from 'react-native';
+import {useState, FC, useContext, useEffect} from 'react';
 import styles from '../styles/NotificationStyles';
+import Toast from 'react-native-toast-message';
 
 //Components
 import Header from '../components/Header/Header';
-import { DashboardContext } from '../context/DashboardContext';
+import {DashboardContext} from '../context/DashboardContext';
 import NotificationSkeleton from '../components/Skeletons/NotificationSkeleton';
 import NotificationItem from '../components/Notifications/NotificationItem';
 
@@ -19,34 +20,21 @@ interface IFriendRequest {
   createdAt: string;
 }
 
-const Notifications: FC = (props) => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  const closeDrawer = () => {
-    setIsDrawerOpen(false);
-  };
-
-  const openDrawer = () => {
-    setIsDrawerOpen((prev) => !prev);
-  };
+const Notifications: FC = props => {
+  //States
+  const [isLoading, setIsLoading] = useState(false);
 
   // Handling real-time functions
   const dashboard = useContext(DashboardContext);
   const connection = dashboard?.connection;
   const isDashboardLoading = dashboard?.isLoading;
+  const setDashboard = dashboard?.setUser;
 
   useEffect(() => {
-    connection?.on('SentRequest', (user) => {
+    connection?.on('SentRequest', user => {
       console.log(user);
     });
   }, [0]);
-
-  const newItems: IFriendRequest[] = [];
-  for (let i = 0; i < 20; i++) {
-    const item = dashboard?.user?.requests[0];
-    if (!item) return;
-    newItems.push({ ...item, id: item.id + i });
-  }
 
   // Function to get item by index
   const getItem = (data: IFriendRequest[], index: number): IFriendRequest => {
@@ -58,6 +46,38 @@ const Notifications: FC = (props) => {
     return data.length;
   };
 
+  const acceptRequest = (id: string) => {
+    try {
+      setIsLoading(true);
+      if (!setDashboard) return;
+      //Start
+      setDashboard((prevData) =>{
+        if(!prevData) return null;
+        return {...prevData,requests:prevData.requests.map((req) =>{
+          return req.id.toString() !== id ? req : null;
+        }).filter(r => r !== null)}
+      })
+      setIsLoading(false)
+      Toast.show({
+        type: 'success',
+        text1: 'Request accepted 🎉',
+        topOffset: 20,
+      });
+
+    } catch (error:any) {
+      console.log(error.response.data);
+      Toast.show({
+        type: 'error',
+        text1: 'Couldn\'t accept the request, please try again later',
+        topOffset: 20,
+      });
+    }
+  };
+
+  const rejectRequest = () => {
+    console.log('Rejecting from parent');
+  };
+
   return (
     <>
       <Header title="Notifications" />
@@ -66,14 +86,24 @@ const Notifications: FC = (props) => {
         {dashboard && (
           <VirtualizedList
             contentContainerStyle={{}}
-            data={newItems}
+            data={dashboard.user?.requests}
             initialNumToRender={5}
-     
-            renderItem={({ item }) => <NotificationItem item={item} />}
-            keyExtractor={(item) => item.id.toString()}
+            maxToRenderPerBatch={10}
+            windowSize={11}
+            updateCellsBatchingPeriod={100}
+            removeClippedSubviews
+            renderItem={({item}) => (
+              <NotificationItem
+                item={item}
+                acceptRequest={acceptRequest}
+                rejectRequest={rejectRequest}
+                disabled={isLoading}
+              />
+            )}
+            keyExtractor={item => item.id.toString()}
             getItem={getItem}
             getItemCount={getItemCount}
-            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+            ItemSeparatorComponent={() => <View style={{height: 20}} />}
           />
         )}
       </View>

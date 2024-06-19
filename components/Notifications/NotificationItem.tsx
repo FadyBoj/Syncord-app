@@ -1,5 +1,8 @@
 import {View, Text, StyleSheet} from 'react-native';
-import {FC,memo} from 'react';
+import {FC, memo, useContext, useState} from 'react';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Animated, {SlideInRight, SlideOutLeft} from 'react-native-reanimated';
 
 //Components
 import ImagePlaceHolder from '../ImagePlaceHolder/ImagePlaceHolder';
@@ -11,6 +14,7 @@ import getRelativeTime from '../../utils/getRelativeTime';
 //Assets
 import tickIcon from '../../assets/tick.png';
 import closeIcon from '../../assets/close.png';
+import {DashboardContext} from '../../context/DashboardContext';
 
 interface IFriendRequest {
   id: number;
@@ -25,14 +29,15 @@ interface IFriendRequest {
 
 interface Props {
   item: IFriendRequest;
+  acceptRequest: (id:string) => void;
+  rejectRequest: (id:string) => void;
+  disabled:boolean
 }
 
-
-const NotificationItem: FC<Props> = ({item}) => {
-  console.log("Rerendred")
+const NotificationItem: FC<Props> = ({item, acceptRequest, rejectRequest,disabled}) => {
 
   return (
-    <View style={styles.container}>
+    <Animated.View  style={styles.container}>
       {!item.outGoing ? (
         <>
           <View style={styles.col1}>
@@ -45,8 +50,8 @@ const NotificationItem: FC<Props> = ({item}) => {
             />
             <View style={styles.content}>
               <View style={styles.nameContainer}>
-                <Text  style={styles.name}>
-                  {item.firstname}  Sent you a friend request
+                <Text style={styles.name}>
+                  {item.firstname} Sent you a friend request
                 </Text>
                 <Text style={styles.email}>{item.email}</Text>
               </View>
@@ -57,9 +62,9 @@ const NotificationItem: FC<Props> = ({item}) => {
                   height={30}
                   radius={100}
                   bgColor="#2d2e33"
-                  action={() => {
-                  }}
+                  action={() => acceptRequest(item.id.toString())}
                   iconSize={15}
+                  disabled={disabled}
                 />
                 <ChoiceButton
                   icon={closeIcon}
@@ -67,9 +72,9 @@ const NotificationItem: FC<Props> = ({item}) => {
                   height={30}
                   radius={100}
                   bgColor="#2d2e33"
-                  action={() => {
-                  }}
+                  action={() => rejectRequest(item.id.toString())}
                   iconSize={11}
+                  disabled={disabled}
                 />
               </View>
             </View>
@@ -77,12 +82,14 @@ const NotificationItem: FC<Props> = ({item}) => {
           <View></View>
         </>
       ) : (
-        <View><Text>Hiiiii</Text></View>
+        <View>
+          <Text></Text>
+        </View>
       )}
-      <View style={styles.time}>
+      {/* <View style={styles.time}>
         <Text style={styles.timeText}>{getRelativeTime(item.createdAt)}</Text>
-      </View>
-    </View>
+      </View> */}
+    </Animated.View>
   );
 };
 
@@ -94,20 +101,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'rgba(118, 118, 118, 0.129)',
     position: 'relative',
-    width:'100%',
+    width: '100%',
   },
   col1: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 15,
-    width:'100%',
-    paddingBottom:10
-
+    width: '100%',
+    // paddingBottom:10
   },
   nameContainer: {
     flexDirection: 'column',
     gap: 5,
-    maxWidth:200
+    maxWidth: 200,
   },
   name: {
     color: '#babfc0',
@@ -133,9 +139,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    flexGrow:1,
-    flexShrink:1
-
+    flexGrow: 1,
+    flexShrink: 1,
   },
   choiceContainer: {
     flexDirection: 'column',
@@ -143,4 +148,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(NotificationItem);
+export default NotificationItem;

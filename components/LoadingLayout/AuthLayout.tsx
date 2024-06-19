@@ -21,7 +21,6 @@ const AuthLayout: FC<Props> = ({onFailNav, children, screen = null}) => {
       let token = null
       if(getToken)
         token = await getToken();
-
       if(token === null)
         setIsLoading(false)
       else 

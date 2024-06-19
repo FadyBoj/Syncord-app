@@ -59,6 +59,8 @@ interface IContext {
   getDashboard: () => Promise<any>;
   connection: SignalR.HubConnection | null;
   isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
 }
 
 export const DashboardContext = createContext<IContext | null>(null);
@@ -133,7 +135,15 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
 
   return (
     <DashboardContext.Provider
-      value={{user, isFetchingDashboard, getDashboard, connection, isLoading}}>
+      value={{
+        user,
+        isFetchingDashboard,
+        getDashboard,
+        connection,
+        isLoading,
+        setUser,
+        setIsLoading,
+      }}>
       {children}
     </DashboardContext.Provider>
   );

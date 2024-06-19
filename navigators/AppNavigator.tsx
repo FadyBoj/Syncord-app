@@ -47,6 +47,7 @@ const AppStack = () => {
                 component={Notifications}
                 options={{
                   headerShown: false,
+                  tabBarBadge:3,
                 }}
               />
               <Tab.Screen name="You" component={Settings} />

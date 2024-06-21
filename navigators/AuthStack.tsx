@@ -5,6 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Main from '../screens/Main';
 import RegisterNavigator from './RegisterNavigator';
 import Login from '../screens/AuthScreens/Login';
+import CheckToken from '../screens/CheckToken';
 
 const Stack = createNativeStackNavigator();
 
@@ -12,10 +13,15 @@ const AuthStack = () => {
   return (
       <Stack.Navigator 
       >
+        <Stack.Screen 
+        name='CheckToken'
+        component={CheckToken}
+        options={{headerShown:false}}
+        />
       <Stack.Screen
         name="Main"
         component={Main}
-        options={{headerShown: false,presentation:'fullScreenModal'}}
+        options={{headerShown: false,presentation:'fullScreenModal',animation:'simple_push'}}
       />
 
       <Stack.Screen

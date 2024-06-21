@@ -3,6 +3,7 @@ import {useState, useEffect, FC, useContext} from 'react';
 import styles from '../../styles/LoginStyles';
 import validator from 'validator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import globals from '../../globals';
 
 //Components
 import CustomTextInput from '../../components/Inputs/CustomTextInput/Index';
@@ -35,6 +36,7 @@ const Login: FC<Props> = ({navigation}) => {
   //Context
   const dashboard = useContext(DashboardContext)
   const setDashboard = dashboard?.setUser;
+  const startConnection = dashboard?.startConnection;
   //Getting previous screen params
 
   const [formData, setFormData] = useState({
@@ -68,14 +70,14 @@ const Login: FC<Props> = ({navigation}) => {
   const handleLogin = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post('https://syncord.runasp.net/user/login', {
+      const response = await axios.post(`${globals.baseUrl}/user/login`, {
         email: formData.email.toLocaleLowerCase(),
         password: formData.password,
       });
       const token = response.data.token;
       await AsyncStorage.setItem('token', token);
       const userResponse = await axios.get(
-        'https://syncord.runasp.net/user/dashboard',
+        `${globals.baseUrl}/user/dashboard`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -83,16 +85,17 @@ const Login: FC<Props> = ({navigation}) => {
         },
       );
       const messages: {data: Friendship[]} = await axios.get(
-        'https://syncord.runasp.net/chat/all-messages',
+        `${globals.baseUrl}/chat/all-messages`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         },
       );
-      if(setDashboard)
+      if(setDashboard && startConnection)
         {
           setDashboard({...userResponse.data, messages: messages.data});
+          startConnection()
         }
       navigation.replace('AppStack', {screen: 'Chats'});
       setIsLoading(false);

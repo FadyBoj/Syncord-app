@@ -3,6 +3,7 @@ import {Children, FC, createContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as SignalR from '@microsoft/signalr';
+import globals from '../globals';
 
 interface Message {
   id: string;
@@ -61,6 +62,7 @@ interface IContext {
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
+  startConnection: () => Promise<void>
 }
 
 export const DashboardContext = createContext<IContext | null>(null);
@@ -80,7 +82,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
         if (!token) return;
 
         const response = await axios.get(
-          'https://syncord.runasp.net/user/dashboard',
+          `${globals.baseUrl}/user/dashboard`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -88,7 +90,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
           },
         );
         const messages: {data: Friendship[]} = await axios.get(
-          'https://syncord.runasp.net/chat/all-messages',
+          `${globals.baseUrl}/chat/all-messages`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -99,7 +101,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
         setIsFetchingDashboard(false);
         //Establishing stream
         const secConnection = new SignalR.HubConnectionBuilder()
-          .withUrl('https://syncord.runasp.net/chat', {
+          .withUrl(`${globals.baseUrl}/chat`, {
             skipNegotiation: true,
             transport: SignalR.HttpTransportType.WebSockets,
             accessTokenFactory: () => token,
@@ -114,16 +116,19 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
         });
         setConnection(secConnection);
         setIsLoading(false);
-      } catch (error) {}
+      } catch (error:any) {
+        console.log("Not Authenticated")
+        console.log(error.response.data)
+      }
     };
     getDashboard();
-  }, [0]);
+  }, []);
   const getDashboard = async () => {
     const token = await AsyncStorage.getItem('token');
     if (!token) return;
 
     const response = await axios.get(
-      'https://syncord.runasp.net/user/dashboard',
+      `${globals.baseUrl}/user/dashboard`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -131,6 +136,29 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
       },
     );
     return response.data;
+  };
+
+  const startConnection = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) return;
+
+    //Establishing stream
+    const secConnection = new SignalR.HubConnectionBuilder()
+      .withUrl(`${globals.baseUrl}/chat`, {
+        skipNegotiation: true,
+        transport: SignalR.HttpTransportType.WebSockets,
+        accessTokenFactory: () => token?.toString(),
+      })
+      .withAutomaticReconnect()
+      .build();
+
+    secConnection.start().then(() => {
+      console.log('Connection started');
+    });
+    secConnection.onreconnected(() => {
+      console.log('Reconnected');
+    });
+    setConnection(secConnection);
   };
 
   return (
@@ -143,6 +171,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
         isLoading,
         setUser,
         setIsLoading,
+        startConnection
       }}>
       {children}
     </DashboardContext.Provider>

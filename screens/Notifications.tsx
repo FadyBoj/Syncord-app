@@ -8,6 +8,8 @@ import Header from '../components/Header/Header';
 import {DashboardContext} from '../context/DashboardContext';
 import NotificationSkeleton from '../components/Skeletons/NotificationSkeleton';
 import NotificationItem from '../components/Notifications/NotificationItem';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface IFriendRequest {
   id: number;
@@ -46,29 +48,46 @@ const Notifications: FC = props => {
     return data.length;
   };
 
-  const acceptRequest = (id: string) => {
+  const acceptRequest = async (id: string) => {
     try {
       setIsLoading(true);
       if (!setDashboard) return;
       //Start
-      setDashboard((prevData) =>{
-        if(!prevData) return null;
-        return {...prevData,requests:prevData.requests.map((req) =>{
-          return req.id.toString() !== id ? req : null;
-        }).filter(r => r !== null)}
-      })
-      setIsLoading(false)
+      const token = await AsyncStorage.getItem('token');
+      if (!token) return;
+      await axios.post(
+        'https://syncord.runasp.net/friendship/accept-request',
+        {
+          requestId: id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      setDashboard(prevData => {
+        if (!prevData) return null;
+        return {
+          ...prevData,
+          requests: prevData.requests
+            .map(req => {
+              return req.id.toString() !== id ? req : null;
+            })
+            .filter(r => r !== null),
+        };
+      });
+      setIsLoading(false);
       Toast.show({
         type: 'success',
         text1: 'Request accepted 🎉',
         topOffset: 20,
       });
-
-    } catch (error:any) {
+    } catch (error: any) {
       console.log(error.response.data);
       Toast.show({
         type: 'error',
-        text1: 'Couldn\'t accept the request, please try again later',
+        text1: "Couldn't accept the request, please try again later",
         topOffset: 20,
       });
     }
@@ -83,7 +102,7 @@ const Notifications: FC = props => {
       <Header title="Notifications" />
       <View style={styles.container}>
         {isDashboardLoading && <NotificationSkeleton />}
-        {dashboard && (
+        {dashboard?.user?.requests && (
           <VirtualizedList
             contentContainerStyle={{}}
             data={dashboard.user?.requests}

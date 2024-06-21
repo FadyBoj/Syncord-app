@@ -31,7 +31,7 @@ const AppStack = () => {
               tabBar={props => (
                 <MyTabBar {...props} addFriendModal={addFriendModal} />
               )}>
-              <Tab.Screen name="Messages" component={Chats} />
+              <Tab.Screen name="Messages" component={Chats}  />
               <Tab.Screen options={{headerShown: false}} name="Friends">
                 {props => (
                   <Friends

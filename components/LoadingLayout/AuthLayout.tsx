@@ -3,6 +3,8 @@ import {useContext, FC, useEffect, useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {AuthContext} from '../../context/AuthContext';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props {
   onFailNav: string;
@@ -13,21 +15,27 @@ interface Props {
 const AuthLayout: FC<Props> = ({onFailNav, children, screen = null}) => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const [isLoading,setIsLoading] = useState(true);
-  const getToken = useContext(AuthContext)?.getToken
+  const [isLoading, setIsLoading] = useState(true);
+  const getToken = useContext(AuthContext)?.getToken;
 
-  useEffect(() => {
-    const handleGetToken = async() =>{
-      let token = null
-      if(getToken)
-        token = await getToken();
-      if(token === null)
-        setIsLoading(false)
-      else 
-      navigation.navigate(onFailNav,{screen:screen})
-    }
-    handleGetToken()
-  }, [0]);
+    const checkAuth = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (!token) setIsLoading(false);
+        const res = await axios.get(
+          'https://syncord.runasp.net/user/requests',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        navigation.navigate(onFailNav, {screen: screen});
+      } catch (error) {
+        setIsLoading(false);
+      }
+    };
+    checkAuth();
 
   return isLoading ? (
     <View style={styles.constainer}>

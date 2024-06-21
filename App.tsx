@@ -51,26 +51,24 @@ export default function App() {
   };
 
   return (
-    <AuthProvider>
-      <DashboardContextProvider>
-        <>
-          <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen
-                name="AuthStack"
-                component={AuthStack}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="AppStack"
-                component={AppStack}
-                options={{headerShown: false, animation: 'default'}}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
-          <Toast config={toastConfig} />
-        </>
-      </DashboardContextProvider>
-    </AuthProvider>
+    <DashboardContextProvider>
+      <>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="AuthStack"
+              component={AuthStack}
+              options={{headerShown: false, animation: 'simple_push'}}
+            />
+            <Stack.Screen
+              name="AppStack"
+              component={AppStack}
+              options={{headerShown: false, animation: 'simple_push'}}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+        <Toast config={toastConfig} />
+      </>
+    </DashboardContextProvider>
   );
 }

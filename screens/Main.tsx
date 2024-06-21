@@ -23,7 +23,6 @@ const Main = () => {
   };
 
   return (
-    <AuthLayout onFailNav="AppStack" screen="Chats">
       <View style={styles.container}>
         <View style={styles.sec1}>
           <Image style={styles.logo} source={logo} />
@@ -49,7 +48,6 @@ const Main = () => {
           />
         </View>
       </View>
-    </AuthLayout>
   );
 };
 

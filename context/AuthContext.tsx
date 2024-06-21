@@ -77,6 +77,7 @@ const AuthProvider: FC<Props> = ({children}) => {
           return;
         }
         setValidToken(true);
+        console.log("Start")
         const response = await axios.get(
           'https://syncord.runasp.net/user/dashboard',
           {
@@ -85,7 +86,8 @@ const AuthProvider: FC<Props> = ({children}) => {
             },
           },
         );
-        setUser(response.data);
+        console.log("End")
+
         setTimeout(() => {
           setIsLoading({value: false});
         }, 1000);

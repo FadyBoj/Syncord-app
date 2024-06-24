@@ -5,7 +5,11 @@ import axios from 'axios';
 import * as SignalR from '@microsoft/signalr';
 import globals from '../globals';
 
-interface Message {
+//Services
+import onHopOnline from '../Services/RealTimeUtils/onHopOnline';
+import onGoOffline from '../Services/RealTimeUtils/onGoOffline';
+
+export interface Message {
   id: string;
   isSent: boolean;
   text: string;
@@ -13,7 +17,7 @@ interface Message {
   senderId: string;
 }
 
-interface IRequest {
+export interface IRequest {
   id: number;
   userId: string;
   email: string;
@@ -23,23 +27,24 @@ interface IRequest {
   image: string;
   createdAt: string;
 }
-interface IFriend {
-  id: string;
+export interface IFriend {
+  friendShipId: string;
   userId: string;
   email: string;
   firstname: string;
   lastname: string;
   isOnline: boolean;
+  image: string;
 }
 
-interface Friendship {
+export interface Friendship {
   friendShipId: string;
   userId: string;
   latesMessageDate: string;
   messages: Message[];
 }
 
-interface IUser {
+export interface IUser {
   id: string;
   email: string;
   firstname: string;
@@ -54,7 +59,7 @@ interface Props {
   children: JSX.Element;
 }
 
-interface IContext {
+export interface IContext {
   user: IUser | null;
   isFetchingDashboard: boolean;
   getDashboard: () => Promise<any>;
@@ -62,7 +67,8 @@ interface IContext {
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
-  startConnection: () => Promise<void>
+  startConnection: () => Promise<void>;
+  getMainDashboard: () => Promise<void>;
 }
 
 export const DashboardContext = createContext<IContext | null>(null);
@@ -75,66 +81,48 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
   );
   const [isLoading, setIsLoading] = useState(true);
   //Fetching dashboard
-  useEffect(() => {
-    const getDashboard = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) return;
+  const getMainDashboard = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) return;
+      console.log('Starting dashboard');
+      const response = await axios.get(`${globals.baseUrl}/user/dashboard`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const messages: {data: Friendship[]} = await axios.get(
+        `${globals.baseUrl}/chat/all-messages`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      setUser({...response.data, messages: messages.data});
+      setIsFetchingDashboard(false);
+      startConnection();
+      setIsLoading(false);
+      console.log('Finished');
+    } catch (error: any) {
+      console.log('Not Authenticated');
+      console.log(error.response.data);
+    }
+  };
 
-        const response = await axios.get(
-          `${globals.baseUrl}/user/dashboard`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-        const messages: {data: Friendship[]} = await axios.get(
-          `${globals.baseUrl}/chat/all-messages`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-        setUser({...response.data, messages: messages.data});
-        setIsFetchingDashboard(false);
-        //Establishing stream
-        const secConnection = new SignalR.HubConnectionBuilder()
-          .withUrl(`${globals.baseUrl}/chat`, {
-            skipNegotiation: true,
-            transport: SignalR.HttpTransportType.WebSockets,
-            accessTokenFactory: () => token,
-          })
-          .withAutomaticReconnect()
-          .build();
-        secConnection.start().then(() => {
-          console.log('Connection started');
-        });
-        secConnection.onreconnected(() => {
-          console.log('Reconnected');
-        });
-        setConnection(secConnection);
-        setIsLoading(false);
-      } catch (error:any) {
-        console.log("Not Authenticated")
-        console.log(error.response.data)
-      }
-    };
-    getDashboard();
-  }, []);
+  // useEffect(() => {
+  //   getMainDashboard();
+  // }, [0]);
+
   const getDashboard = async () => {
     const token = await AsyncStorage.getItem('token');
     if (!token) return;
 
-    const response = await axios.get(
-      `${globals.baseUrl}/user/dashboard`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const response = await axios.get(`${globals.baseUrl}/user/dashboard`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    );
+    });
     return response.data;
   };
 
@@ -147,7 +135,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
       .withUrl(`${globals.baseUrl}/chat`, {
         skipNegotiation: true,
         transport: SignalR.HttpTransportType.WebSockets,
-        accessTokenFactory: () => token?.toString(),
+        accessTokenFactory: () => token,
       })
       .withAutomaticReconnect()
       .build();
@@ -161,6 +149,13 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
     setConnection(secConnection);
   };
 
+  //Handle real time functions
+
+  useEffect(() =>{
+    connection?.on('hoppedOnline',(userId) => onHopOnline(setUser,userId))
+    connection?.on('wentOffline',(userId) => onGoOffline(setUser,userId))
+  },[connection])
+
   return (
     <DashboardContext.Provider
       value={{
@@ -171,7 +166,8 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
         isLoading,
         setUser,
         setIsLoading,
-        startConnection
+        startConnection,
+        getMainDashboard,
       }}>
       {children}
     </DashboardContext.Provider>

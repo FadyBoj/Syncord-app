@@ -2,6 +2,7 @@ import {View, Text, VirtualizedList} from 'react-native';
 import {useState, FC, useContext, useEffect} from 'react';
 import styles from '../styles/NotificationStyles';
 import Toast from 'react-native-toast-message';
+import globals from '../globals';
 
 //Components
 import Header from '../components/Header/Header';
@@ -56,7 +57,7 @@ const Notifications: FC = props => {
       const token = await AsyncStorage.getItem('token');
       if (!token) return;
       await axios.post(
-        'https://syncord.runasp.net/friendship/accept-request',
+        `${globals.baseUrl}/friendship/accept-request`,
         {
           requestId: id,
         },

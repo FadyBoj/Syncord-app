@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import validator from 'validator';
 import axios from 'axios';
 import Toast, {BaseToast} from 'react-native-toast-message';
+import globals from '../../globals';
 
 //Components
 import Modal from '../Modal/Modal';
@@ -76,7 +77,7 @@ const AddFriendModal: FC<Props> = ({closeModal}) => {
         try {
           const token = await AsyncStorage.getItem('token');
           const response = await axios.get(
-            `https://syncord.runasp.net/friendShip/search?search=${email}`,
+            `${globals.baseUrl}/friendShip/search?search=${email}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -135,7 +136,7 @@ const AddFriendModal: FC<Props> = ({closeModal}) => {
       setIsSending(true);
       const token = await AsyncStorage.getItem('token');
       const response = await axios.post(
-        'https://syncord.runasp.net/friendship/send-request',
+        `${globals.baseUrl}/friendship/send-request`,
         {
           recieverEmail: email.toString(),
         },

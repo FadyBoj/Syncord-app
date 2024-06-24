@@ -25,6 +25,7 @@ import axios from 'axios';
 import FastImage from 'react-native-fast-image';
 import {DashboardContext} from '../context/DashboardContext';
 import moment from 'moment-timezone';
+import globals from '../globals';
 
 //Components
 import MessagesList from '../components/MessagesList/MessagesList';
@@ -93,7 +94,7 @@ const SingleChat: FC<Props> = ({route}) => {
         if (!token) return;
 
         const response: {data: Message[]} = await axios.get(
-          `https://syncord.runasp.net/chat/${friend?.friendShipId}?skip=0&take=50`,
+          `${globals.baseUrl}/chat/${friend?.friendShipId}?skip=0&take=50`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -103,7 +104,7 @@ const SingleChat: FC<Props> = ({route}) => {
         const messages = response.data;
         setMessages(messages);
         const checkEnd: {data: Message[]} = await axios.get(
-          `https://syncord.runasp.net/chat/${friend?.friendShipId}?skip=50&take=1`,
+          `${globals.baseUrl}/chat/${friend?.friendShipId}?skip=50&take=1`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -171,7 +172,7 @@ const SingleChat: FC<Props> = ({route}) => {
       const token = await AsyncStorage.getItem('token');
       if (!token) return;
       const response = await axios.post(
-        'https://syncord.runasp.net/chat',
+        `${globals.baseUrl}/chat`,
         {
           friendShipId: friend?.friendShipId,
           message: tempMsg,
@@ -206,7 +207,7 @@ const SingleChat: FC<Props> = ({route}) => {
       if (!token) return;
 
       const response: {data: Message[]} = await axios.get(
-        `https://syncord.runasp.net/chat/${friend?.friendShipId}?skip=${skip}&take=50`,
+        `${globals.baseUrl}/chat/${friend?.friendShipId}?skip=${skip}&take=50`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -227,7 +228,7 @@ const SingleChat: FC<Props> = ({route}) => {
       });
       setIsFetchingPreviousMsgs(false);
       const checkEnd: {data: Message[]} = await axios.get(
-        `https://syncord.runasp.net/chat/${friend?.friendShipId}?skip=${
+        `${globals.baseUrl}/chat/${friend?.friendShipId}?skip=${
           skip + 50
         }&take=1`,
         {

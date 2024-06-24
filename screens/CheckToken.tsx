@@ -1,22 +1,28 @@
 import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
-import {useEffect} from 'react';
+import {useContext, useEffect} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-//Utils 
+//Utils
 import isTokenExpired from '../utils/isTokenExpired';
+import {DashboardContext} from '../context/DashboardContext';
 
 const CheckToken = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const startApp = useContext(DashboardContext)?.getMainDashboard;
 
   useEffect(() => {
     AsyncStorage.getItem('token').then(token => {
       if (!token || isTokenExpired(token)) {
-        navigation.navigate('AuthStack',{screen:'Main'});
+        navigation.navigate('AuthStack', {screen: 'Main'});
         return;
       }
-      navigation.navigate('AppStack',{screen:"Chats"})
+      if (startApp) {
+        startApp().then(() => {
+          navigation.navigate('AppStack', {screen: 'Chats'});
+        });
+      }
     });
   }, [0]);
 

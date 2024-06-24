@@ -54,48 +54,10 @@ const Friends: FC<Props> = ({
   closeAddFriendModal,
   addFriendModal,
 }) => {
-  const getDashboard = useContext(DashboardContext)?.getDashboard;
+  const dashboard = useContext(DashboardContext);
   const connection = useContext(DashboardContext)?.connection;
-  const [user, setUser] = useState<IUser | null>(null);
+  const user = dashboard?.user;
 
-  useEffect(() => {
-    const fetchDashboard = async () => {
-      if (getDashboard) {
-        const data = await getDashboard();
-        setUser(data);
-      }
-    };
-    fetchDashboard();
-  }, [0]);
-
-  const handleHoppingOnline = (id: string) => {
-    setUser(prevData => {
-      if (!prevData) return prevData;
-
-      return {
-        ...prevData,
-        friends: prevData.friends.map(item => {
-          return item.userId !== id ? item : {...item, isOnline: true};
-        }),
-      };
-    });
-  };
-  const handleGoOffline = (id: string) => {
-    setUser(prevData => {
-      if (!prevData) return prevData;
-
-      return {
-        ...prevData,
-        friends: prevData.friends.map(item => {
-          return item.userId !== id ? item : {...item, isOnline: false};
-        }),
-      };
-    });
-  };
-  useEffect(() => {
-    connection?.on('hoppedOnline', handleHoppingOnline);
-    connection?.on('wentOffline', handleGoOffline);
-  }, [0]);
 
   const filters = ['Online', 'Offline', 'All'];
 

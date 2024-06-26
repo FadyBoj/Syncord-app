@@ -100,7 +100,7 @@ const Login: FC<Props> = ({navigation}) => {
       navigation.replace('AppStack', {screen: 'Chats'});
       setIsLoading(false);
       dashboard?.setIsLoading(false);
-    } catch (error) {
+    } catch (error:any) {
       setEmailError('Email and password are mismatched');
       setIsLoading(false);
       console.log(error)

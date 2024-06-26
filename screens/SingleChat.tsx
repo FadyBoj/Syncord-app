@@ -194,8 +194,8 @@ const SingleChat: FC<Props> = ({route}) => {
         if (!prevData) return prevData;
         return [prevData, newMessage].flat();
       });
-    } catch (error) {
-      console.log(error);
+    } catch (error:any) {
+      console.log(error.response.data);
     }
   };
 

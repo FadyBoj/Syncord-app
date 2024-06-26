@@ -43,7 +43,6 @@ const Friend: FC<Props> = ({friend, length, index, status}) => {
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-
   const animScale = useSharedValue(0.6);
   const animOpcity = useSharedValue(0);
 

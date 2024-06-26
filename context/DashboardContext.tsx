@@ -8,6 +8,7 @@ import globals from '../globals';
 //Services
 import onHopOnline from '../Services/RealTimeUtils/onHopOnline';
 import onGoOffline from '../Services/RealTimeUtils/onGoOffline';
+import onAcceptRequest from '../Services/RealTimeUtils/onAcceptRequest';
 
 export interface Message {
   id: string;
@@ -106,7 +107,6 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
       console.log('Finished');
     } catch (error: any) {
       console.log('Not Authenticated');
-      console.log(error.response.data);
     }
   };
 
@@ -154,7 +154,9 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
   useEffect(() =>{
     connection?.on('hoppedOnline',(userId) => onHopOnline(setUser,userId))
     connection?.on('wentOffline',(userId) => onGoOffline(setUser,userId))
+    connection?.on("RequestAccepted",(user) => onAcceptRequest(setUser,user))
   },[connection])
+
 
   return (
     <DashboardContext.Provider

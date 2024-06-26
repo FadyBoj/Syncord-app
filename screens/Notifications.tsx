@@ -23,6 +23,16 @@ interface IFriendRequest {
   createdAt: string;
 }
 
+interface userPayload {
+  id: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  image: string;
+  isOnline: boolean;
+  friendShipId: string;
+}
+
 const Notifications: FC = props => {
   //States
   const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +66,7 @@ const Notifications: FC = props => {
       //Start
       const token = await AsyncStorage.getItem('token');
       if (!token) return;
-      await axios.post(
+      const response: {data: userPayload} = await axios.post(
         `${globals.baseUrl}/friendship/accept-request`,
         {
           requestId: id,
@@ -76,6 +86,18 @@ const Notifications: FC = props => {
               return req.id.toString() !== id ? req : null;
             })
             .filter(r => r !== null),
+          friends: [
+            ...prevData.friends,
+            {
+              friendShipId: response.data.friendShipId,
+              userId: response.data.id,
+              email: response.data.email,
+              firstname: response.data.firstname,
+              lastname: response.data.lastname,
+              isOnline: response.data.isOnline,
+              image: response.data.image,
+            },
+          ],
         };
       });
       setIsLoading(false);

@@ -39,15 +39,8 @@ const Notifications: FC = props => {
 
   // Handling real-time functions
   const dashboard = useContext(DashboardContext);
-  const connection = dashboard?.connection;
   const isDashboardLoading = dashboard?.isLoading;
   const setDashboard = dashboard?.setUser;
-
-  useEffect(() => {
-    connection?.on('SentRequest', user => {
-      console.log(user);
-    });
-  }, [0]);
 
   // Function to get item by index
   const getItem = (data: IFriendRequest[], index: number): IFriendRequest => {

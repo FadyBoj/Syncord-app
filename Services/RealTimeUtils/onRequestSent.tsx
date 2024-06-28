@@ -10,7 +10,7 @@ interface userPayload {
   friendShipId: string;
 }
 
-const onAcceptRequest = (
+const onRequestSent = (
   setUser: React.Dispatch<React.SetStateAction<IUser | null>>,
   user: userPayload,
 ) => {
@@ -34,4 +34,4 @@ const onAcceptRequest = (
   });
 };
 
-export default onAcceptRequest;
+export default onRequestSent;

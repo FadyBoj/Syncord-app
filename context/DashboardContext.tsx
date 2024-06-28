@@ -9,7 +9,7 @@ import globals from '../globals';
 import onHopOnline from '../Services/RealTimeUtils/onHopOnline';
 import onGoOffline from '../Services/RealTimeUtils/onGoOffline';
 import onAcceptRequest from '../Services/RealTimeUtils/onAcceptRequest';
-
+import onRecieveRequest from '../Services/RealTimeUtils/onRecieveRequest';
 export interface Message {
   id: string;
   isSent: boolean;
@@ -151,12 +151,14 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
 
   //Handle real time functions
 
-  useEffect(() =>{
-    connection?.on('hoppedOnline',(userId) => onHopOnline(setUser,userId))
-    connection?.on('wentOffline',(userId) => onGoOffline(setUser,userId))
-    connection?.on("RequestAccepted",(user) => onAcceptRequest(setUser,user))
-  },[connection])
-
+  useEffect(() => {
+    connection?.on('hoppedOnline', userId => onHopOnline(setUser, userId));
+    connection?.on('wentOffline', userId => onGoOffline(setUser, userId));
+    connection?.on('RequestAccepted', user => onAcceptRequest(setUser, user));
+    connection?.on('SentRequest', request =>
+      onRecieveRequest(setUser, request),
+    );
+  }, [connection]);
 
   return (
     <DashboardContext.Provider

@@ -40,7 +40,6 @@ const NotificationItem: FC<Props> = ({
   rejectRequest,
   disabled,
 }) => {
-  console.log(item)
   return (
     <>
       {item && (

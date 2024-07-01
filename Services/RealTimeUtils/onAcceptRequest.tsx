@@ -8,12 +8,14 @@ interface userPayload {
   image: string;
   isOnline: boolean;
   friendShipId: string;
+  requestId: string;
 }
 
 const onAcceptRequest = (
   setUser: React.Dispatch<React.SetStateAction<IUser | null>>,
   user: userPayload,
 ) => {
+  console.log(user)
   setUser(prevData => {
     if (!prevData) return null;
     return {
@@ -30,6 +32,9 @@ const onAcceptRequest = (
           image: user.image,
         },
       ],
+      requests: prevData.requests.filter(
+        r => r.id.toString() !== user.requestId,
+      ),
     };
   });
 };

@@ -1,4 +1,4 @@
-import {View, Text, VirtualizedList} from 'react-native';
+import {View, Text, VirtualizedList, Image} from 'react-native';
 import {useState, FC, useContext, useEffect} from 'react';
 import styles from '../styles/NotificationStyles';
 import Toast from 'react-native-toast-message';
@@ -11,6 +11,9 @@ import NotificationSkeleton from '../components/Skeletons/NotificationSkeleton';
 import NotificationItem from '../components/Notifications/NotificationItem';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+//Assets
+import emptyIcon from '../assets/empty.png';
 
 interface IFriendRequest {
   id: number;
@@ -109,7 +112,7 @@ const Notifications: FC = props => {
     }
   };
 
-  const rejectRequest = async(id:string) => {
+  const rejectRequest = async (id: string) => {
     try {
       setIsLoading(true);
       if (!setDashboard) return;
@@ -151,38 +154,52 @@ const Notifications: FC = props => {
         text1: "Couldn't reject the request, please try again later",
         topOffset: 20,
       });
-    }{}
+    }
+    {
+    }
   };
 
-  console.log(dashboard?.user?.requests,dashboard?.user?.email)
+  console.log(dashboard?.user?.requests, dashboard?.user?.email);
 
   return (
     <>
       <Header title="Notifications" />
       <View style={styles.container}>
-        {isDashboardLoading && <NotificationSkeleton />}
-        {dashboard?.user?.requests && dashboard.user.requests.length > 0 && (
-          <VirtualizedList
-            contentContainerStyle={{}}
-            data={dashboard.user?.requests}
-            initialNumToRender={5}
-            maxToRenderPerBatch={10}
-            windowSize={11}
-            updateCellsBatchingPeriod={100}
-            removeClippedSubviews
-            renderItem={({item}) => (
-              <NotificationItem
-                item={item}
-                acceptRequest={acceptRequest}
-                rejectRequest={rejectRequest}
-                disabled={isLoading}
+        {isDashboardLoading ? (
+          <NotificationSkeleton />
+        ) : (
+          <>
+            {dashboard?.user?.requests && dashboard.user.requests.length > 0 ? (
+              <VirtualizedList
+                contentContainerStyle={{}}
+                data={dashboard.user?.requests}
+                initialNumToRender={5}
+                maxToRenderPerBatch={10}
+                windowSize={11}
+                updateCellsBatchingPeriod={100}
+                removeClippedSubviews
+                renderItem={({item}) => (
+                  <NotificationItem
+                    item={item}
+                    acceptRequest={acceptRequest}
+                    rejectRequest={rejectRequest}
+                    disabled={isLoading}
+                  />
+                )}
+                keyExtractor={item => item?.id?.toString()}
+                getItem={getItem}
+                getItemCount={getItemCount}
+                ItemSeparatorComponent={() => <View style={{height: 20}} />}
               />
+            ) : (
+              <View style={styles.iconConttainer}>
+                <Image source={emptyIcon} style={styles.emptyIcon} />
+                <Text style={styles.emptyText}>
+                  You don't have any notifications yet
+                </Text>
+              </View>
             )}
-            keyExtractor={item => item?.id?.toString()}
-            getItem={getItem}
-            getItemCount={getItemCount}
-            ItemSeparatorComponent={() => <View style={{height: 20}} />}
-          />
+          </>
         )}
       </View>
     </>

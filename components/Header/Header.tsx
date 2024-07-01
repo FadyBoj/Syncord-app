@@ -6,15 +6,18 @@ const screenWidth = Dimensions.get('window').width;
 interface Props {
   title: string;
   rightComponent?: () => JSX.Element;
+  bgColor?: string;
 }
 
-const Header: FC<Props> = ({title, rightComponent}) => {
+const Header: FC<Props> = ({title, rightComponent, bgColor = '#111216'}) => {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {backgroundColor: bgColor ? bgColor : '#111216'},
+      ]}>
       <Text style={styles.title}>{title}</Text>
-      <View>
-        {rightComponent && rightComponent()}
-      </View>
+      <View>{rightComponent && rightComponent()}</View>
     </View>
   );
 };
@@ -22,15 +25,14 @@ const Header: FC<Props> = ({title, rightComponent}) => {
 const styles = StyleSheet.create({
   container: {
     width: screenWidth,
-    backgroundColor: '#111216',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingLeft: 20,
     paddingRight: 20,
-    paddingTop:20,
-    paddingBottom:10,
-    height:80
+    paddingTop: 20,
+    paddingBottom: 10,
+    height: 80,
   },
   title: {
     fontFamily: 'Roboto',

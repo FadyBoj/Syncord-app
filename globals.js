@@ -1,5 +1,5 @@
 const globals = {
-    baseUrl:"http://localhost:5196"
+    baseUrl:"https://syncord.onrender.com"
 }
 
 export default globals;

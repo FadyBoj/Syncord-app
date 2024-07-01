@@ -12,7 +12,7 @@ import Home from '../screens/Home';
 import Chats from '../screens/Chats';
 import Friends from '../screens/Friends';
 import Notifications from '../screens/Notifications';
-import Settings from '../screens/Settings';
+import Profile from '../screens/Profile';
 import SingleChat from '../screens/SingleChat';
 
 //Components
@@ -23,43 +23,47 @@ const AppStack = () => {
   const openAddFriendModal = () => setAddFriendModal(true);
   const closeAddFriendModal = () => setAddFriendModal(false);
   return (
-      <Stack.Navigator>
-        <Stack.Screen name="MainTabs" options={{headerShown: false}}>
-          {props => (
-            <Tab.Navigator
-              {...props}
-              tabBar={props => (
-                <MyTabBar {...props} addFriendModal={addFriendModal} />
-              )}>
-              <Tab.Screen name="Messages" component={Chats}  />
-              <Tab.Screen options={{headerShown: false}} name="Friends">
-                {props => (
-                  <Friends
-                    {...props}
-                    openAddFriendModal={openAddFriendModal}
-                    closeAddFriendModal={closeAddFriendModal}
-                    addFriendModal={addFriendModal}
-                  />
-                )}
-              </Tab.Screen>
-              <Tab.Screen
-                name="Notifications"
-                component={Notifications}
-                options={{
-                  headerShown: false,
-                  tabBarBadge:3,
-                }}
-              />
-              <Tab.Screen name="You" component={Settings} />
-            </Tab.Navigator>
-          )}
-        </Stack.Screen>
-        <Stack.Screen
-          name="singleChat"
-          component={SingleChat}
-          options={{animation: 'ios', headerShown: false}}
-        />
-      </Stack.Navigator>
+    <Stack.Navigator>
+      <Stack.Screen name="MainTabs" options={{headerShown: false}}>
+        {props => (
+          <Tab.Navigator
+            {...props}
+            tabBar={props => (
+              <MyTabBar {...props} addFriendModal={addFriendModal} />
+            )}>
+            <Tab.Screen name="Messages" component={Chats} />
+            <Tab.Screen options={{headerShown: false}} name="Friends">
+              {props => (
+                <Friends
+                  {...props}
+                  openAddFriendModal={openAddFriendModal}
+                  closeAddFriendModal={closeAddFriendModal}
+                  addFriendModal={addFriendModal}
+                />
+              )}
+            </Tab.Screen>
+            <Tab.Screen
+              name="Notifications"
+              component={Notifications}
+              options={{
+                headerShown: false,
+                tabBarBadge: 3,
+              }}
+            />
+            <Tab.Screen
+              name="You"
+              component={Profile}
+              options={{headerShown: false}}
+            />
+          </Tab.Navigator>
+        )}
+      </Stack.Screen>
+      <Stack.Screen
+        name="singleChat"
+        component={SingleChat}
+        options={{animation: 'ios', headerShown: false}}
+      />
+    </Stack.Navigator>
   );
 };
 

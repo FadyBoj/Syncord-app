@@ -159,7 +159,6 @@ const Notifications: FC = props => {
     }
   };
 
-  console.log(dashboard?.user?.requests, dashboard?.user?.email);
 
   return (
     <>

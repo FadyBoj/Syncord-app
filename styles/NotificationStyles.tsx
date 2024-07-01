@@ -22,8 +22,10 @@ const styles = StyleSheet.create({
     paddingTop:89
   },
   emptyText:{
-    color:'white',
+    color:'#b1b2b7',
     fontSize:23,
+    textAlign:'center',
+    fontFamily:'Roboto'
   }
 });
 export default styles;

@@ -15,7 +15,6 @@ const onAcceptRequest = (
   setUser: React.Dispatch<React.SetStateAction<IUser | null>>,
   user: userPayload,
 ) => {
-  console.log(user)
   setUser(prevData => {
     if (!prevData) return null;
     return {

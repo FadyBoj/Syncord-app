@@ -12,6 +12,7 @@ import validator from 'validator';
 import axios from 'axios';
 import Toast, {BaseToast} from 'react-native-toast-message';
 import globals from '../../globals';
+import {IRequest} from '../../context/DashboardContext';
 
 //Components
 import Modal from '../Modal/Modal';
@@ -37,10 +38,8 @@ const screenHeight = Dimensions.get('window').height;
 const AddFriendModal: FC<Props> = ({closeModal}) => {
   const userDashboard = useContext(DashboardContext)?.user;
 
-  const [isLoading, setIsLoading] = useState(false);
   const [validForm, setIsValidForm] = useState(false);
-  const connection = useContext(DashboardContext)?.connection;
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [delay, setDelay] = useState<NodeJS.Timeout | null>(null);
   const [searchState, setSearchState] = useState({
     skeletonVisible: false,
@@ -49,7 +48,9 @@ const AddFriendModal: FC<Props> = ({closeModal}) => {
   const [searchedUsers, setSearchedusers] = useState<IUser[] | null>(null);
   const [isSending, setIsSending] = useState(false);
 
-  const user = useContext(DashboardContext)?.user;
+  const dashboard = useContext(DashboardContext);
+  const user = dashboard?.user;
+  const setUser = dashboard?.setUser;
 
   const handleTextChange = (text: string) => {
     setEmail(text);
@@ -131,11 +132,12 @@ const AddFriendModal: FC<Props> = ({closeModal}) => {
 
   const handleSubmit = async () => {
     if (!validator.isEmail(email)) return;
+    if (!setUser) return;
 
     try {
       setIsSending(true);
       const token = await AsyncStorage.getItem('token');
-      const response = await axios.post(
+      const response: {data: IRequest} = await axios.post(
         `${globals.baseUrl}/friendship/send-request`,
         {
           recieverEmail: email.toString(),
@@ -143,7 +145,7 @@ const AddFriendModal: FC<Props> = ({closeModal}) => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type':'application/json'
+            'Content-Type': 'application/json',
           },
         },
       );
@@ -153,15 +155,18 @@ const AddFriendModal: FC<Props> = ({closeModal}) => {
         topOffset: 20,
       });
       setIsSending(false);
-      closeModal()
-    } catch (error:any) {
+      closeModal();
+      setUser(prevData => {
+        if (!prevData) return null;
+        return {...prevData, requests: [...prevData.requests, response.data]};
+      });
+    } catch (error: any) {
       Toast.show({
         type: 'error',
         text1: error.response.data,
         topOffset: 20,
       });
       setIsSending(false);
-      
     }
   };
 

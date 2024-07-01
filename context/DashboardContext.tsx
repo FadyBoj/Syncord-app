@@ -10,6 +10,8 @@ import onHopOnline from '../Services/RealTimeUtils/onHopOnline';
 import onGoOffline from '../Services/RealTimeUtils/onGoOffline';
 import onAcceptRequest from '../Services/RealTimeUtils/onAcceptRequest';
 import onRecieveRequest from '../Services/RealTimeUtils/onRecieveRequest';
+import onRequestRejected from '../Services/RealTimeUtils/onRequestRejected';
+
 export interface Message {
   id: string;
   isSent: boolean;
@@ -158,6 +160,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
     connection?.on('SentRequest', request =>
       onRecieveRequest(setUser, request),
     );
+    connection?.on('RequestRejected',(requestId) => onRequestRejected(setUser,requestId))
   }, [connection]);
 
   return (

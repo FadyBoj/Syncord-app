@@ -109,16 +109,59 @@ const Notifications: FC = props => {
     }
   };
 
-  const rejectRequest = () => {
-    console.log('Rejecting from parent');
+  const rejectRequest = async(id:string) => {
+    try {
+      setIsLoading(true);
+      if (!setDashboard) return;
+      //Start
+      const token = await AsyncStorage.getItem('token');
+      if (!token) return;
+      const response: {data: userPayload} = await axios.post(
+        `${globals.baseUrl}/friendship/reject-request`,
+        {
+          requestId: id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      setDashboard(prevData => {
+        if (!prevData) return null;
+        return {
+          ...prevData,
+          requests: prevData.requests
+            .map(req => {
+              return req.id.toString() !== id ? req : null;
+            })
+            .filter(r => r !== null),
+        };
+      });
+      setIsLoading(false);
+      Toast.show({
+        type: 'success',
+        text1: 'Request rejected',
+        topOffset: 20,
+      });
+    } catch (error: any) {
+      console.log(error.response.data);
+      Toast.show({
+        type: 'error',
+        text1: "Couldn't reject the request, please try again later",
+        topOffset: 20,
+      });
+    }{}
   };
+
+  console.log(dashboard?.user?.requests,dashboard?.user?.email)
 
   return (
     <>
       <Header title="Notifications" />
       <View style={styles.container}>
         {isDashboardLoading && <NotificationSkeleton />}
-        {dashboard?.user?.requests && (
+        {dashboard?.user?.requests && dashboard.user.requests.length > 0 && (
           <VirtualizedList
             contentContainerStyle={{}}
             data={dashboard.user?.requests}
@@ -135,7 +178,7 @@ const Notifications: FC = props => {
                 disabled={isLoading}
               />
             )}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={item => item?.id?.toString()}
             getItem={getItem}
             getItemCount={getItemCount}
             ItemSeparatorComponent={() => <View style={{height: 20}} />}

@@ -4,6 +4,8 @@ import styles from '../../../styles/RegisterFirstTabStyles';
 import validator from 'validator';
 import axios from 'axios';
 import {AuthContext} from '../../../context/AuthContext';
+import globals from '../../../globals';
+
 //Components
 import CustomTextInput from '../../../components/Inputs/CustomTextInput/Index';
 import ShrinkButton from '../../../components/Buttons/ShrinkButton';
@@ -24,7 +26,7 @@ const RegisterFirstTab: FC<Props> = ({navigation, openModal}) => {
     try {
       setIsLoading(true);
       const {data} = await axios.post(
-        'https://syncord.runasp.net/user/check-user-exist',
+        `${globals.baseUrl}/user/check-user-exist`,
         {
           email: formData.email,
         },
@@ -55,7 +57,6 @@ const RegisterFirstTab: FC<Props> = ({navigation, openModal}) => {
   }, [formData.email]);
 
   const token = useContext(AuthContext);
-  console.log(token);
 
   return (
       <ScrollView contentContainerStyle={styles.container}>

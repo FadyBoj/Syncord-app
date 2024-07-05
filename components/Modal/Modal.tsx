@@ -21,9 +21,16 @@ interface Props {
   children: JSX.Element;
   height?: number;
   width?: number;
+  showClose?: boolean;
 }
 
-const Modal: FC<Props> = ({closeModal, children, height = 300, width}) => {
+const Modal: FC<Props> = ({
+  closeModal,
+  children,
+  height = 300,
+  width,
+  showClose = true,
+}) => {
   const screenWidth = Dimensions.get('window').width;
 
   return (
@@ -35,15 +42,18 @@ const Modal: FC<Props> = ({closeModal, children, height = 300, width}) => {
           style={{
             width: width ? width : 0.8 * screenWidth,
             height: height,
+            paddingTop:showClose ? 60 : 0,
             ...styles.container,
           }}>
           <>
             {/* Close button */}
-            <TouchableOpacity
-              onPress={closeModal}
-              style={styles.closeContainer}>
-              <Image style={styles.closeIcon} source={closeIcon} />
-            </TouchableOpacity>
+            {showClose && (
+              <TouchableOpacity
+                onPress={closeModal}
+                style={styles.closeContainer}>
+                <Image style={styles.closeIcon} source={closeIcon} />
+              </TouchableOpacity>
+            )}
 
             {children}
           </>
@@ -57,7 +67,6 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 20,
     backgroundColor: '#1c1d22',
-    paddingTop: 60,
     alignItems: 'center',
     zIndex: 30,
     position: 'relative',
@@ -70,7 +79,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 10,
-    padding:10
+    padding: 10,
   },
 });
 

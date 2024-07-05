@@ -1,15 +1,22 @@
 import {View, Text, Image, StyleSheet} from 'react-native';
 import {FC} from 'react';
+import FastImage from 'react-native-fast-image';
 
 interface Props {
   size: number;
-  fontSize:number
+  fontSize: number;
   image: string;
   firstname: string;
   lastname: string;
 }
 
-const ImagePlaceHolder: FC<Props> = ({firstname,lastname,image, size,fontSize}) => {
+const ImagePlaceHolder: FC<Props> = ({
+  firstname,
+  lastname,
+  image,
+  size,
+  fontSize,
+}) => {
   const styles = StyleSheet.create({
     profilePicContainer: {
       position: 'relative',
@@ -64,16 +71,18 @@ const ImagePlaceHolder: FC<Props> = ({firstname,lastname,image, size,fontSize}) 
   });
   return (
     <View style={styles.profilePicContainer}>
-      {image  ? (
-        <Image source={{uri: image}} style={styles.profilePic} />
+      {image ? (
+        <FastImage
+          source={{
+            uri: image.replace('http', 'https'),
+            cache: FastImage.cacheControl.immutable,
+          }}
+          style={styles.profilePic}
+        />
       ) : (
         <View style={styles.imagePlaceHolder}>
-          <Text style={styles.pfpText}>
-            {firstname[0].toLocaleUpperCase()}
-          </Text>
-          <Text style={styles.pfpText}>
-            {lastname[0].toLocaleUpperCase()}
-          </Text>
+          <Text style={styles.pfpText}>{firstname[0].toLocaleUpperCase()}</Text>
+          <Text style={styles.pfpText}>{lastname[0].toLocaleUpperCase()}</Text>
         </View>
       )}
     </View>

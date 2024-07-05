@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
   emptyText:{
     color:'#b1b2b7',
-    fontSize:23,
+    fontSize:17,
     textAlign:'center',
     fontFamily:'Roboto'
   }

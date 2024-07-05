@@ -15,7 +15,7 @@ const Backdrop: FC<Props> = ({children, transparent = false, closeModal}) => {
   return (
     <Animated.View
       style={{
-        backgroundColor: transparent ? '' : 'rgba(0, 0, 0, 0.447)',
+        backgroundColor: transparent ? '' : 'rgba(13, 13, 13, 0.737)',
         width: screenWidth,
         height: screenHeight,
         ...styles.container,

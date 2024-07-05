@@ -1,14 +1,16 @@
 import {View, Text, ScrollView} from 'react-native';
-import React, {useState, FC, useEffect,useContext} from 'react';
+import React, {useState, FC, useEffect, useContext} from 'react';
 import styles from '../../../styles/RegisterThirdTabStyles ';
 import validator from 'validator';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import globals from '../../../globals';
 
 //Components
 import CustomTextInput from '../../../components/Inputs/CustomTextInput/Index';
 import ShrinkButton from '../../../components/Buttons/ShrinkButton';
-import { AuthContext } from '../../../context/AuthContext';
+import {AuthContext} from '../../../context/AuthContext';
+import {DashboardContext} from '../../../context/DashboardContext';
 
 interface Props {
   navigation: any;
@@ -20,7 +22,27 @@ interface IregisterRequest {
   token: string;
 }
 
+interface Message {
+  id: string;
+  isSent: boolean;
+  text: string;
+  createdAt: Date;
+  senderId: string;
+}
+
+interface Friendship {
+  friendShipId: string;
+  userId: string;
+  latesMessageDate: string;
+  messages: Message[];
+}
+
 const RegisgerThirdTab: FC<Props> = ({navigation, route}) => {
+  //Context
+  const dashboard = useContext(DashboardContext);
+  const setDashboard = dashboard?.setUser;
+  const startConnection = dashboard?.startConnection;
+
   const previousData = route?.params;
   const [formData, setFormData] = useState({
     password: '',
@@ -66,27 +88,40 @@ const RegisgerThirdTab: FC<Props> = ({navigation, route}) => {
     setIsFormValid(true);
   }, [formData]);
 
-
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
       const userData = {...previousData, ...formData};
       const {msg, token}: IregisterRequest = (
-        await axios.post('https://syncord.runasp.net/user/register', userData)
+        await axios.post(`${globals.baseUrl}/user/register`, userData)
       ).data;
       await AsyncStorage.setItem('token', token);
       const userResponse = await axios.get(
-        'https://syncord.runasp.net/user/dashboard',
+        `${globals.baseUrl}/user/dashboard`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         },
       );
+      const messages: {data: Friendship[]} = await axios.get(
+        `${globals.baseUrl}/chat/all-messages`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (setDashboard && startConnection) {
+        setDashboard({...userResponse.data, messages: messages.data});
+        startConnection();
+      }
+      dashboard?.setIsLoading(false);
+
+      setIsLoading(false);
       navigation.replace('AppStack', {screen: 'Chats'});
     } catch (error) {
-      setIsLoading(false  )
-      console.log("F")
+      setIsLoading(false);
       console.log(error);
     }
   };

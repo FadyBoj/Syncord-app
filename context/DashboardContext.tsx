@@ -53,6 +53,7 @@ export interface IUser {
   firstname: string;
   lastname: string;
   image: string;
+  createdAt: Date;
   requests: IRequest[];
   friends: IFriend[];
   messages: Friendship[];
@@ -160,7 +161,9 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
     connection?.on('SentRequest', request =>
       onRecieveRequest(setUser, request),
     );
-    connection?.on('RequestRejected',(requestId) => onRequestRejected(setUser,requestId))
+    connection?.on('RequestRejected', requestId =>
+      onRequestRejected(setUser, requestId),
+    );
   }, [connection]);
 
   return (

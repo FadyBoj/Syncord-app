@@ -38,6 +38,7 @@ interface Props {
   paddingLeft?:number,
   paddingRight?:number,
   iconMove?:number
+  tintColor?:string
 }
 
 const screenWidth = Dimensions.get('window').width;
@@ -60,7 +61,8 @@ const Index: FC<Props> = ({
   padding=0,
   paddingLeft=0,
   paddingRight=0,
-  iconMove=0
+  iconMove=0,
+  tintColor='white'
 }) => {
   const scaleValue = useSharedValue(1);
   const animatedOpacity = useSharedValue(1);
@@ -123,7 +125,7 @@ const Index: FC<Props> = ({
           icon && 
           <Image
           source={icon}
-          style={[styles.icon,{transform:[{translateY:iconMove}]}]}
+          style={[styles.icon,{transform:[{translateY:iconMove}],tintColor:tintColor}]}
           />
         }
         {isLoading ? (

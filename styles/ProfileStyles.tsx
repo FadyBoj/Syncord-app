@@ -1,8 +1,14 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
+
 
 const styles = StyleSheet.create({
+  wrapper: {
+    height:screenHeight,
+    position:'relative'
+  },
   container: {
     width: screenWidth,
     height: '100%',
@@ -10,7 +16,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'black',
     gap: 80,
-    paddingTop: 140,
+    paddingTop: 100,
   },
   mainContent: {
     flexGrow: 1,
@@ -18,10 +24,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#1c1d22',
     paddingLeft: 20,
     paddingRight: 20,
+    gap: 15,
   },
   row1: {
     position: 'relative',
-    height: 120,
+    height: 60,
   },
   imageContainer: {
     position: 'absolute',
@@ -37,16 +44,17 @@ const styles = StyleSheet.create({
     minHeight: 100,
     borderRadius: 15,
     padding: 20,
-    borderWidth:2,
-    borderColor:'#2c2c34'
+    borderWidth: 2,
+    borderColor: '#2c2c34',
+    gap: 25,
   },
   firstName: {
-    fontSize: 28,
+    fontSize: 20,
     color: '#e4e5e9',
     fontFamily: 'Roboto',
   },
   id: {
-    fontSize: 13,
+    fontSize: 10,
     color: '#76777c',
     fontFamily: 'Roboto',
   },
@@ -54,8 +62,28 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   btnsContainer: {
-    flexDirection:'row',
-    gap:10
+    flexDirection: 'row',
+    gap: 10,
+  },
+  row3: {
+    backgroundColor: '#27272f',
+    width: '100%',
+    minHeight: 70,
+    borderRadius: 15,
+    padding: 20,
+    borderWidth: 2,
+    borderColor: '#2c2c34',
+    gap: 10,
+  },
+  memberText: {
+    color: '#9597a1',
+    fontFamily: 'Roboto',
+    fontSize: 15,
+  },
+  memberDate: {
+    color: '#c1c1c7',
+    fontFamily: 'Roboto',
+    fontSize: 13,
   },
 });
 export default styles;

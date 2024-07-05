@@ -70,7 +70,7 @@ const TabButton: FC<Props> = ({
         {label.toLocaleLowerCase() === 'you' ? (
           <View>
               <View style={styles.profilePicContainer}>
-                {user && user.image.replace('http','https') ? (
+                {user?.image && user.image.replace('http','https') ? (
                   <Image
                     source={{uri: user?.image}}
                     style={styles.profilePic}

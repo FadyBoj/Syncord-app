@@ -95,7 +95,7 @@ const Login: FC<Props> = ({navigation}) => {
       if(setDashboard && startConnection)
         {
           setDashboard({...userResponse.data, messages: messages.data});
-          startConnection()
+          await startConnection()
         }
       navigation.replace('AppStack', {screen: 'Chats'});
       setIsLoading(false);

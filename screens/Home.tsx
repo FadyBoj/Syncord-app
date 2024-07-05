@@ -5,6 +5,9 @@ import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 //Components
 import MainLayout from '../components/MainLayout';
 import LoadingLayout from '../components/LoadingLayout/LoadingLayout';
+import SoundPlayer from 'react-native-sound-player'
+
+
 const Home: FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -18,13 +21,12 @@ const Home: FC = () => {
     });
   };
 
+ 
 
   return (
     <LoadingLayout onFailNav="AuthStack">
         <View style={styles.container}>
-          <TouchableOpacity style={styles.btn} onPress={openDrawer}>
-            <Text>open Drawer</Text>
-          </TouchableOpacity>
+        
         </View>
     </LoadingLayout>
   );

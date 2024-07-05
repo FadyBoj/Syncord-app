@@ -114,7 +114,7 @@ const RegisgerThirdTab: FC<Props> = ({navigation, route}) => {
       );
       if (setDashboard && startConnection) {
         setDashboard({...userResponse.data, messages: messages.data});
-        startConnection();
+        await startConnection();
       }
       dashboard?.setIsLoading(false);
 

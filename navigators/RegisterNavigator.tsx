@@ -50,7 +50,7 @@ const RegisterNavigator = ({navigation}: {navigation: any}) => {
       </Tab.Navigator>
       {/* Global modal */}
       {modalVisible && (
-        <Modal closeModal={closeModal}>
+        <Modal showClose={false} closeModal={closeModal}>
           <View style={styles.container}>
             <View style={styles.sec1}>
               <Text style={styles.mainText}>
@@ -84,6 +84,8 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     paddingRight: 30,
     gap: 40,
+    justifyContent:'center',
+    height:'100%',
   },
   mainText: {
     color: 'white',

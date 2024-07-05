@@ -22,10 +22,10 @@ import styles from '../styles/SingleChatStyles';
 import Header from '../components/Header/SingleChatHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import FastImage from 'react-native-fast-image';
 import {DashboardContext} from '../context/DashboardContext';
-import moment from 'moment-timezone';
 import globals from '../globals';
+import Sound from 'react-native-sound';
+Sound.setCategory('Playback');
 
 //Components
 import MessagesList from '../components/MessagesList/MessagesList';
@@ -36,6 +36,7 @@ import generateChunks from '../utils/generateChunks';
 
 //Assets
 import sendIcon from '../assets/send.png';
+import vineBoomSound from '../assets/sounds/vine-boom.mp3';
 
 interface IFriend {
   friendShipId: string;
@@ -127,6 +128,19 @@ const SingleChat: FC<Props> = ({route}) => {
   }, [messages]);
 
   // Handle real-time connection
+  const vine = new Sound(vineBoomSound, err => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+  });
+
+  const playSound = () => {
+    try {
+      vine.play();
+    } catch (error) {
+    }
+  };
 
   const handleRecieveMessage = (message: Message) => {
     const newMessage: Message = message;
@@ -134,6 +148,7 @@ const SingleChat: FC<Props> = ({route}) => {
       if (!prevData) return prevData;
       return [prevData, newMessage].flat();
     });
+    playSound();
   };
 
   useEffect(() => {
@@ -194,7 +209,7 @@ const SingleChat: FC<Props> = ({route}) => {
         if (!prevData) return prevData;
         return [prevData, newMessage].flat();
       });
-    } catch (error:any) {
+    } catch (error: any) {
       console.log(error.response.data);
     }
   };
@@ -258,7 +273,7 @@ const SingleChat: FC<Props> = ({route}) => {
               isRecordsEnded={isRecordsEnded}
             />
           )}
-         {!chatChunks && <ChatSkeleton />}
+          {!chatChunks && <ChatSkeleton />}
         </View>
         <View style={styles.chatInputContainer}>
           <TextInput

@@ -1,29 +1,17 @@
 import {View, Text, TouchableOpacity, ViewComponent} from 'react-native';
 import {useState, FC, useRef, useEffect} from 'react';
 import styles from '../styles/HomeStyles';
-//Components
-import MainLayout from '../components/MainLayout';
-import LoadingLayout from '../components/LoadingLayout/LoadingLayout';
+import vineBoomSound from '../assets/sounds/vine-boom.mp3';
+import Sound from 'react-native-sound';
+Sound.setCategory('Playback');
 
 const Chats: FC = props => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  const closeDrawer = () => {
-    setIsDrawerOpen(false);
-  };
-
-  const openDrawer = () => {
-    setIsDrawerOpen(prev => {
-      return !prev;
-    });
-  };
+ 
 
   return (
-        <View style={styles.container}>
-          <TouchableOpacity style={styles.btn} onPress={openDrawer}>
-            <Text>open Drawer</Text>
-          </TouchableOpacity>
-        </View>
+    <View style={styles.container}>
+    
+    </View>
   );
 };
 

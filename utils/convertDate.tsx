@@ -8,7 +8,7 @@ const convertDate = (dateString: string): string => {
   const localDate = moment(date).tz(moment.tz.guess());
 
   // Format the date to a readable string in the desired format
-  const readableDate = localDate.format('MM/DD/YYYY h:mm A');
+  const readableDate = localDate.format('DD/MM/YYYY h:mm A');
 
   return readableDate;
 };

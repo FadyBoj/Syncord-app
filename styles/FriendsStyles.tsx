@@ -71,9 +71,10 @@ const styles = StyleSheet.create({
     height:350,
     objectFit:'contain'
   },emptyText:{
-    fontFamily:'Roboto',
-    fontSize:20,
-    color:'gray'
+    color:'#b1b2b7',
+    fontSize:17,
+    textAlign:'center',
+    fontFamily:'Roboto'
   },
   wrapper:{
     position:'relative',

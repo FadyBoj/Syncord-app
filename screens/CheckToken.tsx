@@ -13,17 +13,19 @@ const CheckToken = () => {
   const startApp = useContext(DashboardContext)?.getMainDashboard;
 
   useEffect(() => {
-    AsyncStorage.getItem('token').then(token => {
+    const start = async () => {
+      const token = await AsyncStorage.getItem('token');
       if (!token || isTokenExpired(token)) {
         navigation.navigate('AuthStack', {screen: 'Main'});
         return;
       }
+
       if (startApp) {
-        startApp().then(() => {
-          navigation.navigate('AppStack', {screen: 'Chats'});
-        });
+        await startApp();
+        navigation.navigate('AppStack', {screen: 'Chats'});
       }
-    });
+    };
+    start();
   }, [0]);
 
   return (

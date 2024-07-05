@@ -195,7 +195,7 @@ const Friends: FC<Props> = ({
                   <View style={styles.emptyContainer}>
                     <Image source={emptyFriends} style={styles.emptyImage} />
                     <Text style={styles.emptyText}>
-                      You don't have any friends yet ..
+                      You don't have any friends yet 
                     </Text>
                   </View>
                 )

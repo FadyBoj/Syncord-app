@@ -87,6 +87,8 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
   //Fetching dashboard
   const getMainDashboard = async () => {
     try {
+     await startConnection();
+
       const token = await AsyncStorage.getItem('token');
       if (!token) return;
       console.log('Starting dashboard');
@@ -105,7 +107,6 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
       );
       setUser({...response.data, messages: messages.data});
       setIsFetchingDashboard(false);
-      startConnection();
       setIsLoading(false);
       console.log('Finished');
     } catch (error: any) {
@@ -143,7 +144,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
       .withAutomaticReconnect()
       .build();
 
-    secConnection.start().then(() => {
+    await secConnection.start().then(() => {
       console.log('Connection started');
     });
     secConnection.onreconnected(() => {

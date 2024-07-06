@@ -61,7 +61,7 @@ const RegisterFirstTab: FC<Props> = ({navigation, openModal}) => {
   return (
       <ScrollView contentContainerStyle={styles.container}>
         <View>
-          <Text style={styles.mainText}>Enter you email address</Text>
+          <Text allowFontScaling={false} style={styles.mainText}>Enter you email address</Text>
         </View>
         <View style={styles.inputContainer}>
           <CustomTextInput
@@ -71,7 +71,7 @@ const RegisterFirstTab: FC<Props> = ({navigation, openModal}) => {
             showLabel={false}
             name="email"
           />
-          <Text style={styles.confirmEmailText}>
+          <Text allowFontScaling={false} style={styles.confirmEmailText}>
             You'll need to confirm this email later
           </Text>
         </View>

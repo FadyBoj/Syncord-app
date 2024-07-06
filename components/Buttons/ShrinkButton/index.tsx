@@ -132,6 +132,7 @@ const Index: FC<Props> = ({
           <ActivityIndicator size={30} />
         ) : (
           <Text
+          allowFontScaling={false}
             style={{
               color: disabled || isLoading ? '#b0b4d0' : color,
               ...styles.registerText,

@@ -26,7 +26,7 @@ const SingleChatHeader: FC<Props> = ({friendName}) => {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.name}>{friendName}</Text>
+      <Text allowFontScaling={false} style={styles.name}>{friendName}</Text>
       <TouchableOpacity onPress={handleGoBack} style={styles.arrowContainer}>
         <Image style={styles.arrowIcon} source={backArrowIcon} />
       </TouchableOpacity>

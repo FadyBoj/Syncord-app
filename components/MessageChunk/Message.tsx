@@ -14,12 +14,13 @@ const Message: FC<Props> = ({message, isLoading = false}) => {
   return (
     <View style={styles.container}>
       <Text
-      lineBreakMode='tail'
+        allowFontScaling={false}
+        lineBreakMode="tail"
         style={[
           styles.messageText,
           {
             color: isLoading ? 'gray' : 'white',
-            opacity:isLoading ? 0.7 : 1
+            opacity: isLoading ? 0.7 : 1,
           },
         ]}>
         {message.text}
@@ -32,10 +33,10 @@ const styles = StyleSheet.create({
   messageText: {
     fontFamily: 'Roboto',
   },
-  container:{
-    width:'90%',
-    paddingRight:10
-  }
+  container: {
+    width: '90%',
+    paddingRight: 10,
+  },
 });
 
 export default Message;

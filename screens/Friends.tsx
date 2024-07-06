@@ -58,7 +58,6 @@ const Friends: FC<Props> = ({
   const connection = useContext(DashboardContext)?.connection;
   const user = dashboard?.user;
 
-
   const filters = ['Online', 'Offline', 'All'];
 
   //States
@@ -167,42 +166,54 @@ const Friends: FC<Props> = ({
                 (statusFilter === 'online' || statusFilter === 'all') &&
                 filteredFriends?.filter(f => f.isOnline).length > 0 && (
                   <View style={styles.friendsListContainer}>
-                    <FriendsList status="Online" friends={filteredFriends?.filter(f => f.isOnline)} />
+                    <FriendsList
+                      status="Online"
+                      friends={filteredFriends?.filter(f => f.isOnline)}
+                    />
                   </View>
                 )}
               {filteredFriends &&
                 (statusFilter === 'offline' || statusFilter === 'all') &&
                 filteredFriends?.filter(f => !f.isOnline).length > 0 && (
                   <View style={styles.friendsListContainer}>
-                    <FriendsList status="Offline" friends={filteredFriends?.filter(f => !f.isOnline)} />
+                    <FriendsList
+                      status="Offline"
+                      friends={filteredFriends?.filter(f => !f.isOnline)}
+                    />
                   </View>
                 )}
               {statusFilter === 'online' &&
               filteredFriends?.filter(f => f.isOnline).length === 0 ? (
                 <View style={styles.emptyContainer}>
                   <Image source={emptyFriends} style={styles.emptyImage} />
-                  <Text style={styles.emptyText}>No online friends</Text>
+                  <Text allowFontScaling={false} style={styles.emptyText}>
+                    No online friends
+                  </Text>
                 </View>
               ) : statusFilter === 'offline' &&
                 filteredFriends?.filter(f => !f.isOnline).length === 0 ? (
                 <View style={styles.emptyContainer}>
                   <Image source={emptyFriends} style={styles.emptyImage} />
-                  <Text style={styles.emptyText}>No offline friends</Text>
+                  <Text allowFontScaling={false} style={styles.emptyText}>
+                    No offline friends
+                  </Text>
                 </View>
               ) : (
                 statusFilter === 'all' &&
                 filteredFriends?.length === 0 && (
                   <View style={styles.emptyContainer}>
                     <Image source={emptyFriends} style={styles.emptyImage} />
-                    <Text style={styles.emptyText}>
-                      You don't have any friends yet 
+                    <Text allowFontScaling={false} style={styles.emptyText}>
+                      You don't have any friends yet
                     </Text>
                   </View>
                 )
               )}
             </View>
           </View>
-          {addFriendModal && <AddFriendModal closeModal={closeAddFriendModal} />}
+          {addFriendModal && (
+            <AddFriendModal closeModal={closeAddFriendModal} />
+          )}
         </View>
       )}
     />

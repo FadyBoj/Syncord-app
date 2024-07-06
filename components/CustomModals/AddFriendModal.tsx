@@ -179,25 +179,26 @@ const AddFriendModal: FC<Props> = ({closeModal}) => {
         <View style={styles.wrapper}>
           <View style={styles.container}>
             <View>
-              <Text style={styles.title}>Add a friend on Syncord</Text>
-              <Text style={styles.slogan}>
+              <Text allowFontScaling={false} style={styles.title}>Add a friend on Syncord</Text>
+              <Text allowFontScaling={false} style={styles.slogan}>
                 You can add friends by their email address
               </Text>
             </View>
             <View style={styles.row2}>
-              <Text style={styles.description}>
+              <Text allowFontScaling={false} style={styles.description}>
                 Who would you like to add as a friend?
               </Text>
               <TextInput
+              allowFontScaling={false}
                 style={styles.input}
                 placeholder="Enter email address"
                 placeholderTextColor={'#585a64'}
                 onChangeText={handleTextChange}
                 value={email}
               />
-              <Text style={styles.description}>
+              <Text allowFontScaling={false} style={styles.description}>
                 By the way your Name is
-                <Text style={styles.email}>
+                <Text allowFontScaling={false} style={styles.email}>
                   {'  '}
                   {`${user?.firstname} ${user?.lastname}`}
                 </Text>

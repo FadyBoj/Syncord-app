@@ -159,7 +159,6 @@ const Notifications: FC = props => {
     }
   };
 
-
   return (
     <>
       <Header title="Notifications" />
@@ -193,7 +192,7 @@ const Notifications: FC = props => {
             ) : (
               <View style={styles.iconConttainer}>
                 <Image source={emptyIcon} style={styles.emptyIcon} />
-                <Text style={styles.emptyText}>
+                <Text allowFontScaling={false} style={styles.emptyText}>
                   You don't have any notifications yet
                 </Text>
               </View>

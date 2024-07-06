@@ -112,8 +112,8 @@ const Login: FC<Props> = ({navigation}) => {
       <NavHeader backAction={goBack} />
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>Welcome back!</Text>
-          <Text style={styles.sloganText}>
+          <Text allowFontScaling={false} style={styles.titleText}>Welcome back!</Text>
+          <Text allowFontScaling={false} style={styles.sloganText}>
             We're so excited to see you again!
           </Text>
         </View>
@@ -140,7 +140,7 @@ const Login: FC<Props> = ({navigation}) => {
             />
           </View>
           <View>
-            <Text style={styles.forgetText}>Forget your password?</Text>
+            <Text allowFontScaling={false} style={styles.forgetText}>Forget your password?</Text>
           </View>
         </View>
 

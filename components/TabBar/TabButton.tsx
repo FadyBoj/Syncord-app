@@ -69,23 +69,23 @@ const TabButton: FC<Props> = ({
       <View style={styles.iconCotainer}>
         {label.toLocaleLowerCase() === 'you' ? (
           <View>
-              <View style={styles.profilePicContainer}>
-                {user?.image && user.image.replace('http','https') ? (
-                  <Image
-                    source={{uri: user?.image}}
-                    style={styles.profilePic}
-                  />
-                ) : (
-                  <View style={styles.imagePlaceHolder}>
-                    <Text style={styles.pfpText}>
-                      {user?.firstname[0].toLocaleUpperCase()}
-                    </Text>
-                    <Text style={styles.pfpText}>
-                      {user?.lastname[0].toLocaleUpperCase()}
-                    </Text>
-                  </View>
-                )}
-              </View>
+            <View style={styles.profilePicContainer}>
+              {user?.image ? (
+                <Image
+                  source={{uri: user?.image.replace('http', 'https')}}
+                  style={styles.profilePic}
+                />
+              ) : (
+                <View style={styles.imagePlaceHolder}>
+                  <Text allowFontScaling={false} style={styles.pfpText}>
+                    {user?.firstname[0].toLocaleUpperCase()}
+                  </Text>
+                  <Text allowFontScaling={false} style={styles.pfpText}>
+                    {user?.lastname[0].toLocaleUpperCase()}
+                  </Text>
+                </View>
+              )}
+            </View>
           </View>
         ) : label.toLocaleLowerCase() === 'messages' ? (
           <Image
@@ -104,7 +104,9 @@ const TabButton: FC<Props> = ({
           />
         )}
       </View>
-      <Text style={[styles.btnText, {color: isFocused ? 'white' : 'gray'}]}>
+      <Text
+        allowFontScaling={false}
+        style={[styles.btnText, {color: isFocused ? 'white' : 'gray'}]}>
         {label}
       </Text>
       {/* Animation */}
@@ -128,7 +130,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     gap: 8,
-
     width: '25%',
   },
   icon: {

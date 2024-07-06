@@ -21,31 +21,35 @@ const ChatBeginning: FC<Props> = ({friend}) => {
       <View>
         <View style={styles.profilePicContainer}>
           {friend && friend.image ? (
-            <Image source={{uri: friend?.image.replace('http','https')}} style={styles.profilePic} />
+            <Image
+              source={{uri: friend?.image.replace('http', 'https')}}
+              style={styles.profilePic}
+            />
           ) : (
             <View style={styles.imagePlaceHolder}>
-              <Text style={styles.pfpText}>
+              <Text allowFontScaling={false} style={styles.pfpText}>
                 {friend?.firstname[0].toLocaleUpperCase()}
               </Text>
-              <Text style={styles.pfpText}>
+              <Text allowFontScaling={false} style={styles.pfpText}>
                 {friend?.lastname[0].toLocaleUpperCase()}
               </Text>
             </View>
           )}
-
         </View>
       </View>
       <View style={styles.textsContainer}>
         <View>
           <Text
+            allowFontScaling={false}
             style={
               styles.nameText
             }>{`${friend?.firstname} ${friend?.lastname}`}</Text>
           {/* <Text style={styles.idText}>{friend?.userId}</Text> */}
         </View>
         <View>
-          <Text style={styles.description}>
-            This is the very beginning of your awesome chat with {friend?.firstname}
+          <Text allowFontScaling={false} style={styles.description}>
+            This is the very beginning of your awesome chat with{' '}
+            {friend?.firstname}
           </Text>
         </View>
       </View>
@@ -56,10 +60,9 @@ const ChatBeginning: FC<Props> = ({friend}) => {
 const styles = StyleSheet.create({
   container: {
     paddingLeft: 20,
-    gap:20,
-    paddingBottom:20,
-    paddingTop:20
-
+    gap: 20,
+    paddingBottom: 20,
+    paddingTop: 20,
   },
   pfp: {
     width: 100,
@@ -80,7 +83,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 14,
     width: '80%',
-    lineHeight:24,
+    lineHeight: 24,
   },
   textsContainer: {
     gap: 6,
@@ -95,19 +98,19 @@ const styles = StyleSheet.create({
     objectFit: 'cover',
     borderRadius: 100,
   },
-  imagePlaceHolder:{
+  imagePlaceHolder: {
     width: 100,
     height: 100,
     borderRadius: 100,
-    backgroundColor:'#6441A5',
-    flexDirection:'row',
-    justifyContent:'center',
-    alignItems:'center'
+    backgroundColor: '#6441A5',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  pfpText:{
-    fontFamily:'Roboto',
-    color:'white',
-    fontSize:30
+  pfpText: {
+    fontFamily: 'Roboto',
+    color: 'white',
+    fontSize: 30,
   },
 });
 

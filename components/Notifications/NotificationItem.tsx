@@ -56,10 +56,10 @@ const NotificationItem: FC<Props> = ({
                 />
                 <View style={styles.content}>
                   <View style={styles.nameContainer}>
-                    <Text style={styles.name}>
+                    <Text allowFontScaling={false} style={styles.name}>
                       {item.firstname} Sent you a friend request
                     </Text>
-                    <Text style={styles.email}>{item.email}</Text>
+                    <Text allowFontScaling={false} style={styles.email}>{item.email}</Text>
                   </View>
                   <View style={styles.choiceContainer}>
                     <ChoiceButton
@@ -97,8 +97,8 @@ const NotificationItem: FC<Props> = ({
               />
               <View style={styles.content}>
                 <View style={styles.nameContainer}>
-                  <Text style={styles.name}>{item.firstname}</Text>
-                  <Text style={styles.email}>{item.email}</Text>
+                  <Text allowFontScaling={false} style={styles.name}>{item.firstname}</Text>
+                  <Text allowFontScaling={false} style={styles.email}>{item.email}</Text>
                 </View>
                 <View style={styles.choiceContainer}>
                   <ChoiceButton

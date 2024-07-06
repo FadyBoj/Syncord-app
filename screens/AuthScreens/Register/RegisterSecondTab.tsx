@@ -25,7 +25,7 @@ const RegisterSecondTab: FC<Props> = ({navigation, route}) => {
 
   const handleChnage = (value: string, name: string) => {
     setFormData(prevData => {
-      return {...prevData, [name]: value};
+      return {...prevData, [name]: value.trim()};
     });
   };
 
@@ -56,7 +56,7 @@ const RegisterSecondTab: FC<Props> = ({navigation, route}) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.labelInputContainer}>
-        <Text style={styles.labelText}>First name</Text>
+        <Text allowFontScaling={false} style={styles.labelText}>First name</Text>
         <CustomTextInput
           label="First name"
           value={formData.firstname}
@@ -67,7 +67,7 @@ const RegisterSecondTab: FC<Props> = ({navigation, route}) => {
         />
       </View>
       <View style={styles.labelInputContainer}>
-        <Text style={styles.labelText}>Last name</Text>
+        <Text allowFontScaling={false} style={styles.labelText}>Last name</Text>
         <CustomTextInput
           label="Last name"
           value={formData.lastname}

@@ -30,7 +30,7 @@ const MyTabBar: FC<Props> = ({
   });
 
   useEffect(() => {
-    if (addFriendModal && state.index === 1) {
+    if (addFriendModal && state.index === 0) {
       animTransform.value = withTiming(-80);
     } else {
       animTransform.value = withTiming(0);
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#2d2d35',
     height: 70,

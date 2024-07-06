@@ -95,10 +95,10 @@ const UserItem: FC<Props> = ({item, setEmail, setSearchState}) => {
                 />
               ) : (
                 <View style={styles.imagePlaceHolder}>
-                  <Text style={styles.pfpText}>
+                  <Text allowFontScaling={false} style={styles.pfpText}>
                     {item?.firstname[0].toLocaleUpperCase()}
                   </Text>
-                  <Text style={styles.pfpText}>
+                  <Text allowFontScaling={false} style={styles.pfpText}>
                     {item?.lastname[0].toLocaleUpperCase()}
                   </Text>
                 </View>
@@ -107,8 +107,11 @@ const UserItem: FC<Props> = ({item, setEmail, setSearchState}) => {
           </View>
           <View style={styles.col2}>
             <Text
+              allowFontScaling={false}
               style={styles.name}>{`${item.firstname} ${item.lastname}`}</Text>
-            <Text style={styles.emailText}>{item.email}</Text>
+            <Text allowFontScaling={false} style={styles.emailText}>
+              {item.email}
+            </Text>
           </View>
         </View>
       </View>

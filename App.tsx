@@ -2,12 +2,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthStack from './navigators/AuthStack';
 import AppStack from './navigators/AppNavigator';
-import { View, SafeAreaView, StyleSheet, StatusBar, Platform } from 'react-native';
+import { View, SafeAreaView, StyleSheet, StatusBar } from 'react-native';
 import * as ReactNative from 'react-native';
 import 'react-native-reanimated';
 import 'react-native-gesture-handler';
 import Toast, { BaseToast } from 'react-native-toast-message';
 import DashboardContextProvider from './context/DashboardContext';
+import {  moderateScale, scale } from 'react-native-size-matters';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -25,7 +27,7 @@ export default function App() {
         style={{ borderLeftColor: 'green', backgroundColor: '#26272e' }}
         contentContainerStyle={{ paddingHorizontal: 15 }}
         text1Style={{
-          fontSize: 15,
+          fontSize: moderateScale(15),
           fontWeight: '400',
           color: 'white',
           fontFamily: 'Roboto',
@@ -34,6 +36,7 @@ export default function App() {
     ),
     error: (props: any) => (
       <BaseToast
+      allowFontScaling={false}
         {...props}
         style={{ borderLeftColor: 'red', backgroundColor: '#26272e' }}
         contentContainerStyle={{ paddingHorizontal: 15 }}

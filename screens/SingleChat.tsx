@@ -128,16 +128,17 @@ const SingleChat: FC<Props> = ({route}) => {
   }, [messages]);
 
   // Handle real-time connection
-  const vine = new Sound(vineBoomSound, err => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-  });
+
 
   const playSound = () => {
     try {
-      vine.play();
+      const vine = new Sound(vineBoomSound, err => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        vine.play()
+      });
     } catch (error) {
     }
   };
@@ -277,6 +278,7 @@ const SingleChat: FC<Props> = ({route}) => {
         </View>
         <View style={styles.chatInputContainer}>
           <TextInput
+          allowFontScaling={false}
             placeholder={`Message @${friend?.firstname}`}
             placeholderTextColor={'gray'}
             style={styles.msgInput}

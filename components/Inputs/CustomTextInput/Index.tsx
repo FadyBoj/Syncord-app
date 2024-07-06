@@ -25,8 +25,8 @@ interface Props {
   isError?: boolean;
   errorMsg?: string;
   radius?: number;
-  bgColor?:string
-  icon?:ImageSourcePropType
+  bgColor?: string;
+  icon?: ImageSourcePropType;
 }
 
 const Index: FC<Props> = ({
@@ -40,8 +40,8 @@ const Index: FC<Props> = ({
   isError = false,
   errorMsg = false,
   radius = 4,
-  bgColor='#32323c',
-  icon=null
+  bgColor = '#32323c',
+  icon = null,
 }) => {
   const screenWidth = Dimensions.get('window').width;
 
@@ -53,6 +53,7 @@ const Index: FC<Props> = ({
       {showLabel && <Text style={styles.label}>{label}</Text>}
       <View style={styles.inputEyeContainer}>
         <TextInput
+          allowFontScaling={false}
           placeholder={label}
           placeholderTextColor={'gray'}
           style={[
@@ -60,9 +61,9 @@ const Index: FC<Props> = ({
               width: 0.9 * screenWidth,
               borderColor: isError ? '#ff3333' : '',
               borderWidth: isError ? 1 : 0,
-              borderRadius:radius,
-              backgroundColor:bgColor,
-              paddingLeft: icon ? 50 : 15
+              borderRadius: radius,
+              backgroundColor: bgColor,
+              paddingLeft: icon ? 50 : 15,
             },
             styles.input,
           ]}
@@ -82,17 +83,13 @@ const Index: FC<Props> = ({
           </TouchableOpacity>
         )}
       </View>
-      {helper && <Text style={styles.helperText}>{helper}</Text>}
-      {isError && <Text style={styles.errorText}>{errorMsg}</Text>}
-        {
-          icon &&
-          <View style={styles.iconContainer}>
-            <Image 
-            source={icon}
-            style={styles.icon}
-            />
-          </View>
-        }
+      {helper && <Text allowFontScaling={false} style={styles.helperText}>{helper}</Text>}
+      {isError && <Text allowFontScaling={false} style={styles.errorText}>{errorMsg}</Text>}
+      {icon && (
+        <View style={styles.iconContainer}>
+          <Image source={icon} style={styles.icon} />
+        </View>
+      )}
     </View>
   );
 };
@@ -102,7 +99,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 10,
     position: 'relative',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   input: {
     height: 50,
@@ -134,15 +131,15 @@ const styles = StyleSheet.create({
     color: '#ff3333',
     fontSize: 12,
   },
-  iconContainer:{
-    position:'absolute',
-    left:15,
-    pointerEvents:'none'
+  iconContainer: {
+    position: 'absolute',
+    left: 15,
+    pointerEvents: 'none',
   },
-  icon:{
-    width:17,
-    height:17
-  }
+  icon: {
+    width: 17,
+    height: 17,
+  },
 });
 
 export default Index;

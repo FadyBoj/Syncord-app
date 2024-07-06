@@ -24,7 +24,7 @@ import chatIcon from '../../assets/friendChat.png';
 import StatusBadge from '../StatusBadge/StatusBadge';
 
 interface IFriend {
-  friendShipId:string
+  friendShipId: string;
   userId: string;
   email: string;
   firstname: string;
@@ -40,7 +40,6 @@ interface Props {
 }
 
 const Friend: FC<Props> = ({friend, length, index, status}) => {
-
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const animScale = useSharedValue(0.6);
@@ -87,11 +86,11 @@ const Friend: FC<Props> = ({friend, length, index, status}) => {
   // isOnline: boolean;
   // image: string;
 
-  const handleNavigation = () =>{
-    navigation.navigate('singleChat',{
-     friend:friend
-    })
-  }
+  const handleNavigation = () => {
+    navigation.navigate('singleChat', {
+      friend: friend,
+    });
+  };
 
   return (
     <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut}>
@@ -116,10 +115,10 @@ const Friend: FC<Props> = ({friend, length, index, status}) => {
               />
             ) : (
               <View style={styles.imagePlaceHolder}>
-                <Text style={styles.pfpText}>
+                <Text allowFontScaling={false} style={styles.pfpText}>
                   {friend?.firstname[0].toLocaleUpperCase()}
                 </Text>
-                <Text style={styles.pfpText}>
+                <Text allowFontScaling={false} style={styles.pfpText}>
                   {friend?.lastname[0].toLocaleUpperCase()}
                 </Text>
               </View>
@@ -136,13 +135,16 @@ const Friend: FC<Props> = ({friend, length, index, status}) => {
           </View>
           <View>
             <Text
+              allowFontScaling={false}
               style={
                 styles.friendName
               }>{`${friend.firstname} ${friend.lastname}`}</Text>
           </View>
         </View>
         {/* Section 2  */}
-        <TouchableOpacity onPress={handleNavigation} style={styles.chatIconContainer}>
+        <TouchableOpacity
+          onPress={handleNavigation}
+          style={styles.chatIconContainer}>
           <Image source={chatIcon} style={styles.chatIcon} />
         </TouchableOpacity>
         {index !== length - 1 && <View style={styles.space}></View>}
@@ -223,7 +225,7 @@ const styles = StyleSheet.create({
     zIndex: 30,
   },
   chatIconContainer: {
-    padding:19
+    padding: 19,
   },
 });
 

@@ -81,8 +81,12 @@ const ImagePlaceHolder: FC<Props> = ({
         />
       ) : (
         <View style={styles.imagePlaceHolder}>
-          <Text style={styles.pfpText}>{firstname[0].toLocaleUpperCase()}</Text>
-          <Text style={styles.pfpText}>{lastname[0].toLocaleUpperCase()}</Text>
+          <Text allowFontScaling={false} style={styles.pfpText}>
+            {firstname[0].toLocaleUpperCase()}
+          </Text>
+          <Text allowFontScaling={false} style={styles.pfpText}>
+            {lastname[0].toLocaleUpperCase()}
+          </Text>
         </View>
       )}
     </View>

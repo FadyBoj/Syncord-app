@@ -35,10 +35,10 @@ const LogoutModal: FC<Props> = ({closeModal}) => {
       width={screenWidth * 0.85}>
       <View style={styles.container}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>Log Out</Text>
+          <Text allowFontScaling={false} style={styles.title}>Log Out</Text>
         </View>
         <View style={styles.row2}>
-          <Text style={styles.desc}>Are you sure you want to log out ? </Text>
+          <Text allowFontScaling={false} style={styles.desc}>Are you sure you want to log out ? </Text>
           <View style={styles.btnsContainer}>
               <ShrinkButton
               bgColor='#da373c'

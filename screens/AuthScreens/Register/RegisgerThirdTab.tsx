@@ -128,7 +128,7 @@ const RegisgerThirdTab: FC<Props> = ({navigation, route}) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.labelInputContainer}>
-        <Text style={styles.labelText}>Password</Text>
+        <Text allowFontScaling={false} style={styles.labelText}>Password</Text>
         <CustomTextInput
           label="Password"
           value={formData.password}
@@ -140,7 +140,7 @@ const RegisgerThirdTab: FC<Props> = ({navigation, route}) => {
         />
       </View>
       <View style={styles.labelInputContainer}>
-        <Text style={styles.labelText}>Confirm Password</Text>
+        <Text allowFontScaling={false} style={styles.labelText}>Confirm Password</Text>
         <CustomTextInput
           label="Confirm Password"
           value={formData.passwordConfirmation}

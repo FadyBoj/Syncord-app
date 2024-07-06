@@ -45,9 +45,15 @@ const Profile: FC = props => {
             {/* Row 2 */}
             <View style={styles.row2}>
               <View style={styles.nameContainer}>
-                <Text style={styles.firstName}>{user.firstname}</Text>
-                <Text style={styles.id}>{user.id}</Text>
-                <Text style={styles.id}>{user.email}</Text>
+                <Text allowFontScaling={false} style={styles.firstName}>
+                  {user.firstname}
+                </Text>
+                <Text allowFontScaling={false} style={styles.id}>
+                  {user.id}
+                </Text>
+                <Text allowFontScaling={false} style={styles.id}>
+                  {user.email}
+                </Text>
               </View>
               <View style={styles.btnsContainer}>
                 <ShrinkBtn
@@ -65,8 +71,10 @@ const Profile: FC = props => {
             </View>
             {/* Row3 */}
             <View style={styles.row3}>
-              <Text style={styles.memberText}>Syncord member since</Text>
-              <Text style={styles.memberDate}>
+              <Text allowFontScaling={false} style={styles.memberText}>
+                Syncord member since
+              </Text>
+              <Text allowFontScaling={false} style={styles.memberDate}>
                 {getMonthYear(user.createdAt.toString())}
               </Text>
             </View>
@@ -86,7 +94,7 @@ const Profile: FC = props => {
           </View>
         </View>
       )}
-      {isLogoutModalOpen && <LogoutModal  closeModal={closeLogoutModal} />}
+      {isLogoutModalOpen && <LogoutModal closeModal={closeLogoutModal} />}
     </View>
   );
 };

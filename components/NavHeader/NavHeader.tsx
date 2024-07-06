@@ -18,7 +18,7 @@ const NavHeader: FC<Props> = ({bgColor = '#1c1d22', backAction, title=null}) => 
       </TouchableOpacity>
 
       <View style={styles.titleContainer}>
-        {title && <Text style={styles.title}>{title}</Text>}
+        {title && <Text allowFontScaling={false} style={styles.title}>{title}</Text>}
       </View>
     </View>
   );

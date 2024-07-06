@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image,} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import {FC, useContext, memo} from 'react';
 import FastImage from 'react-native-fast-image';
 import {DashboardContext} from '../../context/DashboardContext';
@@ -15,8 +15,8 @@ interface Chunk {
   userId: string;
   messages: {id: string; text: string; createdAt: string}[];
   timestampSpace: string | boolean;
-  id:string
-  isLoading?:boolean
+  id: string;
+  isLoading?: boolean;
 }
 
 interface IFriend {
@@ -35,7 +35,7 @@ interface Props {
   friendId?: string;
   friend?: IFriend;
   index: number;
-  length:number
+  length: number;
 }
 
 const MessageChunk: FC<Props> = ({
@@ -45,10 +45,8 @@ const MessageChunk: FC<Props> = ({
   friend,
   index,
   length,
-  
 }) => {
   const user = useContext(DashboardContext)?.user;
-
 
   return (
     <View style={styles.wrapper}>
@@ -56,7 +54,7 @@ const MessageChunk: FC<Props> = ({
         <View style={styles.timestampSpace}>
           <View style={styles.timestampLine}></View>
           <View style={styles.timeStampTextContainer}>
-            <Text style={styles.timeStampText}>
+            <Text allowFontScaling={false} style={styles.timeStampText}>
               {getMonthYear(chunk.messages[0].createdAt)}
             </Text>
           </View>
@@ -67,29 +65,35 @@ const MessageChunk: FC<Props> = ({
           <View style={styles.pfpContainer}>
             {chunk.userId === user?.id ? (
               user.image ? (
-                <Image style={styles.pfp} source={{uri: user.image.replace('http','https')}} />
+                <Image
+                  style={styles.pfp}
+                  source={{uri: user.image.replace('http', 'https')}}
+                />
               ) : (
                 // Place Holder
                 <View style={styles.profilePicContainer}>
-                <View style={styles.imagePlaceHolder}>
-                  <Text style={styles.pfpText}>
-                    {user?.firstname[0].toLocaleUpperCase()}
-                  </Text>
-                  <Text style={styles.pfpText}>
-                    {user?.lastname[0].toLocaleUpperCase()}
-                  </Text>
+                  <View style={styles.imagePlaceHolder}>
+                    <Text allowFontScaling={false} style={styles.pfpText}>
+                      {user?.firstname[0].toLocaleUpperCase()}
+                    </Text>
+                    <Text allowFontScaling={false} style={styles.pfpText}>
+                      {user?.lastname[0].toLocaleUpperCase()}
+                    </Text>
+                  </View>
                 </View>
-              </View>
               )
             ) : friendPfp ? (
-              <Image style={styles.pfp} source={{uri: friendPfp.replace('http','https')}} />
+              <Image
+                style={styles.pfp}
+                source={{uri: friendPfp.replace('http', 'https')}}
+              />
             ) : (
               <View style={styles.profilePicContainer}>
                 <View style={styles.imagePlaceHolder}>
-                  <Text style={styles.pfpText}>
+                  <Text allowFontScaling={false} style={styles.pfpText}>
                     {user?.firstname[0].toLocaleUpperCase()}
                   </Text>
-                  <Text style={styles.pfpText}>
+                  <Text allowFontScaling={false} style={styles.pfpText}>
                     {user?.lastname[0].toLocaleUpperCase()}
                   </Text>
                 </View>
@@ -100,23 +104,29 @@ const MessageChunk: FC<Props> = ({
         <View style={styles.messagesColumn}>
           {chunk.userId === user?.id ? (
             <View style={styles.nameDateContainer}>
-              <Text style={styles.chunkDate}>
+              <Text allowFontScaling={false} style={styles.chunkDate}>
                 {convertDate(chunk.messages[0].createdAt)}
               </Text>
-              <Text style={styles.userNameText}>{user.firstname}</Text>
+              <Text allowFontScaling={false} style={styles.userNameText}>{user.firstname}</Text>
             </View>
           ) : (
             <View style={styles.nameDateContainer}>
-              <Text style={styles.chunkDate}>
+              <Text allowFontScaling={false} style={styles.chunkDate}>
                 {convertDate(chunk.messages[0].createdAt)}
               </Text>
-              <Text style={styles.userNameText}>{friend?.firstname}</Text>
+              <Text allowFontScaling={false} style={styles.userNameText}>{friend?.firstname}</Text>
             </View>
           )}
           {
             <View style={styles.messagesContainer}>
               {chunk.messages.map(item => {
-                return <Message isLoading={chunk.isLoading} key={item.id} message={item} />;
+                return (
+                  <Message
+                    isLoading={chunk.isLoading}
+                    key={item.id}
+                    message={item}
+                  />
+                );
               })}
             </View>
           }
@@ -155,7 +165,7 @@ const styles = StyleSheet.create({
   timeStampText: {
     fontFamily: 'Roboto',
     fontSize: 12,
-    color:'white'
+    color: 'white',
   },
   mainContainer: {
     borderColor: 'cyan',
@@ -205,14 +215,14 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   nameDateContainer: {
-    flexDirection:'row-reverse',
-    justifyContent:'flex-end',
-    alignItems:'center',
-    gap:10
+    flexDirection: 'row-reverse',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    gap: 10,
   },
-  chunkDate:{
-    fontSize:12,
-    color:'grey',
+  chunkDate: {
+    fontSize: 12,
+    color: 'grey',
   },
 });
 

@@ -16,7 +16,7 @@ const Header: FC<Props> = ({title, rightComponent, bgColor = '#111216'}) => {
         styles.container,
         {backgroundColor: bgColor ? bgColor : '#111216'},
       ]}>
-      <Text style={styles.title}>{title}</Text>
+      <Text allowFontScaling={false} style={styles.title}>{title}</Text>
       <View>{rightComponent && rightComponent()}</View>
     </View>
   );

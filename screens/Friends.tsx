@@ -10,12 +10,14 @@ import FilterBtn from '../components/FilterBtn/FilterBtn';
 import Header from '../components/Header/Header';
 import AddFriendModal from '../components/CustomModals/AddFriendModal';
 import UserOv from '../components/UserOv/UserOv';
+import SingleBackDrop from '../components/Backdrop/SingleBackDrop';
 
 //Assets
 import addFriendIcon from '../assets/addFriend.png';
 import searchIcon from '../assets/search.png';
 import {DashboardContext} from '../context/DashboardContext';
 import emptyFriends from '../assets/emptyFriends.png';
+import Animated from 'react-native-reanimated';
 
 interface IRequest {
   id: number;
@@ -138,11 +140,13 @@ const Friends: FC<Props> = ({
   };
 
   return (
+    
     <FlatList
-      contentContainerStyle={styles.container}
+    contentContainerStyle={styles.container}
       data={[1]}
       renderItem={({item}) => (
         <View style={styles.wrapper}>
+       
           <Header title="Friends" rightComponent={addFriendsBtn} />
           <View style={styles.container}>
             <TouchableOpacity onPress={toggleOv}>
@@ -233,6 +237,7 @@ const Friends: FC<Props> = ({
           {addFriendModal && (
             <AddFriendModal closeModal={closeAddFriendModal} />
           )}
+         
         </View>
       )}
     />

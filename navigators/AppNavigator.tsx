@@ -25,16 +25,12 @@ const AppStack = () => {
 
   //Handle user overview
   const [userOv, setUserOv] = useState(false);
-  const openUserOv = () => {
-    'worklet'; // This line is important for marking the function as a worklet
-
-    setUserOv(true);
-  };
+  const openUserOv = () => {setUserOv(true);}
   const closeUserOv = () => setUserOv(false);
 
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="MainTabs" options={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{autoHideHomeIndicator:true}}>
+      <Stack.Screen name="MainTabs" options={{headerShown: false,autoHideHomeIndicator:true}}>
         {props => (
           <Tab.Navigator
             {...props}
@@ -45,7 +41,7 @@ const AppStack = () => {
                 userOv={userOv}
               />
             )}>
-            <Tab.Screen options={{headerShown: false}} name="Friends">
+            <Tab.Screen options={{headerShown: false,}} name="Friends">
               {props => (
                 <Friends
                   {...props}

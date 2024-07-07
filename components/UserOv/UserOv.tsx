@@ -1,5 +1,5 @@
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
-import {FC, useEffect} from 'react';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { FC, useEffect } from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -14,23 +14,24 @@ import {
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
+const SWIPE_THRESHOLD = 1000; // Define a suitable threshold for swipe velocity
 
 interface Props {
   isOpen: boolean;
   closeUserOv: () => void;
 }
 
-const UserOv: FC<Props> = ({isOpen,closeUserOv}) => {
+const UserOv: FC<Props> = ({ isOpen, closeUserOv }) => {
   const animTranslate = useSharedValue(screenHeight * 0.7);
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
-      transform: [{translateY: animTranslate.value}],
+      transform: [{ translateY: animTranslate.value }],
     };
   });
   const fastSpringConfig = {
-    damping: 23, // Adjust this value to control how bouncy the animation is (higher value, less bounce)
-    stiffness: 230, // Higher value makes the animation faster
+    damping: 23,
+    stiffness: 230,
     mass: 1,
     velocity: 0,
     restDisplacementThreshold: 0.01,
@@ -52,17 +53,18 @@ const UserOv: FC<Props> = ({isOpen,closeUserOv}) => {
     .onBegin(() => {
       isPressed.value = true;
     })
-    .onUpdate(e => {
+    .onUpdate((e) => {
       animTranslate.value = e.translationY > 0 ? e.translationY : 0;
     })
-    .onEnd(() => {
-      if(!(animTranslate.value > 240))
-      {
-        animTranslate.value = withSpring(0, fastSpringConfig);
-      }
-      else{
+    .onEnd((e) => {
+      const isFastSwipe = e.velocityY > SWIPE_THRESHOLD;
+      console.log(e.velocityY)
+
+      if (isFastSwipe || animTranslate.value > 240) {
         animTranslate.value = withSpring(screenHeight * 0.7, fastSpringConfig);
-       runOnJS(closeUserOv)()
+        runOnJS(closeUserOv)();
+      } else {
+        animTranslate.value = withSpring(0, fastSpringConfig);
       }
     })
     .onFinalize(() => {
@@ -71,14 +73,14 @@ const UserOv: FC<Props> = ({isOpen,closeUserOv}) => {
 
   const animatedMoveStyles = useAnimatedStyle(() => {
     return {
-      transform: [{translateY: animTranslate.value}],
+      transform: [{ translateY: animTranslate.value }],
     };
   });
+
   return (
-    <GestureHandlerRootView style={[styles.gr,{bottom:isOpen ? -30 : -screenHeight * 0.7}]}>
+    <GestureHandlerRootView style={[styles.gr, { bottom: isOpen ? -30 : -screenHeight * 0.7 }]}>
       <GestureDetector gesture={gesture}>
-        <Animated.View
-          style={[styles.wrapper, animatedStyles, animatedMoveStyles]}>
+        <Animated.View style={[styles.wrapper, animatedStyles, animatedMoveStyles]}>
           <View style={styles.mainContent}>
             <View style={styles.stick}></View>
             <View style={styles.container}></View>
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
     height: screenHeight * 0.7,
     position: 'absolute',
     bottom: -30,
-    pointerEvents:'none',
+    pointerEvents: 'none',
   },
   wrapper: {
     width: screenWidth,

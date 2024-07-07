@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
     gap: 30,
-    paddingBottom:30
+    paddingBottom:30,
+    position:'relative'
   },
   titleContainer: {
     justifyContent: 'center',

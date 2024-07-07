@@ -1,4 +1,4 @@
-import {View, Text, Image, FlatList} from 'react-native';
+import {View, Text, Image, FlatList, TouchableOpacity} from 'react-native';
 import {useState, FC, useEffect, useContext} from 'react';
 import styles from '../styles/FriendsStyles';
 
@@ -9,6 +9,7 @@ import CustomTextInput from '../components/Inputs/CustomTextInput/Index';
 import FilterBtn from '../components/FilterBtn/FilterBtn';
 import Header from '../components/Header/Header';
 import AddFriendModal from '../components/CustomModals/AddFriendModal';
+import UserOv from '../components/UserOv/UserOv';
 
 //Assets
 import addFriendIcon from '../assets/addFriend.png';
@@ -47,12 +48,18 @@ interface Props {
   openAddFriendModal: () => void;
   closeAddFriendModal: () => void;
   addFriendModal: boolean;
+  userOv: boolean;
+  openUserOv: () => void;
+  closeUserOv: () => void;
 }
 
 const Friends: FC<Props> = ({
   openAddFriendModal,
   closeAddFriendModal,
   addFriendModal,
+  userOv,
+  openUserOv,
+  closeUserOv,
 }) => {
   const dashboard = useContext(DashboardContext);
   const connection = useContext(DashboardContext)?.connection;
@@ -122,6 +129,14 @@ const Friends: FC<Props> = ({
     );
   };
 
+  const toggleOv = () => {
+    if (userOv) {
+      closeUserOv();
+      return;
+    }
+    openUserOv();
+  };
+
   return (
     <FlatList
       contentContainerStyle={styles.container}
@@ -130,6 +145,9 @@ const Friends: FC<Props> = ({
         <View style={styles.wrapper}>
           <Header title="Friends" rightComponent={addFriendsBtn} />
           <View style={styles.container}>
+            <TouchableOpacity onPress={toggleOv}>
+              <Text allowFontScaling={false}>Toggle</Text>
+            </TouchableOpacity>
             <View style={styles.sec1}>
               {/* Search input container */}
               <View>
@@ -210,6 +228,7 @@ const Friends: FC<Props> = ({
                 )
               )}
             </View>
+            <UserOv isOpen={userOv} closeUserOv={closeUserOv} />
           </View>
           {addFriendModal && (
             <AddFriendModal closeModal={closeAddFriendModal} />

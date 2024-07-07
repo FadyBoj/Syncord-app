@@ -1,12 +1,8 @@
 import {
   View,
-  Text,
-  VirtualizedList,
   TextInput,
   Image,
   TouchableOpacity,
-  ActivityIndicator,
-  FlatList,
 } from 'react-native';
 import {
   FC,

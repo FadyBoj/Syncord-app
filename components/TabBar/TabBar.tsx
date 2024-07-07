@@ -14,6 +14,7 @@ interface Props {
   descriptors?: any;
   navigation?: any;
   addFriendModal: boolean;
+  userOv:boolean
 }
 
 const MyTabBar: FC<Props> = ({
@@ -21,6 +22,7 @@ const MyTabBar: FC<Props> = ({
   descriptors,
   navigation,
   addFriendModal,
+  userOv
 }) => {
   const animTransform = useSharedValue(0);
   const animatedStyles = useAnimatedStyle(() => {
@@ -29,13 +31,15 @@ const MyTabBar: FC<Props> = ({
     };
   });
 
+  console.log(userOv)
+
   useEffect(() => {
-    if (addFriendModal && state.index === 0) {
+    if ((addFriendModal || userOv) && state.index === 0) {
       animTransform.value = withTiming(-80);
     } else {
       animTransform.value = withTiming(0);
     }
-  }, [addFriendModal,state]);
+  }, [addFriendModal,state,userOv]);
   
   
   return (

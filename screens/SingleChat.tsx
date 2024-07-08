@@ -3,6 +3,7 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import {
   FC,
@@ -22,6 +23,8 @@ import {DashboardContext} from '../context/DashboardContext';
 import globals from '../globals';
 import Sound from 'react-native-sound';
 Sound.setCategory('Playback');
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 //Components
 import MessagesList from '../components/MessagesList/MessagesList';
@@ -72,6 +75,8 @@ interface Chunk {
 }
 
 const SingleChat: FC<Props> = ({route}) => {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
   const friend = route?.params.friend;
 
   const [messages, setMessages] = useState<null | Message[]>(null);
@@ -82,6 +87,20 @@ const SingleChat: FC<Props> = ({route}) => {
   const [isFetchingPreviousMsgs, setIsFetchingPreviousMsgs] = useState(false);
   const [isRecordsEnded, setIsRecordsEnded] = useState(false);
   const [skip, setSkip] = useState(50);
+
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack()
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, [0]);
 
   // Fetch messages
   useEffect(() => {
@@ -125,7 +144,6 @@ const SingleChat: FC<Props> = ({route}) => {
 
   // Handle real-time connection
 
-
   const playSound = () => {
     try {
       const vine = new Sound(vineBoomSound, err => {
@@ -133,13 +151,13 @@ const SingleChat: FC<Props> = ({route}) => {
           console.log(err);
           return;
         }
-        vine.play()
+        vine.play();
       });
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const handleRecieveMessage = (message: Message) => {
+    if(message.senderId !== friend?.userId) return
     const newMessage: Message = message;
     setMessages(prevData => {
       if (!prevData) return prevData;
@@ -274,7 +292,7 @@ const SingleChat: FC<Props> = ({route}) => {
         </View>
         <View style={styles.chatInputContainer}>
           <TextInput
-          allowFontScaling={false}
+            allowFontScaling={false}
             placeholder={`Message @${friend?.firstname}`}
             placeholderTextColor={'gray'}
             style={styles.msgInput}

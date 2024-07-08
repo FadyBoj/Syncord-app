@@ -38,6 +38,7 @@ export interface IFriend {
   lastname: string;
   isOnline: boolean;
   image: string;
+  createdAt : Date
 }
 
 export interface Friendship {
@@ -110,7 +111,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
       setIsLoading(false);
       console.log('Finished');
     } catch (error: any) {
-      console.log(error,"ERRR")
+      console.log(error.response,"ERRR")
       console.log('Not Authenticated');
     }
   };

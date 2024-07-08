@@ -10,12 +10,17 @@ import Toast, { BaseToast } from 'react-native-toast-message';
 import DashboardContextProvider from './context/DashboardContext';
 import {  moderateScale, scale } from 'react-native-size-matters';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
+import {
+  GestureHandlerRootView,
+  GestureDetector,
+  Gesture,
+} from 'react-native-gesture-handler';
 
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  SystemNavigationBar.navigationHide()
+  SystemNavigationBar.stickyImmersive()
 
   try {
     ReactNative.I18nManager.allowRTL(false);

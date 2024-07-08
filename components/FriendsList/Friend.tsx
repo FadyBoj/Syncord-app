@@ -6,7 +6,7 @@ import {
   Pressable,
   TouchableOpacity,
 } from 'react-native';
-import {FC, memo} from 'react';
+import {FC, memo, useContext} from 'react';
 import FastImage from 'react-native-fast-image';
 import Animated, {
   Easing,
@@ -22,6 +22,7 @@ import chatIcon from '../../assets/friendChat.png';
 
 //Components
 import StatusBadge from '../StatusBadge/StatusBadge';
+import {UserOvContext} from '../../screens/Friends';
 
 interface IFriend {
   friendShipId: string;
@@ -31,6 +32,7 @@ interface IFriend {
   lastname: string;
   isOnline: boolean;
   image: string;
+  createdAt:Date
 }
 interface Props {
   friend: IFriend;
@@ -40,6 +42,10 @@ interface Props {
 }
 
 const Friend: FC<Props> = ({friend, length, index, status}) => {
+  //User overview context
+  const userOv = useContext(UserOvContext);
+  const setUserOv = userOv?.setUserOv;
+
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const animScale = useSharedValue(0.6);
@@ -78,22 +84,24 @@ const Friend: FC<Props> = ({friend, length, index, status}) => {
     };
   });
 
-  // id: string;
-  // userId: string;
-  // email: string;
-  // firstname: string;
-  // lastname: string;
-  // isOnline: boolean;
-  // image: string;
-
   const handleNavigation = () => {
     navigation.navigate('singleChat', {
       friend: friend,
     });
   };
 
+  const handlePress = () => {
+    if (!setUserOv) return;
+    setUserOv(prevData => {
+      return {data: friend, visible: true};
+    });
+  };
+
   return (
-    <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut}>
+    <Pressable
+      onPress={handlePress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}>
       <View
         style={[
           styles.container,

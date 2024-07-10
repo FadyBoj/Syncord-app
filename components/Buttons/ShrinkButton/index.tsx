@@ -129,7 +129,10 @@ const Index: FC<Props> = ({
             source={icon}
             style={[
               styles.icon,
-              {transform: [{translateY: iconMove}], tintColor: tintColor},
+              {
+                transform: [{translateY: iconMove}],
+                tintColor: disabled || isLoading ? '#b0b4d0' : tintColor,
+              },
             ]}
           />
         )}

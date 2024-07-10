@@ -4,7 +4,6 @@ const onFriendRemoved = (
   setUser: React.Dispatch<React.SetStateAction<IUser | null>>,
   friendshipId: string,
 ) => {
-  console.log(friendshipId);
   setUser(prevData => {
     if (!prevData) return null;
     return {

@@ -25,7 +25,7 @@ const ImagePlaceHolder: FC<Props> = ({
     profilePic: {
       width: size,
       height: size,
-      objectFit: 'cover',
+      objectFit:'contain',
       borderRadius: 100,
     },
     previewInfo: {

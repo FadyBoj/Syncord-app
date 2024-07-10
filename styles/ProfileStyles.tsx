@@ -3,11 +3,10 @@ import {StyleSheet, Dimensions} from 'react-native';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-
 const styles = StyleSheet.create({
   wrapper: {
-    height:screenHeight,
-    position:'relative'
+    height: screenHeight,
+    position: 'relative',
   },
   container: {
     width: screenWidth,
@@ -38,6 +37,11 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     padding: 12,
   },
+  imageContainerContent: {
+    width: '100%',
+    height: '100%',
+    position: 'relative',
+  },
   row2: {
     backgroundColor: '#27272f',
     width: '100%',
@@ -47,6 +51,21 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#2c2c34',
     gap: 25,
+  },
+  cameraIconContainer:{
+    position:'absolute',
+    bottom:-10,
+    right:-15,
+    backgroundColor:'#1c1d22',
+    padding:8,
+    borderRadius:50,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  cameraIcon:{
+    width:20,
+    height:20,
+    tintColor:'white'
   },
   firstName: {
     fontSize: 20,
@@ -73,6 +92,13 @@ const styles = StyleSheet.create({
     padding: 20,
     borderWidth: 2,
     borderColor: '#2c2c34',
+    gap: 10,
+  },
+  row4: {
+    width: '100%',
+    minHeight: 70,
+    borderRadius: 15,
+    alignItems: 'center',
     gap: 10,
   },
   memberText: {

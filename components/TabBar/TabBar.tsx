@@ -120,7 +120,8 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    gap:36,
     alignItems: 'center',
     backgroundColor: '#2d2d35',
     height: 70,

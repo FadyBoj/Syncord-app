@@ -12,13 +12,13 @@ import {
   ScrollView,
 } from 'react-native-gesture-handler';
 import {DashboardContext, IFriend} from '../../context/DashboardContext';
+import globals from '../../globals';
 
 //Components
 import ImagePlaceHolder from '../ImagePlaceHolder/ImagePlaceHolder';
 import ShrinkBtn from '../Buttons/ShrinkButton';
 
 //Assets
-import editIcon from '../../assets/edit.png';
 import chatIcon from '../../assets/friendChat.png';
 import trashIcon from '../../assets/trash.png';
 
@@ -113,7 +113,7 @@ const UserOv: FC<Props> = ({isOpen, closeUserOv, user}) => {
       const token = await AsyncStorage.getItem('token');
       if (!token) return;
       const response = await axios.delete(
-        'http://localhost:5196/friendship/delete-friend',
+        `${globals.baseUrl}/friendship/delete-friend`,
         {
           data: {
             friendShipId: user.friendShipId,
@@ -135,6 +135,7 @@ const UserOv: FC<Props> = ({isOpen, closeUserOv, user}) => {
         };
       });
       closeUserOv();
+      setIsDeleting(false);
     } catch (error: any) {
       console.log(error);
     }

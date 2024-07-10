@@ -1,5 +1,4 @@
-import {View, Text} from 'react-native';
-import {Children, FC, createContext, useEffect, useState} from 'react';
+import {FC, createContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as SignalR from '@microsoft/signalr';
@@ -117,10 +116,6 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
     }
   };
 
-  // useEffect(() => {
-  //   getMainDashboard();
-  // }, [0]);
-
   const getDashboard = async () => {
     const token = await AsyncStorage.getItem('token');
     if (!token) return;
@@ -169,9 +164,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
       onRequestRejected(setUser, requestId),
     );
     connection?.on('friendshipDeleted', friendshipId =>
-      {
-        console.log(friendshipId)
-        onFriendRemoved(setUser, friendshipId)},
+      onFriendRemoved(setUser, friendshipId),
     );
   }, [connection]);
 

@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Dimensions,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from 'react-native';
 import {FC} from 'react';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
@@ -13,16 +14,23 @@ const screenHeight = Dimensions.get('window').height;
 
 interface Props {
   close?: () => void;
+  spinner?: boolean;
 }
 
-const SingleBackDrop: FC<Props> = ({close}) => {
+const SingleBackDrop: FC<Props> = ({close, spinner = false}) => {
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut} style={styles.container}>
-      <TouchableWithoutFeedback
-      onPress={close}
-        style={styles.content}>
-          <View style={{width:'100%',height:'100%'}}></View>
-        </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={close} style={styles.content}>
+        <View
+          style={{
+            width: '100%',
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          {spinner && <ActivityIndicator size={50} />}
+        </View>
+      </TouchableWithoutFeedback>
     </Animated.View>
   );
 };
@@ -40,7 +48,7 @@ const styles = StyleSheet.create({
   content: {
     width: '100%',
     height: '100%',
-    backgroundColor:'red'
+    backgroundColor: 'red',
   },
 });
 

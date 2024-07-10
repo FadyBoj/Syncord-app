@@ -1,10 +1,13 @@
-import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {StyleSheet, BackHandler} from 'react-native';
 import {FC, useEffect, useId} from 'react';
 import Animated, {
   useSharedValue,
   withTiming,
   useAnimatedStyle,
 } from 'react-native-reanimated';
+import {IUserOv} from '../../navigators/AppNavigator';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 //Components
 import TabButton from './TabButton';
@@ -14,6 +17,8 @@ interface Props {
   descriptors?: any;
   navigation?: any;
   addFriendModal: boolean;
+  userOv: IUserOv;
+  closeUserOv: () => void;
 }
 
 const MyTabBar: FC<Props> = ({
@@ -21,23 +26,49 @@ const MyTabBar: FC<Props> = ({
   descriptors,
   navigation,
   addFriendModal,
+  userOv,
+  closeUserOv,
 }) => {
   const animTransform = useSharedValue(0);
   const animatedStyles = useAnimatedStyle(() => {
     return {
-      bottom:animTransform.value
+      bottom: animTransform.value,
     };
   });
 
   useEffect(() => {
-    if (addFriendModal && state.index === 0) {
+    if ((addFriendModal || userOv.visible) && state.index === 0) {
       animTransform.value = withTiming(-80);
     } else {
       animTransform.value = withTiming(0);
     }
-  }, [addFriendModal,state]);
-  
-  
+  }, [addFriendModal, state, userOv]);
+
+  //Handling back button behavior
+  useEffect(() => {
+    const backAction = () => {
+      if (userOv.visible) {
+          closeUserOv();
+          return true
+      }
+      if (state.index === 0 && !userOv.visible) {
+        BackHandler.exitApp();
+      }
+      else {
+        navigation.goBack()
+      }
+
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, [state, userOv.visible]);
+
   return (
     <Animated.View style={[styles.container, animatedStyles]}>
       {state.routes.map((route: any, index: number) => {

@@ -9,11 +9,19 @@ import 'react-native-gesture-handler';
 import Toast, { BaseToast } from 'react-native-toast-message';
 import DashboardContextProvider from './context/DashboardContext';
 import {  moderateScale, scale } from 'react-native-size-matters';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
+import {
+  GestureHandlerRootView,
+  GestureDetector,
+  Gesture,
+} from 'react-native-gesture-handler';
 
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  SystemNavigationBar.stickyImmersive()
+
   try {
     ReactNative.I18nManager.allowRTL(false);
   } catch (error) {
@@ -55,20 +63,20 @@ export default function App() {
       <SafeAreaView  style={styles.safeArea}>
         <StatusBar hidden={false} />
         <NavigationContainer>
-          <Stack.Navigator>
+          <Stack.Navigator screenOptions={{autoHideHomeIndicator:true}}>
             <Stack.Screen
               name="AuthStack"
               component={AuthStack}
-              options={{ headerShown: false, animation: 'simple_push' }}
+              options={{ headerShown: false, animation: 'simple_push' ,autoHideHomeIndicator:true}}
             />
             <Stack.Screen
               name="AppStack"
               component={AppStack}
-              options={{ headerShown: false, animation: 'simple_push' }}
+              options={{ headerShown: false, animation: 'simple_push' ,autoHideHomeIndicator:true}}
             />
           </Stack.Navigator>
         </NavigationContainer>
-        <Toast config={toastConfig} />
+        <Toast  config={toastConfig} />
       </SafeAreaView>
     </DashboardContextProvider>
   );

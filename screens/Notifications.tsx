@@ -34,6 +34,7 @@ interface userPayload {
   image: string;
   isOnline: boolean;
   friendShipId: string;
+  createdAt : Date
 }
 
 const Notifications: FC = props => {
@@ -92,6 +93,7 @@ const Notifications: FC = props => {
               lastname: response.data.lastname,
               isOnline: response.data.isOnline,
               image: response.data.image,
+              createdAt:response.data.createdAt
             },
           ],
         };

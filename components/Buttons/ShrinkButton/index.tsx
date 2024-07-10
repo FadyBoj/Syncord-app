@@ -7,7 +7,7 @@ import {
   Dimensions,
   ActivityIndicator,
   Image,
-  ImageSourcePropType
+  ImageSourcePropType,
 } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -30,15 +30,16 @@ interface Props {
   isLoading?: boolean;
   borderColor?: string;
   borderWidth?: number;
-  color?:string
+  color?: string;
   radius?: number;
-  icon?:ImageSourcePropType
-  fit?:boolean
-  padding?:number
-  paddingLeft?:number,
-  paddingRight?:number,
-  iconMove?:number
-  tintColor?:string
+  icon?: ImageSourcePropType;
+  fit?: boolean;
+  padding?: number;
+  paddingLeft?: number;
+  paddingRight?: number;
+  iconMove?: number;
+  tintColor?: string;
+  fullWidth?: boolean;
 }
 
 const screenWidth = Dimensions.get('window').width;
@@ -55,14 +56,15 @@ const Index: FC<Props> = ({
   borderColor = '',
   borderWidth = 0,
   radius = 4,
-  color='white',
+  color = 'white',
   icon,
-  fit=false,
-  padding=0,
-  paddingLeft=0,
-  paddingRight=0,
-  iconMove=0,
-  tintColor='white'
+  fit = false,
+  padding = 0,
+  paddingLeft = 0,
+  paddingRight = 0,
+  iconMove = 0,
+  tintColor = 'white',
+  fullWidth = false,
 }) => {
   const scaleValue = useSharedValue(1);
   const animatedOpacity = useSharedValue(1);
@@ -80,7 +82,7 @@ const Index: FC<Props> = ({
     });
   };
 
-  const handlePressOut = () => {    
+  const handlePressOut = () => {
     scaleValue.value = withTiming(1, {
       duration: 100,
       easing: Easing.inOut(Easing.back(0.8)),
@@ -102,6 +104,7 @@ const Index: FC<Props> = ({
 
   return (
     <Pressable
+      style={{width: fullWidth ? '100%' : 'auto'}}
       onPress={disabled || isLoading ? () => {} : action}
       onPressIn={disabled || isLoading ? () => {} : handlePress}
       onPressOut={handlePressOut}>
@@ -109,30 +112,32 @@ const Index: FC<Props> = ({
         style={[
           {
             backgroundColor: disabled || isLoading ? disabledBg : bgColor,
-            width: fit ? 'auto' : width,
+            width: fullWidth ? '100%' : fit ? 'auto' : width,
             height: height,
             borderColor: borderColor,
             borderWidth: borderWidth,
             borderRadius: radius,
-            padding:padding,
-            paddingLeft:paddingLeft,
-            paddingRight:paddingRight
+            padding: padding,
+            paddingLeft: paddingLeft,
+            paddingRight: paddingRight,
           },
           styles.container,
           btnAnimatedStyles,
         ]}>
-           {
-          icon && 
+        {icon && (
           <Image
-          source={icon}
-          style={[styles.icon,{transform:[{translateY:iconMove}],tintColor:tintColor}]}
+            source={icon}
+            style={[
+              styles.icon,
+              {transform: [{translateY: iconMove}], tintColor: tintColor},
+            ]}
           />
-        }
+        )}
         {isLoading ? (
           <ActivityIndicator size={30} />
         ) : (
           <Text
-          allowFontScaling={false}
+            allowFontScaling={false}
             style={{
               color: disabled || isLoading ? '#b0b4d0' : color,
               ...styles.registerText,
@@ -140,7 +145,6 @@ const Index: FC<Props> = ({
             {label}
           </Text>
         )}
-       
       </Animated.View>
     </Pressable>
   );
@@ -150,18 +154,18 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection:'row',
-    gap:8
+    flexDirection: 'row',
+    gap: 8,
   },
   registerText: {
     fontSize: 14,
     fontFamily: 'Roboto',
   },
-  icon:{
-    width:18,
-    height:18,
-    objectFit:'contain',
-  }
+  icon: {
+    width: 18,
+    height: 18,
+    objectFit: 'contain',
+  },
 });
 
 export default Index;

@@ -53,16 +53,16 @@ const RegisterNavigator = ({navigation}: {navigation: any}) => {
         <Modal showClose={false} closeModal={closeModal}>
           <View style={styles.container}>
             <View style={styles.sec1}>
-              <Text style={styles.mainText}>
+              <Text allowFontScaling={false} style={styles.mainText}>
                 This email is already connected to an account
               </Text>
-              <Text style={styles.secText}>Do you wanna login instead ? </Text>
+              <Text allowFontScaling={false} style={styles.secText}>Do you wanna login instead ? </Text>
             </View>
             <View style={styles.sec2}>
               <ShrinkButton
                 action={() => {}}
                 label="Login"
-                bgColor="#5865f2"
+                bgColor="#5865f2" 
                 width={100}
               />
               <ShrinkButton

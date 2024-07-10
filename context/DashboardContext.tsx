@@ -11,6 +11,7 @@ import onGoOffline from '../Services/RealTimeUtils/onGoOffline';
 import onAcceptRequest from '../Services/RealTimeUtils/onAcceptRequest';
 import onRecieveRequest from '../Services/RealTimeUtils/onRecieveRequest';
 import onRequestRejected from '../Services/RealTimeUtils/onRequestRejected';
+import onFriendRemoved from '../Services/RealTimeUtils/onFriendRemoved';
 
 export interface Message {
   id: string;
@@ -38,7 +39,7 @@ export interface IFriend {
   lastname: string;
   isOnline: boolean;
   image: string;
-  createdAt : Date
+  createdAt: Date;
 }
 
 export interface Friendship {
@@ -88,7 +89,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
   //Fetching dashboard
   const getMainDashboard = async () => {
     try {
-     await startConnection();
+      await startConnection();
 
       const token = await AsyncStorage.getItem('token');
       if (!token) return;
@@ -111,7 +112,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
       setIsLoading(false);
       console.log('Finished');
     } catch (error: any) {
-      console.log(error.response,"ERRR")
+      console.log(error, 'Dashboard');
       console.log('Not Authenticated');
     }
   };
@@ -166,6 +167,11 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
     );
     connection?.on('RequestRejected', requestId =>
       onRequestRejected(setUser, requestId),
+    );
+    connection?.on('friendshipDeleted', friendshipId =>
+      {
+        console.log(friendshipId)
+        onFriendRemoved(setUser, friendshipId)},
     );
   }, [connection]);
 

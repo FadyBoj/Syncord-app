@@ -151,7 +151,7 @@ const AddFriendModal: FC<Props> = ({closeModal}) => {
       );
       Toast.show({
         type: 'success',
-        text1: 'Your request has been sent successfully 🎉',
+        text1: 'Request sent 🎉',
         topOffset: 20,
       });
       setIsSending(false);

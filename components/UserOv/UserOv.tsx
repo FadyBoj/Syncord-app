@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
-import {FC, useEffect, useState} from 'react';
+import {FC, useContext, useEffect, useState} from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -11,7 +11,7 @@ import {
   Gesture,
   ScrollView,
 } from 'react-native-gesture-handler';
-import {IFriend} from '../../context/DashboardContext';
+import {DashboardContext, IFriend} from '../../context/DashboardContext';
 
 //Components
 import ImagePlaceHolder from '../ImagePlaceHolder/ImagePlaceHolder';
@@ -20,9 +20,12 @@ import ShrinkBtn from '../Buttons/ShrinkButton';
 //Assets
 import editIcon from '../../assets/edit.png';
 import chatIcon from '../../assets/friendChat.png';
+import trashIcon from '../../assets/trash.png';
 
 //Utils
 import getMonthYear from '../../utils/getMonthYear';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -35,6 +38,10 @@ interface Props {
 }
 
 const UserOv: FC<Props> = ({isOpen, closeUserOv, user}) => {
+  //DashboardContext
+  const dashboard = useContext(DashboardContext);
+  const setUser = dashboard?.setUser;
+
   const animTranslate = useSharedValue(screenHeight * 0.84);
   const [rootDisplay, setRootDisplay] = useState<'none' | 'flex'>('flex');
 
@@ -56,7 +63,12 @@ const UserOv: FC<Props> = ({isOpen, closeUserOv, user}) => {
 
   useEffect(() => {
     if (!isOpen) {
-      animTranslate.value = withSpring(screenHeight * 0.84, fastSpringConfig);
+      animTranslate.value = withSpring(screenHeight * 0.84, {
+        damping: 203,
+        stiffness: 330,
+        mass: 0.5,
+        velocity: 0,
+      });
       setRootDisplay('none');
       return;
     } else {
@@ -92,6 +104,42 @@ const UserOv: FC<Props> = ({isOpen, closeUserOv, user}) => {
     };
   });
 
+  //Handle delete friend
+  const [tempFriedn, setTempFriend] = useState<IFriend | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteFriend = async () => {
+    try {
+      setIsDeleting(true);
+      const token = await AsyncStorage.getItem('token');
+      if (!token) return;
+      const response = await axios.delete(
+        'http://localhost:5196/friendship/delete-friend',
+        {
+          data: {
+            friendShipId: user.friendShipId,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      //Update friends list UI
+      if (!setUser) return;
+      setUser(prevData => {
+        if (!prevData) return null;
+        return {
+          ...prevData,
+          friends: prevData.friends.filter(
+            f => f.friendShipId !== user.friendShipId,
+          ),
+        };
+      });
+      closeUserOv();
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
   return (
     <GestureDetector gesture={gesture}>
       <Animated.View
@@ -114,7 +162,7 @@ const UserOv: FC<Props> = ({isOpen, closeUserOv, user}) => {
               </View>
               <ScrollView style={{flexGrow: 1}}>
                 {/* Row 2 */}
-                <View style={{gap:10}}>
+                <View style={{gap: 10}}>
                   <View style={styles.row2}>
                     <View style={styles.nameContainer}>
                       <Text allowFontScaling={false} style={styles.firstName}>
@@ -150,9 +198,23 @@ const UserOv: FC<Props> = ({isOpen, closeUserOv, user}) => {
                       {getMonthYear(user.createdAt.toString())}
                     </Text>
                   </View>
+
+                  {/* Row 4 */}
+                  <View style={styles.row4}>
+                    <ShrinkBtn
+                      label="Delete friend"
+                      action={deleteFriend}
+                      bgColor="#da373c"
+                      disabledBg="#da373c"
+                      radius={15}
+                      fullWidth
+                      icon={trashIcon}
+                      tintColor="white"
+                      disabled={isDeleting}
+                    />
+                  </View>
                 </View>
               </ScrollView>
-              {/* Row 4 */}
             </View>
           </View>
         </View>
@@ -264,6 +326,16 @@ const styles = StyleSheet.create({
     borderWidth: 0.4,
     borderColor: '#2c2c34',
     gap: 10,
+  },
+  row4: {
+    width: '100%',
+    minHeight: 70,
+    borderRadius: 15,
+    justifyContent: 'center',
+    borderColor: '#2c2c34',
+    gap: 10,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
   memberText: {
     color: '#9597a1',

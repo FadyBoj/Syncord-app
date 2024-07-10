@@ -3,10 +3,8 @@ import {
   Text,
   Image,
   FlatList,
-  TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
-import {useState, FC, useEffect, useContext, createContext} from 'react';
+import {useState, FC, useEffect, useContext, createContext,memo} from 'react';
 import styles from '../styles/FriendsStyles';
 import {IUserOv} from '../navigators/AppNavigator';
 
@@ -82,13 +80,10 @@ const Friends: FC<Props> = ({
   setUserOv,
 }) => {
   const dashboard = useContext(DashboardContext);
-  const connection = useContext(DashboardContext)?.connection;
   const user = dashboard?.user;
-
   const filters = ['Online', 'Offline', 'All'];
 
   //States
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState('all');
   const [filteredFriends, setFilteredFriends] = useState<IFriend[] | null>(
     null,
@@ -96,12 +91,6 @@ const Friends: FC<Props> = ({
   const [filterData, setFilterData] = useState({
     search: '',
   });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  //Handle add friend modal state
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
 
   //Handle search text input change
   const handleChange = (text: string, name: string) => {
@@ -262,4 +251,4 @@ const Friends: FC<Props> = ({
     </UserOvContext.Provider>
   );
 };
-export default Friends;
+export default memo(Friends);

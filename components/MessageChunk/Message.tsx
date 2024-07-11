@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   container: {
-    width: '90%',
+    width: '100%',
     paddingRight: 10,
   },
 });

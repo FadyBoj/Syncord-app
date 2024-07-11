@@ -14,11 +14,12 @@ const styles = StyleSheet.create({
 
   msgInput: {
     backgroundColor: '#26262e',
-    width: '80%',
     borderRadius: 100,
     paddingLeft: 20,
     height: 45,
     color: 'white',
+    flexGrow:1,
+    flexShrink:1,
   },
   sendIcon: {
     width: 20,

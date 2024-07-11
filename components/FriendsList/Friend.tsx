@@ -85,7 +85,7 @@ const Friend: FC<Props> = ({friend, length, index, status}) => {
   });
 
   const handleNavigation = () => {
-    navigation.navigate('singleChat', {
+    navigation.push('singleChat', {
       friend: friend,
     });
   };

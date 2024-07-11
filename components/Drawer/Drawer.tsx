@@ -10,7 +10,6 @@ import {FC, useId, useContext} from 'react';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import navigationData from './navigationData';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Components
 import NavItem from './NavItem';

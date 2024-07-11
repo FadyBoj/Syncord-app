@@ -43,7 +43,7 @@ const MyTabBar: FC<Props> = ({
       animTransform.value = withTiming(0);
     }
   }, [addFriendModal, state, userOv]);
-
+  
   //Handling back button behavior
   useEffect(() => {
     const backAction = () => {

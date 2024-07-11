@@ -13,6 +13,8 @@ import {
 } from 'react-native-gesture-handler';
 import {DashboardContext, IFriend} from '../../context/DashboardContext';
 import globals from '../../globals';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 //Components
 import ImagePlaceHolder from '../ImagePlaceHolder/ImagePlaceHolder';
@@ -41,6 +43,9 @@ const UserOv: FC<Props> = ({isOpen, closeUserOv, user}) => {
   //DashboardContext
   const dashboard = useContext(DashboardContext);
   const setUser = dashboard?.setUser;
+
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
 
   const animTranslate = useSharedValue(screenHeight * 0.84);
   const [rootDisplay, setRootDisplay] = useState<'none' | 'flex'>('flex');
@@ -141,6 +146,12 @@ const UserOv: FC<Props> = ({isOpen, closeUserOv, user}) => {
     }
   };
 
+  const hadnleNavigation = () =>{
+    navigation.push('singleChat', {
+      friend: user,
+    });
+  }
+
   return (
     <GestureDetector gesture={gesture}>
       <Animated.View
@@ -179,9 +190,7 @@ const UserOv: FC<Props> = ({isOpen, closeUserOv, user}) => {
                     <View style={styles.btnsContainer}>
                       <ShrinkBtn
                         label="Message"
-                        action={() => {
-                          console.log('Editing');
-                        }}
+                        action={hadnleNavigation}
                         bgColor="#5865f2"
                         width={140}
                         radius={12}

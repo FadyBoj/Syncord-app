@@ -107,14 +107,18 @@ const MessageChunk: FC<Props> = ({
               <Text allowFontScaling={false} style={styles.chunkDate}>
                 {convertDate(chunk.messages[0].createdAt)}
               </Text>
-              <Text allowFontScaling={false} style={styles.userNameText}>{user.firstname}</Text>
+              <Text allowFontScaling={false} style={styles.userNameText}>
+                {user.firstname}
+              </Text>
             </View>
           ) : (
             <View style={styles.nameDateContainer}>
               <Text allowFontScaling={false} style={styles.chunkDate}>
                 {convertDate(chunk.messages[0].createdAt)}
               </Text>
-              <Text allowFontScaling={false} style={styles.userNameText}>{friend?.firstname}</Text>
+              <Text allowFontScaling={false} style={styles.userNameText}>
+                {friend?.firstname}
+              </Text>
             </View>
           )}
           {
@@ -203,6 +207,9 @@ const styles = StyleSheet.create({
   messagesColumn: {
     paddingTop: 6,
     gap: 10,
+    flexGrow:1,
+    flexShrink:1,
+    paddingRight:20
   },
   userNameText: {
     fontFamily: 'Roboot',
@@ -213,6 +220,7 @@ const styles = StyleSheet.create({
   messagesContainer: {
     flexDirection: 'column',
     gap: 3,
+    width: '100%',
   },
   nameDateContainer: {
     flexDirection: 'row-reverse',

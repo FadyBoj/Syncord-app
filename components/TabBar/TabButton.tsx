@@ -17,6 +17,9 @@ interface Props {
   label: string;
 }
 
+//Components
+import Badge from '../Badge/Badge';
+
 //Assets
 import tabChat from '../../assets/tabChat.png';
 import friendsIcon from '../../assets/Friends.png';
@@ -32,7 +35,6 @@ const TabButton: FC<Props> = ({
   //Start
 
   const animatedScale = useSharedValue(0);
-
   const animatedStyles = useAnimatedStyle(() => {
     return {
       transform: [{scaleX: animatedScale.value}],
@@ -114,6 +116,11 @@ const TabButton: FC<Props> = ({
         <Animated.View
           style={[styles.scalable, animatedStyles]}></Animated.View>
       )}
+      {label.toLocaleLowerCase() === 'notifications' &&
+        user?.requests &&
+        user.requests.filter(r => !r.outGoing).length > 0 && (
+          <Badge bgColor="#C82333" length={user.requests.length} />
+        )}
     </TouchableOpacity>
   );
 };
@@ -125,6 +132,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     position: 'relative',
+    zIndex: 50,
   },
   barContainer: {
     flexDirection: 'column',

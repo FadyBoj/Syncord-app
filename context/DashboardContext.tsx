@@ -11,6 +11,7 @@ import onAcceptRequest from '../Services/RealTimeUtils/onAcceptRequest';
 import onRecieveRequest from '../Services/RealTimeUtils/onRecieveRequest';
 import onRequestRejected from '../Services/RealTimeUtils/onRequestRejected';
 import onFriendRemoved from '../Services/RealTimeUtils/onFriendRemoved';
+import onFriendUpdatedPfp from '../Services/RealTimeUtils/onFriendUpdatedPfp';
 
 export interface Message {
   id: string;
@@ -166,6 +167,7 @@ const DashboardContextProvider: FC<Props> = ({children}) => {
     connection?.on('friendshipDeleted', friendshipId =>
       onFriendRemoved(setUser, friendshipId),
     );
+    connection?.on("FriendImageUpdated",(data) => onFriendUpdatedPfp(setUser,data))
   }, [connection]);
 
   return (
